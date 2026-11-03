@@ -1,0 +1,7 @@
+package com.athletelink.exception;
+
+public class EmailAlreadyExistsException extends RuntimeException {
+    public EmailAlreadyExistsException(String message) {
+        super(message);
+    }
+}

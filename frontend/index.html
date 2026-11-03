@@ -1,0 +1,3430 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AthleteLink AI – India’s Smart Sports Talent Network</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkbg: '#0a0f1d',
+                        cardbg: '#111827',
+                        cardborder: '#1f2937',
+                        accentBlue: '#0ea5e9',
+                        accentGreen: '#10b981',
+                        accentNeon: '#22d3ee',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- App configuration: points to the Spring Boot backend -->
+    <script src="./js/config.js"></script>
+    <style>
+
+    /* ===============================
+       GLOBAL WEBSITE BACKGROUND
+    ================================ */
+
+    body {
+        font-family: 'Outfit', sans-serif;
+        color: #f3f4f6;
+        overflow-x: hidden;
+
+        background-image:
+            linear-gradient(
+                rgba(10, 15, 29, 0.72),
+                rgba(10, 15, 29, 0.88)
+            ),
+            url('https://i.ibb.co/5gLrmQrB/Screenshot-2026-07-27-150159.png');
+
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+
+        min-height: 100vh;
+    }
+
+
+    /* ===============================
+       GLASS EFFECT FOR ALL CARDS
+    ================================ */
+
+    .glass-card {
+        background: rgba(17, 24, 39, 0.58);
+
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+
+        border: 1px solid rgba(255, 255, 255, 0.12);
+
+        box-shadow:
+            0 8px 32px rgba(0, 0, 0, 0.35);
+
+        transition:
+            transform 0.3s ease,
+            border-color 0.3s ease,
+            box-shadow 0.3s ease;
+    }
+
+
+    /* ===============================
+       GLASS CARD HOVER EFFECT
+    ================================ */
+
+    .glass-card:hover {
+        border-color: rgba(34, 211, 238, 0.35);
+
+        box-shadow:
+            0 12px 40px rgba(0, 0, 0, 0.5);
+    }
+
+
+    /* ===============================
+       BLUE GLOW
+    ================================ */
+
+    .glow-blue {
+        box-shadow:
+            0 0 25px rgba(14, 165, 233, 0.25),
+            0 0 60px rgba(14, 165, 233, 0.08);
+    }
+
+
+    /* ===============================
+       GREEN GLOW
+    ================================ */
+
+    .glow-green {
+        box-shadow:
+            0 0 25px rgba(16, 185, 129, 0.25),
+            0 0 60px rgba(16, 185, 129, 0.08);
+    }
+
+
+    /* ===============================
+       CUSTOM SCROLLBAR
+    ================================ */
+
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: rgba(10, 15, 29, 0.8);
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: linear-gradient(
+            #0ea5e9,
+            #10b981
+        );
+
+        border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #22d3ee;
+    }
+
+
+    /* ===============================
+       SMOOTH PAGE TRANSITIONS
+    ================================ */
+
+    .tab-content {
+        animation: fadeIn 0.4s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* ===============================
+       AUTH MODAL (Login / Register)
+       Kept in the same glass/neon visual
+       language as the rest of the site.
+    ================================ */
+
+    .auth-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 100;
+        background: rgba(5, 8, 16, 0.75);
+        backdrop-filter: blur(4px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+    }
+
+    .auth-field-error {
+        color: #f87171;
+        font-size: 0.75rem;
+        margin-top: 0.25rem;
+        min-height: 1rem;
+    }
+
+    .auth-banner {
+        font-size: 0.8rem;
+        font-weight: 700;
+        border-radius: 0.75rem;
+        padding: 0.65rem 0.9rem;
+        display: none;
+    }
+
+    .auth-banner.show {
+        display: block;
+    }
+
+    .auth-banner.error {
+        background: rgba(248, 113, 113, 0.12);
+        border: 1px solid rgba(248, 113, 113, 0.4);
+        color: #fca5a5;
+    }
+
+    .auth-banner.success {
+        background: rgba(16, 185, 129, 0.12);
+        border: 1px solid rgba(16, 185, 129, 0.4);
+        color: #6ee7b7;
+    }
+
+    .btn-spinner {
+        display: inline-block;
+        width: 14px;
+        height: 14px;
+        border: 2px solid rgba(255, 255, 255, 0.4);
+        border-top-color: #fff;
+        border-radius: 50%;
+        animation: spin 0.7s linear infinite;
+        margin-right: 8px;
+        vertical-align: -2px;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    /* =========================================================
+       CLEAN A4 PRINT STYLESHEET (FIXES 6-PAGE REPEATING ISSUE)
+    ========================================================= */
+    @media print {
+        @page {
+            size: A4 portrait;
+            margin: 8mm 10mm;
+        }
+
+        html, body {
+            background: #ffffff !important;
+            color: #0f172a !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            height: auto !important;
+            min-height: auto !important;
+            overflow: visible !important;
+        }
+
+        /* Hide all global navigation, background grids, overlays, footer */
+        body > *:not(#scouting-card-modal) {
+            display: none !important;
+        }
+
+        /* Hide all action controls with .no-print */
+        .no-print, .no-print * {
+            display: none !important;
+        }
+
+        /* Make modal container clean, full width, single-page */
+        #scouting-card-modal {
+            position: static !important;
+            display: block !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            background: #ffffff !important;
+            backdrop-filter: none !important;
+            overflow: visible !important;
+            z-index: 1000 !important;
+        }
+
+        #scouting-card-modal > div {
+            margin: 0 !important;
+            max-width: 100% !important;
+            padding: 0 !important;
+        }
+
+        /* The Scouting CV Sheet */
+        #scouting-cv-sheet {
+            background: #ffffff !important;
+            color: #0f172a !important;
+            border: 2px solid #0284c7 !important;
+            border-radius: 12px !important;
+            padding: 16px 20px !important;
+            box-shadow: none !important;
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+        }
+
+        /* Invert dark text colors for high-contrast crisp paper printing */
+        #scouting-cv-sheet * {
+            box-shadow: none !important;
+            text-shadow: none !important;
+        }
+
+        #scouting-cv-sheet .text-white {
+            color: #0f172a !important;
+        }
+
+        #scouting-cv-sheet .text-gray-300,
+        #scouting-cv-sheet .text-gray-400,
+        #scouting-cv-sheet .text-gray-500 {
+            color: #334155 !important;
+        }
+
+        #scouting-cv-sheet .bg-gray-950,
+        #scouting-cv-sheet .bg-gray-900,
+        #scouting-cv-sheet .bg-darkbg {
+            background: #f8fafc !important;
+            border-color: #cbd5e1 !important;
+        }
+
+        #scouting-cv-sheet .border-gray-800,
+        #scouting-cv-sheet .border-gray-700 {
+            border-color: #e2e8f0 !important;
+        }
+
+        #scouting-cv-sheet .text-accentNeon {
+            color: #0284c7 !important;
+        }
+    }
+
+</style>
+</head>
+<body class="text-gray-100 selection:bg-accentBlue selection:text-white">
+
+    <!-- ================= PUBLIC NAVIGATION ================= -->
+
+<header class="sticky top-0 z-50 bg-[#080d19]/90 backdrop-blur-xl border-b border-cyan-400/20">
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+
+        <!-- LOGO -->
+
+        <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('home')">
+
+            <div class="w-11 h-11 flex items-center justify-center">
+
+    <img
+        src="https://i.ibb.co/nMdMJfM7/Screenshot-2026-07-30-115340.png"
+        alt="AthleteLink AI Logo"
+        class="w-11 h-11 object-contain">
+
+</div>
+
+            <div>
+
+                <div class="text-xl font-black tracking-wide text-white">
+
+                    ATHLETE<span class="text-cyan-400">LINK</span>
+
+                    <span class="text-emerald-400">AI</span>
+
+                </div>
+
+                <div class="text-[10px] tracking-[0.25em] text-cyan-300 uppercase font-bold">
+
+                    India's Smart Sports Network
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- DESKTOP NAVIGATION -->
+
+        <nav class="hidden lg:flex items-center gap-8 text-sm font-semibold">
+
+            <button onclick="switchTab('home')" data-nav-tab="home"
+                class="text-cyan-300 font-black hover:text-white transition">
+                Home
+            </button>
+            <button onclick="switchTab('challenge')" data-nav-tab="challenge"
+                class="text-gray-300 hover:text-cyan-300 transition">
+                Challenges &amp; Arena
+            </button>
+            <button onclick="switchTab('recovery')" data-nav-tab="recovery"
+                class="text-gray-300 hover:text-emerald-300 transition">
+                <i class="fa-solid fa-heart-pulse text-xs mr-1 text-emerald-400"></i>Recovery Lab
+            </button>
+            <button onclick="switchTab('solution')" data-nav-tab="solution"
+                class="text-gray-300 hover:text-emerald-300 transition">
+                Our AI Solution
+            </button>
+            <button onclick="switchTab('directory')" data-nav-tab="directory"
+                class="text-gray-300 hover:text-cyan-300 transition">
+                Explore Talent
+            </button>
+            <button onclick="switchTab('scouts')" data-nav-tab="scouts" class="text-gray-300 hover:text-cyan-300 transition">Scouts</button>
+            <button onclick="switchTab('trials')" data-nav-tab="trials" class="text-gray-300 hover:text-emerald-300 transition">Trials</button>
+            <button onclick="switchTab('opportunities')" data-nav-tab="opportunities" class="text-gray-300 hover:text-emerald-300 transition">Opportunities</button>
+            <button onclick="switchTab('matching')" data-nav-tab="matching" class="text-gray-300 hover:text-accentNeon transition">
+                <i class="fa-solid fa-wand-magic-sparkles mr-1 text-accentNeon text-xs"></i>AI Matching
+            </button>
+            <button onclick="switchTab('dashboard')" data-nav-tab="dashboard"
+                class="text-gray-300 hover:text-emerald-300 transition">
+                Dashboard
+            </button>
+
+        </nav>
+
+
+        <!-- AUTH BUTTONS (logged out) -->
+
+        <div id="auth-buttons-guest" class="flex items-center gap-3">
+
+            <a href="/admin.html"
+                class="hidden md:flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-cyan-400/20 bg-cyan-400/5 text-cyan-300 text-xs font-bold hover:bg-cyan-400/15 transition">
+                <i class="fa-solid fa-shield-halved"></i>
+                Admin Portal
+            </a>
+
+            <button
+                onclick="openAuth('login')"
+                class="hidden sm:block px-5 py-2.5 rounded-xl border border-cyan-400/40 text-cyan-300 font-bold hover:bg-cyan-400/10 transition">
+
+                Login
+
+            </button>
+
+
+            <button
+                onclick="openAuth('register')"
+                class="px-5 py-3 rounded-xl bg-gradient-to-r from-cyan-400 via-blue-500 to-emerald-400 text-white font-black shadow-xl shadow-cyan-500/30 hover:scale-105 transition">
+
+                Join as Athlete
+
+            </button>
+
+
+            <button
+                id="mobile-menu-btn"
+                class="lg:hidden text-cyan-300 text-xl">
+
+                <i class="fa-solid fa-bars"></i>
+
+            </button>
+
+        </div>
+
+        <!-- AUTH BUTTONS (logged in) -->
+        <div id="auth-buttons-user" class="hidden items-center gap-3">
+            <a id="nav-admin-link" href="/admin.html" class="hidden items-center gap-1.5 px-3.5 py-2 rounded-xl border border-cyan-400/40 bg-cyan-400/10 text-cyan-300 text-xs font-bold hover:bg-cyan-400/20 transition">
+                <i class="fa-solid fa-shield-halved"></i>
+                Admin Dashboard
+            </a>
+            <button onclick="loadNotifications().then(res => res && showNotifications(res.rows))" class="relative p-2.5 rounded-xl bg-white/5 border border-white/10 hover:border-cyan-400/40 text-gray-300 hover:text-white transition" title="Notifications">
+                <i class="fa-solid fa-bell text-sm"></i>
+                <span id="notif-count-badge" class="hidden absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">0</span>
+            </button>
+            <div class="hidden sm:flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10">
+                <i class="fa-solid fa-circle-user text-cyan-300"></i>
+                <span id="nav-user-name" class="text-sm font-bold text-white">Athlete</span>
+            </div>
+            <button
+                onclick="logout()"
+                class="px-5 py-2.5 rounded-xl border border-red-400/40 text-red-300 font-bold hover:bg-red-400/10 transition">
+                Logout
+            </button>
+            <button id="mobile-menu-btn-2" class="lg:hidden text-cyan-300 text-xl">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+
+    </div>
+
+
+    <!-- MOBILE MENU -->
+
+    <div id="mobile-menu"
+        class="hidden lg:hidden px-5 pb-5 space-y-2 border-t border-cyan-400/10">
+
+        <button onclick="switchTab('home'); toggleMobileMenu()"
+            class="block w-full text-left px-4 py-3 rounded-xl hover:bg-cyan-400/10 text-white">
+
+            Home
+
+        </button>
+
+        <button onclick="switchTab('challenge'); toggleMobileMenu()"
+            class="block w-full text-left px-4 py-3 rounded-xl hover:bg-cyan-400/10 text-white">
+            Challenges &amp; Arena
+        </button>
+
+        <button onclick="switchTab('recovery'); toggleMobileMenu()"
+            class="block w-full text-left px-4 py-3 rounded-xl hover:bg-cyan-400/10 text-emerald-300 font-semibold">
+            <i class="fa-solid fa-heart-pulse text-xs mr-2 text-emerald-400"></i>Recovery Lab
+        </button>
+
+        <button onclick="switchTab('solution'); toggleMobileMenu()"
+            class="block w-full text-left px-4 py-3 rounded-xl hover:bg-cyan-400/10 text-white">
+
+            AI Solution
+
+        </button>
+
+        <button onclick="switchTab('directory'); toggleMobileMenu()"
+            class="block w-full text-left px-4 py-3 rounded-xl hover:bg-cyan-400/10 text-white">
+
+            Explore Talent
+
+        </button>
+
+        <button onclick="switchTab('opportunities'); toggleMobileMenu()"
+            class="block w-full text-left px-4 py-3 rounded-xl hover:bg-cyan-400/10 text-white">
+            Opportunities
+        </button>
+        <button onclick="switchTab('matching'); toggleMobileMenu()"
+            class="block w-full text-left px-4 py-3 rounded-xl hover:bg-accentNeon/10 text-accentNeon font-bold">
+            <i class="fa-solid fa-wand-magic-sparkles mr-2"></i>AI Matching
+        </button>
+        <button onclick="switchTab('dashboard'); toggleMobileMenu()"
+            class="block w-full text-left px-4 py-3 rounded-xl hover:bg-cyan-400/10 text-white">
+
+            Dashboard
+
+        </button>
+
+        <button onclick="openAuth('login'); toggleMobileMenu()"
+            class="block w-full text-left px-4 py-3 rounded-xl text-cyan-300 font-bold auth-guest-only">
+
+            Login
+
+        </button>
+
+        <button onclick="logout(); toggleMobileMenu()"
+            class="hidden w-full text-left px-4 py-3 rounded-xl text-red-300 font-bold auth-user-only">
+
+            Logout
+
+        </button>
+
+    </div>
+
+</header>
+
+
+    <!-- Main Content Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- ================= PAGE 1: HOME PAGE ================= -->
+        <!-- ================= PUBLIC HOME PAGE ================= -->
+
+<section id="page-home" class="tab-content space-y-24">
+
+
+    <!-- ================= HERO ================= -->
+
+    <section class="relative min-h-[680px] flex items-center overflow-hidden">
+
+        <!-- Background Glow -->
+
+        <div class="absolute top-20 left-10 w-72 h-72 bg-cyan-500/20 rounded-full blur-[120px]"></div>
+
+        <div class="absolute bottom-10 right-10 w-96 h-96 bg-emerald-500/20 rounded-full blur-[140px]"></div>
+
+
+        <div class="relative z-10 grid lg:grid-cols-2 gap-16 items-center w-full">
+
+
+            <!-- HERO TEXT -->
+
+            <div class="space-y-8">
+
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-400/10 border border-cyan-400/30 text-cyan-300 font-bold text-sm">
+
+                    <i class="fa-solid fa-sparkles"></i>
+
+                    India's Next Generation Sports Talent Network
+
+                </div>
+
+
+                <h1 class="text-5xl md:text-7xl font-black leading-[0.95] tracking-tight text-white">
+
+                    India's Hidden
+
+                    <span class="block bg-gradient-to-r from-cyan-300 via-blue-400 to-emerald-300 bg-clip-text text-transparent">
+
+                        Talent Deserves
+
+                    </span>
+
+                    The World.
+
+                </h1>
+
+
+                <p class="text-xl text-gray-200 leading-relaxed max-w-xl">
+
+                    AthleteLink AI connects athletes, coaches, scouts, academies, sponsors and opportunities in one intelligent sports ecosystem.
+
+                </p>
+
+
+                <p class="text-lg font-bold text-cyan-300">
+
+                    From local fields to national podiums.
+
+                </p>
+
+
+                <!-- CTA BUTTONS -->
+
+                <div class="flex flex-wrap gap-4 pt-3">
+
+                    <button
+                        onclick="openAuth('register')"
+                        class="px-8 py-4 rounded-2xl bg-gradient-to-r from-cyan-400 via-blue-500 to-emerald-400 text-white font-black text-lg shadow-2xl shadow-cyan-500/30 hover:scale-105 transition flex items-center gap-3">
+
+                        <i class="fa-solid fa-person-running"></i>
+
+                        Join as Athlete
+
+                    </button>
+
+
+                    <button
+                        onclick="switchTab('directory')"
+                        class="px-8 py-4 rounded-2xl border border-cyan-400/40 bg-white/5 text-white font-bold text-lg hover:bg-cyan-400/10 transition flex items-center gap-3">
+
+                        <i class="fa-solid fa-compass"></i>
+
+                        Explore Talent
+
+                    </button>
+
+                </div>
+
+
+                <div class="flex items-center gap-4 text-sm text-gray-300">
+
+                    <div class="flex -space-x-3">
+
+                        <div class="w-10 h-10 rounded-full bg-cyan-400 flex items-center justify-center text-black font-bold">A</div>
+
+                        <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">S</div>
+
+                        <div class="w-10 h-10 rounded-full bg-emerald-400 flex items-center justify-center text-black font-bold">C</div>
+
+                    </div>
+
+                    <span>
+
+                        Join athletes, scouts and coaches building India's sports future.
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- HERO VISUAL -->
+
+            <div class="relative hidden lg:block">
+
+                <div class="absolute inset-0 bg-cyan-400/20 blur-[100px]"></div>
+
+
+                <div class="relative glass-card rounded-[2rem] p-6 border border-cyan-400/30 shadow-2xl shadow-cyan-500/20">
+
+
+                    <div class="flex items-center justify-between mb-6">
+
+                        <div>
+
+                            <p class="text-xs text-cyan-300 uppercase tracking-widest font-bold">
+
+                                Live Talent Network
+
+                            </p>
+
+                            <h3 class="text-2xl font-black text-white">
+
+                                India Sports Pulse
+
+                            </h3>
+
+                        </div>
+
+                        <div class="w-12 h-12 rounded-xl bg-emerald-400/20 flex items-center justify-center">
+
+                            <i class="fa-solid fa-chart-line text-emerald-300 text-xl"></i>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="space-y-4">
+
+
+                        <div class="p-4 rounded-2xl bg-white/5 border border-white/10">
+
+                            <div class="flex justify-between mb-2">
+
+                                <span class="text-gray-300">Athletes Registered</span>
+
+                                <span id="pulse-athletes-count" class="text-cyan-300 font-black">10</span>
+
+                            </div>
+
+                            <div class="h-2 bg-gray-800 rounded-full overflow-hidden">
+
+                                <div class="h-full w-[100%] bg-gradient-to-r from-cyan-400 to-blue-500"></div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="p-4 rounded-2xl bg-white/5 border border-white/10">
+
+                            <div class="flex justify-between mb-2">
+
+                                <span class="text-gray-300">Opportunities Connected</span>
+
+                                <span id="pulse-opps-count" class="text-emerald-300 font-black">15</span>
+
+                            </div>
+
+                            <div class="h-2 bg-gray-800 rounded-full overflow-hidden">
+
+                                <div class="h-full w-[100%] bg-gradient-to-r from-emerald-400 to-cyan-400"></div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="p-4 rounded-2xl bg-white/5 border border-white/10">
+
+                            <div class="flex justify-between mb-2">
+
+                                <span class="text-gray-300">States & UTs Reached</span>
+
+                                <span class="text-yellow-300 font-black">28 States & 9 UTs</span>
+
+                            </div>
+
+                            <div class="h-2 bg-gray-800 rounded-full overflow-hidden">
+
+                                <div class="h-full w-[100%] bg-gradient-to-r from-yellow-300 to-orange-400"></div>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="mt-6 grid grid-cols-3 gap-3">
+
+                        <div class="text-center p-3 rounded-xl bg-cyan-400/10">
+
+                            <div id="pulse-scouts-count" class="text-2xl font-black text-cyan-300">4</div>
+
+                            <div class="text-xs text-gray-300">Scouts</div>
+
+                        </div>
+
+                        <div class="text-center p-3 rounded-xl bg-emerald-400/10">
+
+                            <div id="pulse-trials-count" class="text-2xl font-black text-emerald-300">8</div>
+
+                            <div class="text-xs text-gray-300">Active Trials</div>
+
+                        </div>
+
+                        <div class="text-center p-3 rounded-xl bg-blue-400/10">
+
+                            <div class="text-2xl font-black text-blue-300">100%</div>
+
+                            <div class="text-xs text-gray-300">Verified</div>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= WHAT IS ATHLETELINK ================= -->
+
+    <section class="space-y-10">
+
+
+        <div class="text-center max-w-3xl mx-auto">
+
+            <p class="text-cyan-300 font-black uppercase tracking-widest text-sm">
+
+                One Ecosystem. Every Opportunity.
+
+            </p>
+
+            <h2 class="text-4xl md:text-5xl font-black text-white mt-3">
+
+                Talent Exists Everywhere.
+
+                <span class="text-emerald-300">
+
+                    Opportunity Doesn't.
+
+                </span>
+
+            </h2>
+
+            <p class="text-gray-300 mt-5 text-lg">
+
+                AthleteLink AI is built to change that.
+
+            </p>
+
+        </div>
+
+
+        <div class="grid md:grid-cols-3 gap-6">
+
+
+            <div class="glass-card p-8 rounded-3xl border border-cyan-400/20 hover:border-cyan-400/60 transition">
+
+                <div class="w-16 h-16 rounded-2xl bg-cyan-400/15 flex items-center justify-center mb-6">
+
+                    <i class="fa-solid fa-person-running text-cyan-300 text-2xl"></i>
+
+                </div>
+
+                <h3 class="text-2xl font-black text-white mb-3">
+
+                    For Athletes
+
+                </h3>
+
+                <p class="text-gray-300 leading-relaxed">
+
+                    Build your digital sports profile, showcase your achievements, upload performance data and get discovered by the right opportunities.
+
+                </p>
+
+            </div>
+
+
+            <div class="glass-card p-8 rounded-3xl border border-emerald-400/20 hover:border-emerald-400/60 transition">
+
+                <div class="w-16 h-16 rounded-2xl bg-emerald-400/15 flex items-center justify-center mb-6">
+
+                    <i class="fa-solid fa-binoculars text-emerald-300 text-2xl"></i>
+
+                </div>
+
+                <h3 class="text-2xl font-black text-white mb-3">
+
+                    For Scouts
+
+                </h3>
+
+                <p class="text-gray-300 leading-relaxed">
+
+                    Discover verified talent from across India using intelligent search, performance data and AI-powered recommendations.
+
+                </p>
+
+            </div>
+
+
+            <div class="glass-card p-8 rounded-3xl border border-blue-400/20 hover:border-blue-400/60 transition">
+
+                <div class="w-16 h-16 rounded-2xl bg-blue-400/15 flex items-center justify-center mb-6">
+
+                    <i class="fa-solid fa-trophy text-blue-300 text-2xl"></i>
+
+                </div>
+
+                <h3 class="text-2xl font-black text-white mb-3">
+
+                    For Opportunities
+
+                </h3>
+
+                <p class="text-gray-300 leading-relaxed">
+
+                    Connect scholarships, trials, academies, sponsors and coaches with athletes who are ready to grow.
+
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= HOW IT WORKS ================= -->
+
+    <section class="space-y-10">
+
+
+        <div class="text-center">
+
+            <p class="text-emerald-300 font-black uppercase tracking-widest text-sm">
+
+                Simple. Powerful. Connected.
+
+            </p>
+
+            <h2 class="text-4xl md:text-5xl font-black text-white mt-3">
+
+                From Potential To Opportunity
+
+            </h2>
+
+        </div>
+
+
+        <div class="grid md:grid-cols-4 gap-6">
+
+
+            <div class="text-center">
+
+                <div class="mx-auto w-20 h-20 rounded-full bg-cyan-400/15 border border-cyan-400/40 flex items-center justify-center text-cyan-300 text-2xl font-black">
+
+                    01
+
+                </div>
+
+                <h3 class="text-xl font-black text-white mt-5">
+
+                    Create Your Profile
+
+                </h3>
+
+                <p class="text-gray-300 text-sm mt-3">
+
+                    Tell us who you are and what sport you play.
+
+                </p>
+
+            </div>
+
+
+            <div class="text-center">
+
+                <div class="mx-auto w-20 h-20 rounded-full bg-blue-400/15 border border-blue-400/40 flex items-center justify-center text-blue-300 text-2xl font-black">
+
+                    02
+
+                </div>
+
+                <h3 class="text-xl font-black text-white mt-5">
+
+                    Showcase Your Talent
+
+                </h3>
+
+                <p class="text-gray-300 text-sm mt-3">
+
+                    Add achievements, certificates and performance records.
+
+                </p>
+
+            </div>
+
+
+            <div class="text-center">
+
+                <div class="mx-auto w-20 h-20 rounded-full bg-emerald-400/15 border border-emerald-400/40 flex items-center justify-center text-emerald-300 text-2xl font-black">
+
+                    03
+
+                </div>
+
+                <h3 class="text-xl font-black text-white mt-5">
+
+                    Get AI Matched
+
+                </h3>
+
+                <p class="text-gray-300 text-sm mt-3">
+
+                    Discover opportunities that match your profile.
+
+                </p>
+
+            </div>
+
+
+            <div class="text-center">
+
+                <div class="mx-auto w-20 h-20 rounded-full bg-yellow-400/15 border border-yellow-400/40 flex items-center justify-center text-yellow-300 text-2xl font-black">
+
+                    04
+
+                </div>
+
+                <h3 class="text-xl font-black text-white mt-5">
+
+                    Reach Your Next Level
+
+                </h3>
+
+                <p class="text-gray-300 text-sm mt-3">
+
+                    Connect with coaches, scouts and real opportunities.
+
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= FINAL CTA ================= -->
+
+    <section class="relative overflow-hidden rounded-[2rem] p-12 md:p-20 text-center border border-cyan-400/30 bg-gradient-to-br from-cyan-500/20 via-blue-500/10 to-emerald-500/20">
+
+
+        <div class="absolute inset-0 bg-cyan-400/5 blur-3xl"></div>
+
+
+        <div class="relative z-10">
+
+            <h2 class="text-4xl md:text-6xl font-black text-white">
+
+                Your Talent Is
+
+                <span class="text-cyan-300">
+
+                    Your Future.
+
+                </span>
+
+            </h2>
+
+
+            <p class="text-gray-200 text-lg mt-5 max-w-2xl mx-auto">
+
+                Don't wait to be discovered. Create your profile and put your talent where the right people can find it.
+
+            </p>
+
+
+            <button
+                onclick="openAuth('register')"
+                class="mt-8 px-10 py-5 rounded-2xl bg-gradient-to-r from-cyan-400 to-emerald-400 text-black font-black text-lg hover:scale-105 transition shadow-2xl">
+
+                <i class="fa-solid fa-arrow-right mr-2"></i>
+
+                Start Your Athlete Journey
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+</section>
+
+
+        <!-- ================= PAGE 2: THE CHALLENGE ================= -->
+        <section id="page-challenge" class="tab-content hidden space-y-12">
+            <div class="max-w-3xl mx-auto text-center space-y-4">
+                <div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-bold tracking-wide uppercase">
+                    <i class="fa-solid fa-triangle-exclamation"></i> <span>The Broken Sports Discovery System</span>
+                </div>
+                <h2 class="text-3xl sm:text-5xl font-black uppercase tracking-tight">Why Talented Athletes Remain Undiscovered</h2>
+                <p class="text-gray-400 text-base leading-relaxed">
+                    India possesses a billion-plus demographic powerhouse with raw athletic energy, yet a vast proportion of brilliant prodigies in rural pockets never make it to national stages due to deep systemic barriers.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Challenge 1 -->
+                <div class="glass-card p-6 rounded-2xl border border-gray-800 space-y-3">
+                    <div class="w-10 h-10 rounded-lg bg-red-500/10 text-red-400 flex items-center justify-center font-bold">01</div>
+                    <h3 class="text-lg font-bold">Limited Access to Coaches & Scouts</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">Elite training guidance is heavily concentrated in expensive urban metros, leaving regional talent without technical mentorship.</p>
+                </div>
+                <!-- Challenge 2 -->
+                <div class="glass-card p-6 rounded-2xl border border-gray-800 space-y-3">
+                    <div class="w-10 h-10 rounded-lg bg-red-500/10 text-red-400 flex items-center justify-center font-bold">02</div>
+                    <h3 class="text-lg font-bold">Rural & Underserved Isolation</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">Talented youngsters in tier-3 cities and remote villages lack transport, funding, and information about regional trials.</p>
+                </div>
+                <!-- Challenge 3 -->
+                <div class="glass-card p-6 rounded-2xl border border-gray-800 space-y-3">
+                    <div class="w-10 h-10 rounded-lg bg-red-500/10 text-red-400 flex items-center justify-center font-bold">03</div>
+                    <h3 class="text-lg font-bold">Scattered Performance Records</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">Paper certificates, unverified match scores, and lack of digitized stats make it impossible for scouts to cross-verify potential.</p>
+                </div>
+                <!-- Challenge 4 -->
+                <div class="glass-card p-6 rounded-2xl border border-gray-800 space-y-3">
+                    <div class="w-10 h-10 rounded-lg bg-red-500/10 text-red-400 flex items-center justify-center font-bold">04</div>
+                    <h3 class="text-lg font-bold">Disconnected Academies & Recruiters</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">Sports bodies, corporate sponsors, and academies operate in isolated silos with zero unified repository for talent search.</p>
+                </div>
+                <!-- Challenge 5 -->
+                <div class="glass-card p-6 rounded-2xl border border-gray-800 space-y-3">
+                    <div class="w-10 h-10 rounded-lg bg-red-500/10 text-red-400 flex items-center justify-center font-bold">05</div>
+                    <h3 class="text-lg font-bold">Absence of Centralized Network</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">India lacks a unified digital highway linking athletes directly to trials, grants, and specialized training programs.</p>
+                </div>
+                <!-- Challenge 6 -->
+                <div class="glass-card p-6 rounded-2xl border border-gray-800 space-y-3 bg-gradient-to-br from-red-950/20 to-transparent">
+                    <div class="w-10 h-10 rounded-lg bg-accentBlue/10 text-accentBlue flex items-center justify-center font-bold"><i class="fa-solid fa-bullseye"></i></div>
+                    <h3 class="text-lg font-bold">The National Impact</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">Fixing this bottleneck creates an unprecedented medal pipeline, drastically improving India’s global standing at the Olympics and international championships.</p>
+                </div>
+            </div>
+
+            <!-- ================= PRACTICAL FEATURE: ATHLETE SKILLS & FITNESS DRILLS ARENA ================= -->
+            <div class="mt-12 pt-10 border-t border-gray-800 space-y-8">
+                <!-- Arena Header -->
+                <div class="glass-card p-6 sm:p-8 rounded-3xl border border-cyan-500/30 bg-gradient-to-r from-cyan-950/40 via-darkbg to-emerald-950/40 space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div>
+                            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs font-black uppercase tracking-wider">
+                                <i class="fa-solid fa-bolt text-accentNeon"></i> Live Practical Testing Arena
+                            </div>
+                            <h3 class="text-2xl sm:text-3xl font-black mt-2 text-white">National Athlete Skills &amp; Benchmark Drills Arena</h3>
+                            <p class="text-xs sm:text-sm text-gray-300 max-w-2xl mt-1">
+                                Moving beyond theory: Test your neuromuscular reaction speed, core isometric stamina, and footwork cadence live in your browser. Earn verified Skill Badges and boost your AI Talent Index!
+                            </p>
+                        </div>
+                        <div class="flex items-center gap-2 shrink-0">
+                            <button onclick="openChallengeSubmitModal()" class="px-5 py-3 rounded-xl bg-gradient-to-r from-cyan-400 to-emerald-400 text-gray-950 font-black text-xs uppercase tracking-wider hover:opacity-90 shadow-lg shadow-cyan-500/25 flex items-center gap-2 transition">
+                                <i class="fa-solid fa-trophy text-sm"></i> Log Benchmark Proof
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interactive Drill Stations (Tabs) -->
+                <div class="space-y-6">
+                    <div class="flex flex-wrap items-center gap-2 border-b border-gray-800 pb-3">
+                        <button onclick="switchDrillTab('reaction')" id="drill-tab-reaction" class="px-4 py-2 rounded-xl bg-accentBlue/20 text-cyan-300 border border-accentBlue/40 text-xs font-bold transition flex items-center gap-2">
+                            <i class="fa-solid fa-bolt text-yellow-400"></i> 1. Rapid Reflex Tap (Live)
+                        </button>
+                        <button onclick="switchDrillTab('plank')" id="drill-tab-plank" class="px-4 py-2 rounded-xl bg-darkbg/60 text-gray-400 hover:text-white border border-gray-800 text-xs font-bold transition flex items-center gap-2">
+                            <i class="fa-solid fa-shield-halved text-emerald-400"></i> 2. Core Plank Stopwatch
+                        </button>
+                        <button onclick="switchDrillTab('cadence')" id="drill-tab-cadence" class="px-4 py-2 rounded-xl bg-darkbg/60 text-gray-400 hover:text-white border border-gray-800 text-xs font-bold transition flex items-center gap-2">
+                            <i class="fa-solid fa-person-running text-cyan-400"></i> 3. Jump Rope Cadence
+                        </button>
+                    </div>
+
+                    <!-- DRILL 1: INTERACTIVE RAPID REFLEX TAP ARENA -->
+                    <div id="drill-content-reaction" class="glass-card p-6 sm:p-8 rounded-3xl border border-gray-800 space-y-6">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-800 pb-4">
+                            <div>
+                                <h4 class="text-xl font-black text-white flex items-center gap-2">
+                                    <i class="fa-solid fa-hand-pointer text-cyan-400"></i> 30-Second Rapid Reflex &amp; Reaction Test
+                                </h4>
+                                <p class="text-xs text-gray-400 mt-0.5">Click the glowing neural targets as fast as possible. Tests visual latency and neuromuscular response time.</p>
+                            </div>
+                            <div class="flex items-center gap-4 text-xs font-mono">
+                                <div class="p-2.5 rounded-xl bg-gray-900 border border-gray-800 text-center">
+                                    <span class="text-gray-500 text-[10px] block uppercase">Time Left</span>
+                                    <span id="reaction-timer" class="text-lg font-black text-white">30.0s</span>
+                                </div>
+                                <div class="p-2.5 rounded-xl bg-gray-900 border border-gray-800 text-center">
+                                    <span class="text-gray-500 text-[10px] block uppercase">Hits</span>
+                                    <span id="reaction-hits" class="text-lg font-black text-emerald-400">0</span>
+                                </div>
+                                <div class="p-2.5 rounded-xl bg-gray-900 border border-gray-800 text-center">
+                                    <span class="text-gray-500 text-[10px] block uppercase">Avg Latency</span>
+                                    <span id="reaction-avg" class="text-lg font-black text-cyan-400">— ms</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Interactive Tap Grid Area -->
+                        <div id="reaction-arena" class="relative w-full h-72 sm:h-80 bg-gray-950/80 rounded-2xl border-2 border-dashed border-gray-800 flex items-center justify-center overflow-hidden">
+                            <div id="reaction-start-screen" class="text-center space-y-3 z-10 p-6">
+                                <div class="w-16 h-16 rounded-full bg-cyan-500/20 text-cyan-300 text-2xl mx-auto flex items-center justify-center border border-cyan-400/40">
+                                    <i class="fa-solid fa-play ml-1"></i>
+                                </div>
+                                <h5 class="text-lg font-bold text-white">Ready to test your reaction speed?</h5>
+                                <p class="text-xs text-gray-400 max-w-sm mx-auto">Targets will flash across the arena. Tap them immediately as they appear.</p>
+                                <button onclick="startReactionTest()" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 text-gray-950 font-black text-xs uppercase tracking-wider hover:scale-105 transition shadow-lg shadow-cyan-500/25">
+                                    Start 30s Reflex Drill
+                                </button>
+                            </div>
+                            <button id="reaction-target" onclick="hitReactionTarget()" class="hidden absolute w-16 h-16 rounded-full bg-gradient-to-tr from-cyan-400 via-emerald-400 to-yellow-300 shadow-xl shadow-cyan-400/50 flex items-center justify-center text-gray-950 text-xl font-black cursor-pointer transform active:scale-90 transition-transform">
+                                <i class="fa-solid fa-bolt"></i>
+                            </button>
+                        </div>
+
+                        <!-- Result & Auto-Log Banner -->
+                        <div id="reaction-result-box" class="hidden p-4 rounded-2xl bg-cyan-950/30 border border-cyan-500/40 flex flex-col sm:flex-row items-center justify-between gap-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 rounded-xl bg-emerald-400/20 text-emerald-300 text-xl flex items-center justify-center shrink-0">
+                                    <i class="fa-solid fa-medal"></i>
+                                </div>
+                                <div>
+                                    <div id="reaction-result-badge" class="text-xs font-black text-cyan-300 uppercase tracking-wider">⚡ Lightning Reflexes (National Elite)</div>
+                                    <div class="text-sm font-bold text-white mt-0.5"><span id="reaction-result-score">215</span> ms Average Reaction Speed</div>
+                                </div>
+                            </div>
+                            <div class="flex gap-2">
+                                <button onclick="startReactionTest()" class="px-4 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-300 font-bold text-xs">
+                                    Try Again
+                                </button>
+                                <button onclick="autoSubmitReflexScore()" class="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-gray-950 font-black text-xs uppercase tracking-wider shadow-md">
+                                    <i class="fa-solid fa-check mr-1"></i> Save to Profile
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- DRILL 2: CORE PLANK STOPWATCH -->
+                    <div id="drill-content-plank" class="hidden glass-card p-6 sm:p-8 rounded-3xl border border-gray-800 space-y-6">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-800 pb-4">
+                            <div>
+                                <h4 class="text-xl font-black text-white flex items-center gap-2">
+                                    <i class="fa-solid fa-shield-halved text-emerald-400"></i> Core Stability Isometric Plank Benchmark
+                                </h4>
+                                <p class="text-xs text-gray-400 mt-0.5">Maintain a strict forearm plank. Measures core abdominal endurance and spinal posture stabilization.</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+                            <div class="md:col-span-2 text-center p-8 bg-gray-950/80 rounded-2xl border border-gray-800 space-y-4">
+                                <div class="text-5xl sm:text-7xl font-mono font-black text-white tracking-widest" id="plank-display">00:00</div>
+                                <div class="text-xs font-bold text-gray-400 uppercase tracking-widest" id="plank-tier-label">Tiers: 60s (Bronze) • 120s (Silver) • 180s (Gold) • 240s+ (Titanium)</div>
+                                <div class="flex justify-center gap-3 pt-2">
+                                    <button id="plank-start-btn" onclick="togglePlankTimer()" class="px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-400 to-cyan-500 text-gray-950 font-black text-xs uppercase tracking-wider hover:opacity-90 shadow-lg">
+                                        Start Plank
+                                    </button>
+                                    <button onclick="resetPlankTimer()" class="px-4 py-3 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-300 font-bold text-xs">
+                                        Reset
+                                    </button>
+                                    <button onclick="savePlankScore()" class="px-5 py-3 rounded-xl bg-accentBlue text-darkbg font-black text-xs uppercase tracking-wider hover:bg-accentNeon">
+                                        Log Time
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="p-5 rounded-2xl bg-gray-900/60 border border-gray-800 space-y-3 text-xs text-gray-300">
+                                <div class="font-bold text-cyan-300 uppercase tracking-wider flex items-center gap-1.5">
+                                    <i class="fa-solid fa-circle-info"></i> Form Guidelines
+                                </div>
+                                <ul class="list-disc list-inside space-y-1.5 text-gray-400 text-[11px]">
+                                    <li>Keep elbows directly underneath shoulders.</li>
+                                    <li>Engage glutes and core; do not allow hips to sag.</li>
+                                    <li>Maintain a neutral neck looking slightly forward.</li>
+                                    <li>Stop timer the instant lumbar posture breaks.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- DRILL 3: JUMP ROPE CADENCE -->
+                    <div id="drill-content-cadence" class="hidden glass-card p-6 sm:p-8 rounded-3xl border border-gray-800 space-y-6">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-800 pb-4">
+                            <div>
+                                <h4 class="text-xl font-black text-white flex items-center gap-2">
+                                    <i class="fa-solid fa-person-running text-cyan-400"></i> 60-Second Jump Rope Cadence Tracker
+                                </h4>
+                                <p class="text-xs text-gray-400 mt-0.5">Evaluate rhythmic calf elasticity, speed endurance, and footwork frequency.</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+                            <div class="md:col-span-2 text-center p-8 bg-gray-950/80 rounded-2xl border border-gray-800 space-y-4">
+                                <div class="text-4xl sm:text-6xl font-mono font-black text-cyan-400" id="cadence-reps">0 <span class="text-xl font-normal text-gray-500">reps</span></div>
+                                <div class="text-xs font-bold text-gray-400 uppercase tracking-wider" id="cadence-timer-label">Time Remaining: 60s</div>
+                                <div class="flex justify-center gap-3 pt-2">
+                                    <button id="cadence-start-btn" onclick="startCadenceDrill()" class="px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 text-gray-950 font-black text-xs uppercase tracking-wider hover:opacity-90 shadow-lg">
+                                        Start 60s Countdown
+                                    </button>
+                                    <button onclick="tapCadenceRep()" class="px-6 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-gray-950 font-black text-xs uppercase tracking-wider active:scale-95 transition shadow-lg">
+                                        + Tap Rep
+                                    </button>
+                                    <button onclick="saveCadenceScore()" class="px-5 py-3 rounded-xl bg-gray-800 hover:bg-gray-700 text-cyan-300 font-bold text-xs">
+                                        Log Score
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="p-5 rounded-2xl bg-gray-900/60 border border-gray-800 space-y-3 text-xs text-gray-300">
+                                <div class="font-bold text-yellow-300 uppercase tracking-wider flex items-center gap-1.5">
+                                    <i class="fa-solid fa-award"></i> National Benchmark Tiers
+                                </div>
+                                <div class="space-y-1.5 text-[11px] text-gray-400">
+                                    <div class="flex justify-between"><span>Elite Junior:</span> <b class="text-emerald-400">160+ reps / min</b></div>
+                                    <div class="flex justify-between"><span>State Level:</span> <b class="text-cyan-300">130 - 159 reps</b></div>
+                                    <div class="flex justify-between"><span>Club Level:</span> <b class="text-gray-300">100 - 129 reps</b></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Challenge Leaderboard -->
+                <div class="glass-card p-6 sm:p-8 rounded-3xl border border-gray-800 space-y-6">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-800 pb-4">
+                        <div>
+                            <h4 class="text-xl font-black text-white flex items-center gap-2">
+                                <i class="fa-solid fa-ranking-star text-yellow-400"></i> National Skills &amp; Benchmark Leaderboard
+                            </h4>
+                            <p class="text-xs text-gray-400 mt-0.5">Real-time verified records from athletes across India.</p>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-1.5">
+                            <button onclick="loadChallengeLeaderboard('ALL')" class="px-3 py-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-xs font-bold text-cyan-300">All</button>
+                            <button onclick="loadChallengeLeaderboard('REACTION_TAP')" class="px-3 py-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-xs font-bold text-gray-300">Reflex Tap</button>
+                            <button onclick="loadChallengeLeaderboard('PLANK_HOLD')" class="px-3 py-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-xs font-bold text-gray-300">Plank Hold</button>
+                            <button onclick="loadChallengeLeaderboard('JUMP_ROPE')" class="px-3 py-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-xs font-bold text-gray-300">Jump Rope</button>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead>
+                                <tr class="text-gray-500 uppercase tracking-wider border-b border-gray-800/80">
+                                    <th class="pb-3 px-3">Rank</th>
+                                    <th class="pb-3 px-3">Athlete</th>
+                                    <th class="pb-3 px-3">Drill</th>
+                                    <th class="pb-3 px-3">Verified Result</th>
+                                    <th class="pb-3 px-3">Badge Unlocked</th>
+                                    <th class="pb-3 px-3">Date</th>
+                                </tr>
+                            </thead>
+                            <tbody id="challenges-leaderboard-body" class="divide-y divide-gray-800/60 text-gray-300">
+                                <tr>
+                                    <td colspan="6" class="py-6 text-center text-gray-500">Loading verified benchmark records...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= PAGE: AI ATHLETIC RECOVERY & READINESS LAB (NEW FEATURE 4) ================= -->
+        <section id="page-recovery" class="tab-content hidden space-y-12">
+            <!-- Header -->
+            <div class="max-w-3xl mx-auto text-center space-y-4">
+                <div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold tracking-wide uppercase">
+                    <i class="fa-solid fa-heart-pulse"></i> <span>Sports Science &amp; Workload Intelligence</span>
+                </div>
+                <h2 class="text-3xl sm:text-5xl font-black uppercase tracking-tight">AI Athletic Recovery &amp; Readiness Lab</h2>
+                <p class="text-gray-400 text-base leading-relaxed">
+                    Prevent overtraining, analyze daily resting biometrics, and access sport-specific prehabilitation routines engineered to safeguard athletic careers.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- LEFT: Daily Athletic Readiness Check-In & Gauge -->
+                <div class="glass-card p-6 sm:p-8 rounded-3xl border border-emerald-500/30 space-y-6">
+                    <div class="flex items-center justify-between border-b border-gray-800 pb-4">
+                        <div>
+                            <h3 class="text-xl font-black text-white flex items-center gap-2">
+                                <i class="fa-solid fa-stethoscope text-emerald-400"></i> Daily Readiness Check-In
+                            </h3>
+                            <p class="text-xs text-gray-400 mt-0.5">Calculates your nervous system readiness &amp; training tolerance.</p>
+                        </div>
+                        <span id="readiness-risk-pill" class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                            Low Injury Risk
+                        </span>
+                    </div>
+
+                    <!-- Live AI Gauge -->
+                    <div class="p-6 rounded-2xl bg-gray-950 border border-gray-800 text-center space-y-3">
+                        <div class="relative w-36 h-36 mx-auto flex items-center justify-center">
+                            <div class="absolute inset-0 rounded-full border-4 border-gray-800"></div>
+                            <div id="readiness-ring" class="absolute inset-0 rounded-full border-4 border-emerald-400 border-t-transparent animate-spin-slow"></div>
+                            <div>
+                                <div id="readiness-score-display" class="text-4xl font-black text-emerald-400">88%</div>
+                                <div class="text-[9px] uppercase font-bold text-gray-500 tracking-wider">Readiness Index</div>
+                            </div>
+                        </div>
+                        <div>
+                            <div id="readiness-status-label" class="text-sm font-bold text-white">OPTIMAL READINESS</div>
+                            <p id="readiness-advice-text" class="text-xs text-gray-400 max-w-sm mx-auto mt-1">
+                                Prime nervous system state. Cleared for maximal effort speed, power, and high-intensity game play.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Biometrics Input Sliders -->
+                    <form id="readiness-form" onsubmit="submitReadinessCheck(event)" class="space-y-4 text-xs">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <div class="flex justify-between font-bold text-gray-300 mb-1">
+                                    <span>Resting Heart Rate</span>
+                                    <span id="hr-val-display" class="text-cyan-300 font-mono">54 bpm</span>
+                                </div>
+                                <input type="range" id="input-resting-hr" min="40" max="100" value="54" oninput="updateLiveReadiness()" class="w-full accent-cyan-400 bg-gray-800 rounded-lg">
+                            </div>
+                            <div>
+                                <div class="flex justify-between font-bold text-gray-300 mb-1">
+                                    <span>Sleep Duration</span>
+                                    <span id="sleep-val-display" class="text-cyan-300 font-mono">8.0 hrs</span>
+                                </div>
+                                <input type="range" id="input-sleep" min="4" max="12" step="0.5" value="8" oninput="updateLiveReadiness()" class="w-full accent-cyan-400 bg-gray-800 rounded-lg">
+                            </div>
+                            <div>
+                                <div class="flex justify-between font-bold text-gray-300 mb-1">
+                                    <span>Muscle Soreness</span>
+                                    <span id="soreness-val-display" class="text-yellow-300 font-mono">3 / 10</span>
+                                </div>
+                                <input type="range" id="input-soreness" min="1" max="10" value="3" oninput="updateLiveReadiness()" class="w-full accent-yellow-400 bg-gray-800 rounded-lg">
+                            </div>
+                            <div>
+                                <div class="flex justify-between font-bold text-gray-300 mb-1">
+                                    <span>Fatigue / Stress</span>
+                                    <span id="fatigue-val-display" class="text-yellow-300 font-mono">2 / 10</span>
+                                </div>
+                                <input type="range" id="input-fatigue" min="1" max="10" value="2" oninput="updateLiveReadiness()" class="w-full accent-yellow-400 bg-gray-800 rounded-lg">
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between font-bold text-gray-300 mb-1">
+                                <span>Hydration Intake (Liters)</span>
+                                <span id="hydration-val-display" class="text-cyan-300 font-mono">3.2 L</span>
+                            </div>
+                            <input type="range" id="input-hydration" min="1.0" max="5.0" step="0.2" value="3.2" oninput="updateLiveReadiness()" class="w-full accent-cyan-400 bg-gray-800 rounded-lg">
+                        </div>
+
+                        <div>
+                            <label class="block font-bold text-gray-300 mb-1">Today's Subjective Notes (Optional)</label>
+                            <input type="text" id="readiness-notes" placeholder="e.g. Completed heavy sprint session yesterday; hamstrings feel slightly tight." class="w-full p-2.5 rounded-xl bg-gray-900 border border-gray-800 text-xs text-white">
+                        </div>
+
+                        <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-400 to-cyan-500 text-gray-950 font-black text-xs uppercase tracking-wider hover:opacity-90 shadow-lg shadow-emerald-500/20 transition">
+                            <i class="fa-solid fa-floppy-disk mr-1.5"></i> Save Today's Recovery Check
+                        </button>
+                    </form>
+                </div>
+
+                <!-- RIGHT: Sport-Specific Prehab & Guided Breathing Timer -->
+                <div class="space-y-6">
+                    <!-- Prehab Protocols -->
+                    <div class="glass-card p-6 sm:p-8 rounded-3xl border border-gray-800 space-y-6">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-800 pb-4">
+                            <div>
+                                <h3 class="text-xl font-black text-white flex items-center gap-2">
+                                    <i class="fa-solid fa-person-running text-cyan-400"></i> Sport-Specific Injury Prehab
+                                </h3>
+                                <p class="text-xs text-gray-400 mt-0.5">Targeted corrective routines for your discipline.</p>
+                            </div>
+                            <select id="prehab-sport-select" onchange="changePrehabSport(this.value)" class="p-2 rounded-xl bg-gray-900 border border-gray-700 text-xs text-white font-bold">
+                                <option value="athletics">Athletics / Sprinting</option>
+                                <option value="cricket">Cricket (Bowlers &amp; Batsmen)</option>
+                                <option value="football">Football / Soccer</option>
+                                <option value="badminton">Badminton / Racquet Sports</option>
+                            </select>
+                        </div>
+
+                        <div id="prehab-protocols-list" class="space-y-3">
+                            <!-- Populated dynamically by changePrehabSport() -->
+                        </div>
+                    </div>
+
+                    <!-- 3-Minute Post-Workout Parasympathetic Breathing Timer -->
+                    <div class="glass-card p-6 rounded-3xl border border-cyan-500/30 text-center space-y-4">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold text-cyan-300 uppercase tracking-wider flex items-center gap-1.5">
+                                <i class="fa-solid fa-lungs text-sm"></i> Parasympathetic Recovery Orb (4-7-8)
+                            </span>
+                            <span id="breathing-timer-display" class="font-mono text-xs font-bold text-gray-400">03:00</span>
+                        </div>
+
+                        <div class="py-4">
+                            <div id="breathing-orb" class="w-24 h-24 mx-auto rounded-full bg-gradient-to-tr from-cyan-400 to-emerald-400 shadow-2xl shadow-cyan-400/40 flex items-center justify-center text-gray-950 font-black text-xs uppercase tracking-wider transition-all duration-1000">
+                                Inhale
+                            </div>
+                            <p id="breathing-cue" class="text-xs text-gray-400 mt-3">Inhale through nose for 4 seconds...</p>
+                        </div>
+
+                        <div class="flex justify-center gap-2">
+                            <button id="breathing-start-btn" onclick="toggleBreathingTimer()" class="px-4 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 text-white font-bold text-xs">
+                                Start 3-Min Protocol
+                            </button>
+                            <button onclick="resetBreathingTimer()" class="px-3 py-2 rounded-xl bg-gray-900 text-gray-500 text-xs">
+                                Reset
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= PAGE 3: OUR SOLUTION ================= -->
+        <section id="page-solution" class="tab-content hidden space-y-12">
+            <div class="max-w-3xl mx-auto text-center space-y-4">
+                <div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-accentGreen/10 border border-accentGreen/30 text-accentGreen text-xs font-bold tracking-wide uppercase">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> <span>The AthleteLink AI Ecosystem</span>
+                </div>
+                <h2 class="text-3xl sm:text-5xl font-black uppercase tracking-tight">How We Transform Sports Discovery</h2>
+                <p class="text-gray-400 text-base leading-relaxed">
+                    By combining secure cloud databases, high-performance video processing, and intelligent matchmaking algorithms, we build a seamless bridge from local fields to international stadiums.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="glass-card p-8 rounded-3xl border border-gray-800 space-y-4">
+                    <div class="w-14 h-14 rounded-2xl bg-accentBlue/10 text-accentBlue flex items-center justify-center text-2xl font-bold">
+                        <i class="fa-solid fa-id-card-clip"></i>
+                    </div>
+                    <h3 class="text-xl font-bold">Digital Sports Profiles & Records</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">Every athlete gets a verified digital passport tracking verified match records, medical history, physical metrics, certificates, and video highlights securely stored on cloud infrastructure.</p>
+                </div>
+
+                <div class="glass-card p-8 rounded-3xl border border-gray-800 space-y-4">
+                    <div class="w-14 h-14 rounded-2xl bg-accentGreen/10 text-accentGreen flex items-center justify-center text-2xl font-bold">
+                        <i class="fa-solid fa-brain"></i>
+                    </div>
+                    <h3 class="text-xl font-bold">AI-Based Talent Analysis</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">Machine learning algorithms process uploaded action clips to generate objective metrics—measuring sprint velocity, vertical jump height, agility index, and technical consistency without human bias.</p>
+                </div>
+
+                <div class="glass-card p-8 rounded-3xl border border-gray-800 space-y-4">
+                    <div class="w-14 h-14 rounded-2xl bg-accentNeon/10 text-accentNeon flex items-center justify-center text-2xl font-bold">
+                        <i class="fa-solid fa-network-wired"></i>
+                    </div>
+                    <h3 class="text-xl font-bold">Smart Recommendation Engine</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">Connects athletes directly with optimal coaches, elite training academies, government scholarships, corporate sponsorships, and upcoming competitive trials suited precisely to their profile.</p>
+                </div>
+
+                <div class="glass-card p-8 rounded-3xl border border-gray-800 space-y-4">
+                    <div class="w-14 h-14 rounded-2xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-2xl font-bold">
+                        <i class="fa-solid fa-binoculars"></i>
+                    </div>
+                    <h3 class="text-xl font-bold">Recruiter Discovery Portal</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">Empowers sports scouts, federation selectors, and franchise talent hunters with advanced filtering tools to scout raw rural talent instantly by sport, region, performance score, and age bracket.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= PAGE 4: ATHLETE DASHBOARD ================= -->
+        <section id="page-dashboard" class="tab-content hidden space-y-8">
+            <!-- Athlete Header Card -->
+            <div class="glass-card p-6 sm:p-8 rounded-3xl border border-gray-800 flex flex-col md:flex-row items-center justify-between gap-6 glow-blue">
+                <div class="flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left">
+                    <div class="relative">
+                        <div id="profile-avatar" class="w-28 h-28 rounded-2xl border-2 border-accentBlue bg-gradient-to-br from-cyan-400/20 to-emerald-400/20 flex items-center justify-center text-cyan-300">
+                            <svg viewBox="0 0 24 24" class="w-14 h-14" fill="currentColor"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+                        </div>
+                        <span class="absolute -bottom-2 -right-2 bg-accentBlue text-white text-xs font-black px-2.5 py-1 rounded-full uppercase">Athlete</span>
+                    </div>
+                    <div class="space-y-1">
+                        <div class="flex items-center justify-center sm:justify-start gap-2">
+                            <h2 id="dash-user-name" class="text-2xl font-black">Athlete</h2>
+                            <span id="dash-user-id" class="bg-blue-500/10 text-accentNeon text-xs px-2.5 py-0.5 rounded border border-blue-500/30 font-semibold">ID: —</span>
+                        </div>
+                        <p id="dash-user-sport" class="text-accentBlue font-bold text-sm">—</p>
+                        <p id="dash-user-email" class="text-gray-500 text-xs">—</p>
+                        <p id="dash-user-location" class="text-gray-400 text-xs flex items-center justify-center sm:justify-start gap-1">
+                            <i class="fa-solid fa-location-dot text-red-400"></i> <span>—</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap items-center justify-center gap-4 bg-darkbg/60 p-4 rounded-2xl border border-gray-800">
+                    <div class="text-center px-3">
+                        <div id="dash-ai-talent-score" class="text-3xl font-black text-accentNeon">—</div>
+                        <div class="text-[10px] text-gray-400 uppercase tracking-wider font-bold">AI Talent Index</div>
+                    </div>
+                    <div class="h-10 w-px bg-gray-800 hidden sm:block"></div>
+                    <div class="text-center px-3">
+                        <div id="dash-profile-completion-badge" class="text-3xl font-black text-accentGreen">—%</div>
+                        <div class="text-[10px] text-gray-400 uppercase tracking-wider font-bold">Profile Complete</div>
+                    </div>
+                    <div class="h-10 w-px bg-gray-800 hidden sm:block"></div>
+                    <button onclick="openScoutingCardModal()" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-400 via-blue-500 to-emerald-400 text-gray-950 font-black text-xs uppercase tracking-wider hover:opacity-95 shadow-lg shadow-cyan-500/20 flex items-center gap-2 transition">
+                        <i class="fa-solid fa-id-card-clip text-sm"></i> Official Scouting Card &amp; QR
+                    </button>
+                </div>
+            </div>
+
+            <!-- Profile Completion Bar (Dynamic) -->
+            <div id="dash-profile-completion" class="hidden glass-card p-4 rounded-2xl border border-gray-800 space-y-2">
+                <div class="flex items-center justify-between text-xs">
+                    <span class="text-gray-400 font-bold flex items-center gap-1.5">
+                        <i class="fa-solid fa-chart-pie text-cyan-300"></i> Profile Completion
+                    </span>
+                    <div class="flex items-center gap-3">
+                        <span id="dash-profile-completion-pct" class="font-black text-cyan-300">25%</span>
+                        <button id="dash-share-profile-btn" class="hidden text-[11px] px-2.5 py-1 rounded-lg bg-accentBlue/20 border border-accentBlue/40 text-cyan-300 hover:bg-accentBlue hover:text-darkbg font-bold transition">
+                            <i class="fa-solid fa-share-nodes mr-1"></i>Share Profile
+                        </button>
+                    </div>
+                </div>
+                <div class="w-full bg-gray-800 rounded-full h-2.5">
+                    <div id="dash-profile-completion-bar" class="h-2.5 rounded-full bg-gradient-to-r from-cyan-400 to-emerald-400 transition-all duration-700" style="width: 25%"></div>
+                </div>
+            </div>
+
+            <!-- Dashboard Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Left 2 Cols: Stats & Charts & Video Upload -->
+                <div class="lg:col-span-2 space-y-8">
+                    <!-- Live Trial Opportunities -->
+                    <div class="glass-card p-6 rounded-3xl border border-gray-800 space-y-5">
+                        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
+                            <div>
+                                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accentGreen/10 border border-accentGreen/30 text-accentGreen text-[10px] font-black uppercase tracking-widest">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-accentGreen animate-pulse"></span> Live Registration
+                                </div>
+                                <h3 class="text-xl font-black mt-3 flex items-center gap-2">
+                                    <i class="fa-solid fa-bolt text-accentBlue"></i> LIVE TRIAL OPPORTUNITIES
+                                </h3>
+                                <p class="text-xs text-gray-500 mt-1">Verified upcoming trials matched for youth athletes. Applications are saved to your AthleteLink profile.</p>
+                            </div>
+                            <button onclick="switchTab('trials')" class="text-xs font-bold text-accentBlue hover:text-accentNeon transition whitespace-nowrap">View all trials →</button>
+                        </div>
+                        <div id="dashboard-trials-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="md:col-span-2 py-10 text-center text-xs text-gray-500">Loading live trial opportunities…</div>
+                        </div>
+                    </div>
+
+                    <!-- Athlete Performance Metrics & PR Tracker (Feature 2) -->
+                    <div class="glass-card p-6 sm:p-8 rounded-3xl border border-gray-800 space-y-6 glow-blue">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                            <div>
+                                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-[10px] font-black uppercase tracking-widest">
+                                    <i class="fa-solid fa-bolt text-accentNeon"></i> Athletic Benchmarks
+                                </div>
+                                <h3 class="text-xl font-black mt-2 flex items-center gap-2 text-white">
+                                    <i class="fa-solid fa-stopwatch-20 text-accentNeon"></i> PERFORMANCE METRICS &amp; PR TRACKER
+                                </h3>
+                                <p class="text-xs text-gray-400 mt-1 max-w-xl">
+                                    Log physical test scores (sprint speed, vertical jump, endurance). Verified records boost your AI Talent Index and appear on your official scouting CV.
+                                </p>
+                            </div>
+                            <div class="flex items-center gap-2 shrink-0">
+                                <button onclick="openAddMetricModal()" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-400 to-emerald-400 text-gray-950 font-black text-xs uppercase tracking-wider hover:opacity-90 transition shadow-lg shadow-cyan-500/20 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-plus text-xs"></i> Log PR / Metric
+                                </button>
+                                <button onclick="openScoutingCardModal()" class="px-3.5 py-2.5 rounded-xl bg-gray-800 hover:bg-gray-700 border border-gray-700 text-cyan-300 font-bold text-xs transition" title="Print Official Scouting Bio-Data">
+                                    <i class="fa-solid fa-id-card"></i> Scouting CV
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Top PR Highlights Grid -->
+                        <div>
+                            <div class="text-[11px] font-black uppercase tracking-widest text-gray-400 mb-2.5 flex items-center gap-1.5">
+                                <i class="fa-solid fa-medal text-yellow-400"></i> Personal Records Matrix
+                            </div>
+                            <div id="metrics-pr-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                                <div class="col-span-full py-4 text-center text-xs text-gray-500">Loading benchmark PRs…</div>
+                            </div>
+                        </div>
+
+                        <!-- Recorded Performance Logs Table / List -->
+                        <div class="pt-2 border-t border-gray-800/80">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="text-xs font-bold text-gray-300 uppercase tracking-wider flex items-center gap-1.5">
+                                    <i class="fa-solid fa-clock-rotate-left text-accentBlue"></i> Recent Performance Test History
+                                </div>
+                                <span class="text-[11px] text-gray-500">Auto-synced with MySQL</span>
+                            </div>
+                            <div id="metrics-list" class="space-y-2.5 max-h-72 overflow-y-auto pr-1">
+                                <p class="text-xs text-gray-500 py-3 text-center">Loading performance logs…</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Upload Training Video Feature -->
+                    <div class="glass-card p-6 rounded-3xl border border-gray-800 space-y-4">
+                        <h3 class="text-lg font-bold flex items-center gap-2">
+                            <i class="fa-solid fa-video text-accentNeon"></i> AI Video Analysis & Form Upload
+                        </h3>
+                        <p class="text-gray-400 text-sm">Upload raw training or race footage. Our computer vision model automatically extracts joint angles, stride frequency, and explosive power vectors.</p>
+                        <label for="video-file-input" class="block border-2 border-dashed border-gray-700 hover:border-accentBlue rounded-2xl p-8 text-center cursor-pointer transition bg-darkbg/40">
+                            <i class="fa-solid fa-cloud-arrow-up text-4xl text-accentBlue mb-3"></i>
+                            <p class="font-bold text-sm">Click to browse or drag &amp; drop your training video</p>
+                            <p class="text-xs text-gray-500 mt-1">Supports MP4, MOV, AVI, MKV up to 500MB</p>
+                            <input id="video-file-input" type="file" accept="video/mp4,video/quicktime,video/avi,video/x-matroska,video/webm,.mp4,.mov,.avi,.mkv,.webm" class="hidden" onchange="handleVideoUpload(this)">
+                            <button id="video-upload-btn" onclick="document.getElementById('video-file-input').click()" type="button" class="mt-4 px-6 py-2.5 rounded-xl bg-accentBlue text-darkbg font-bold text-xs uppercase tracking-wider hover:bg-accentNeon transition">
+                                <i class="fa-solid fa-cloud-arrow-up mr-2"></i>Upload &amp; Analyze Now
+                            </button>
+                        </label>
+                        <div id="video-upload-progress" class="hidden text-center py-3">
+                            <i class="fa-solid fa-spinner fa-spin text-accentBlue text-2xl"></i>
+                            <p class="text-xs text-gray-400 mt-2">Uploading video and running AI analysis...</p>
+                        </div>
+                        <div id="video-upload-result"></div>
+                    </div>
+                </div>
+
+                <!-- Right Col: Real profile data -->
+                <div class="space-y-8">
+                    <div class="glass-card p-6 rounded-3xl border border-gray-800 space-y-4">
+                        <div class="flex items-center justify-between"><h3 class="text-lg font-bold flex items-center gap-2"><i class="fa-solid fa-award text-yellow-400"></i> Verified Achievements</h3><button onclick="addAchievement()" class="text-xs px-3 py-1.5 rounded-lg bg-gray-800 hover:bg-accentBlue hover:text-darkbg font-bold">+ Add</button></div>
+                        <div id="achievements-list" class="space-y-3"><p class="text-xs text-gray-500">Loading achievements…</p></div>
+                    </div>
+                    <div class="glass-card p-6 rounded-3xl border border-gray-800 space-y-4">
+                        <h3 class="text-lg font-bold flex items-center gap-2"><i class="fa-solid fa-ticket text-accentGreen"></i> Upcoming Bookings</h3>
+                        <div id="bookings-list" class="space-y-3"><p class="text-xs text-gray-500">Loading bookings…</p></div>
+                    </div>
+                    <div class="glass-card p-6 rounded-3xl border border-gray-800 space-y-4">
+                        <h3 class="text-lg font-bold flex items-center gap-2"><i class="fa-solid fa-file-signature text-accentBlue"></i> Trial Applications</h3>
+                        <div id="applications-list" class="space-y-3"><p class="text-xs text-gray-500">Loading applications…</p></div>
+                    </div>
+                    <div class="glass-card p-6 rounded-3xl border border-gray-800 space-y-4">
+                        <h3 class="text-lg font-bold flex items-center gap-2"><i class="fa-solid fa-graduation-cap text-purple-400"></i> My Scholarship Application</h3>
+                        <div id="my-scholarship-card" class="space-y-3"><p class="text-xs text-gray-500">Loading scholarship status…</p></div>
+                    </div>
+                    <div class="glass-card p-6 rounded-3xl border border-gray-800 space-y-4">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-lg font-bold flex items-center gap-2"><i class="fa-solid fa-bell text-accentBlue"></i> Notifications</h3>
+                            <button onclick="markAllNotificationsRead()" class="text-xs text-accentBlue hover:text-white font-bold transition">Mark all read</button>
+                        </div>
+                        <div id="notifications-list" class="space-y-3"><p class="text-xs text-gray-500">Loading notifications…</p></div>
+                    </div>
+                    <div class="glass-card p-6 rounded-3xl border border-gray-800 space-y-4">
+                        <h3 class="text-lg font-bold flex items-center gap-2"><i class="fa-solid fa-user-group text-accentNeon"></i> Scout Connections</h3>
+                        <div id="connections-list" class="space-y-3"><p class="text-xs text-gray-500">Loading connections…</p></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= PAGE 5: AI TALENT MATCHING ================= -->
+        <section id="page-matching" class="tab-content hidden space-y-12">
+            <div class="max-w-3xl mx-auto text-center space-y-4">
+                <div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-accentNeon/10 border border-accentNeon/30 text-accentNeon text-xs font-bold tracking-wide uppercase">
+                    <i class="fa-solid fa-microchip-ai"></i> <span>Neural Matching Engine</span>
+                </div>
+                <h2 class="text-3xl sm:text-5xl font-black uppercase tracking-tight">AI Talent Matching & Recommendation</h2>
+                <p class="text-gray-400 text-base leading-relaxed">
+                    Our multi-variable recommendation network scans athlete performance matrices, geographical parameters, and specialized skills to link them with the ideal mentors and funding bodies.
+                </p>
+            </div>
+
+            <!-- Matching Simulator Box -->
+            <div class="glass-card p-8 rounded-3xl border border-gray-800 space-y-8 glow-blue">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-gray-400 mb-2">Select Sport Category</label>
+                        <select id="match-sport" class="w-full bg-darkbg border border-gray-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-accentBlue">
+                            <option>Track & Field (Sprint)</option>
+                            <option>Badminton (Singles)</option>
+                            <option>Wrestling (Freestyle)</option>
+                            <option>Boxing</option>
+                            <option>Archery</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-gray-400 mb-2">Region / Location Tier</label>
+                        <select id="match-region" class="w-full bg-darkbg border border-gray-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-accentBlue">
+                            <option>Rural / Tier-3 District</option>
+                            <option>Tier-2 City</option>
+                            <option>Tier-1 Metro</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-gray-400 mb-2">Performance Benchmark</label>
+                        <select id="match-level" class="w-full bg-darkbg border border-gray-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-accentBlue">
+                            <option>Elite State Level (Score > 90)</option>
+                            <option>National Youth Contender</option>
+                            <option>Grassroots Raw Prospect</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <button onclick="runAIMatching()" class="px-8 py-3.5 rounded-xl bg-gradient-to-r from-accentBlue to-accentGreen text-white font-bold text-sm shadow-lg transition hover:opacity-90">
+                        <i class="fa-solid fa-wand-magic-sparkles mr-2"></i> Run AI Match Analysis
+                    </button>
+                </div>
+
+                <div id="matching-results" class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-gray-800">
+                    <!-- Dynamic Result Cards -->
+                    <div class="p-5 rounded-2xl bg-darkbg/60 border border-gray-800 space-y-3">
+                        <span class="text-xs font-bold text-accentBlue bg-accentBlue/10 px-2.5 py-1 rounded">Recommended Coach</span>
+                        <h4 class="font-bold text-base">Coach P. Gopichand Academy Mentor</h4>
+                        <p class="text-xs text-gray-400">Specialized technical training program matching athlete acceleration profile.</p>
+                        <div class="text-xs font-bold text-accentNeon">Match Confidence: 97.4%</div>
+                    </div>
+                    <div class="p-5 rounded-2xl bg-darkbg/60 border border-gray-800 space-y-3">
+                        <span class="text-xs font-bold text-accentGreen bg-accentGreen/10 px-2.5 py-1 rounded">Scholarship Grant</span>
+                        <h4 class="font-bold text-base">Khelo India Elite Development Grant</h4>
+                        <p class="text-xs text-gray-400">Covers full boarding, coaching, and international gear support.</p>
+                        <div class="text-xs font-bold text-accentGreen">Match Confidence: 94.1%</div>
+                    </div>
+                    <div class="p-5 rounded-2xl bg-darkbg/60 border border-gray-800 space-y-3">
+                        <span class="text-xs font-bold text-yellow-400 bg-yellow-400/10 px-2.5 py-1 rounded">Upcoming Trial</span>
+                        <h4 class="font-bold text-base">National Federation Open Trials</h4>
+                        <p class="text-xs text-gray-400">Direct selection camp for upcoming Asian Youth Games squad.</p>
+                        <div class="text-xs font-bold text-yellow-400">Match Confidence: 91.8%</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= PAGE 6: EXPLORE ATHLETES (DIRECTORY) ================= -->
+        <section id="page-directory" class="tab-content hidden space-y-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-3xl font-black uppercase tracking-tight">Explore Talent Directory</h2>
+                    <p class="text-gray-400 text-sm">Discover verified grassroots and elite sports talent across India.</p>
+                </div>
+                <!-- Search & Filters -->
+                <div class="flex flex-wrap gap-3">
+                    <input type="text" id="athlete-search" placeholder="Search athlete or district..." onkeyup="filterAthletes()" class="bg-cardbg border border-gray-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-accentBlue text-white">
+                    <select id="filter-sport" onchange="filterAthletes()" class="bg-cardbg border border-gray-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-accentBlue text-white">
+                        <option value="all">All Sports</option>
+                        <option value="Athletics">Athletics</option>
+                        <option value="Badminton">Badminton</option>
+                        <option value="Wrestling">Wrestling</option>
+                        <option value ="Javelin ">Javelin</option>
+                        <option value="Boxing">Boxing</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Athlete Cards Grid - Dynamic from DB -->
+            <div id="athletes-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="col-span-3 text-center py-10 text-gray-500">Loading athletes...</div>
+            </div>
+        </section>
+
+        <!-- ================= PAGE 7: SCOUTS ================= -->
+        <section id="page-scouts" class="tab-content hidden space-y-8">
+            <div class="max-w-4xl mx-auto text-center space-y-4">
+                <div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-accentNeon/10 border border-accentNeon/30 text-accentNeon text-xs font-bold tracking-wide uppercase"><i class="fa-solid fa-location-crosshairs"></i><span>Nearby Coach & Scout Network</span></div>
+                <h2 class="text-3xl sm:text-5xl font-black uppercase tracking-tight">Find Coaches Near You</h2>
+                <p class="text-gray-400">Use your current location to discover coaches around you. Your sport and saved achievements help prioritize relevant coaches.</p>
+                <div class="flex flex-wrap justify-center gap-3 pt-2">
+                    <button onclick="findNearbyCoaches(false)" class="px-5 py-2.5 rounded-xl bg-accentBlue hover:bg-accentNeon text-darkbg font-black text-xs"><i class="fa-solid fa-location-crosshairs mr-2"></i>Use My Location</button>
+                    <button onclick="findNearbyCoaches(true)" class="px-5 py-2.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-white font-bold text-xs">Search Within 500 km</button>
+                </div>
+            </div>
+            <div id="scouts-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"><div class="text-gray-500">Loading nearby coaches…</div></div><div class="max-w-6xl mx-auto pt-8"><h3 class="text-2xl font-black mb-2">Scouts</h3><p class="text-sm text-gray-500 mb-5">Connect with talent scouts. Requests are saved to MySQL.</p><div id="scouts-network-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6"><div class="text-gray-500">Loading scouts…</div></div></div>
+        </section>
+
+        <!-- ================= PAGE 8: TRIALS ================= -->
+        <section id="page-trials" class="tab-content hidden space-y-8">
+            <div class="max-w-3xl mx-auto text-center space-y-4">
+                <div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-accentBlue/10 border border-accentBlue/30 text-accentNeon text-xs font-bold tracking-wide uppercase"><i class="fa-solid fa-person-running"></i><span>Verified Trial Opportunities</span></div>
+                <h2 class="text-3xl sm:text-5xl font-black uppercase tracking-tight">Upcoming Trials</h2>
+                <p class="text-gray-400">Apply with your athlete profile, choose an available slot and receive a persistent booking confirmation.</p>
+            </div>
+
+            <!-- Trials Filter & Search Bar -->
+            <div class="glass-card p-5 rounded-2xl border border-gray-800 space-y-3">
+                <div class="flex flex-col md:flex-row gap-3">
+                    <div class="relative flex-1">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500 text-xs"></i>
+                        <input id="trial-search-input" type="text" placeholder="Search trials by name, sport, or venue..." onkeyup="applyTrialFilters()" class="w-full pl-9 pr-4 py-2.5 rounded-xl bg-darkbg/80 border border-gray-800 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-accentBlue" />
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <select id="filter-sport-chip" onchange="applyTrialFilters()" class="px-3 py-2 rounded-xl bg-darkbg/80 border border-gray-800 text-xs font-semibold text-gray-300 focus:outline-none focus:border-accentBlue">
+                            <option value="">All Sports</option>
+                            <option value="Football">Football</option>
+                            <option value="Cricket">Cricket</option>
+                            <option value="Basketball">Basketball</option>
+                            <option value="Athletics">Athletics</option>
+                            <option value="Badminton">Badminton</option>
+                            <option value="Tennis">Tennis</option>
+                            <option value="Swimming">Swimming</option>
+                            <option value="Boxing">Boxing</option>
+                        </select>
+                        <select id="filter-category-chip" onchange="applyTrialFilters()" class="px-3 py-2 rounded-xl bg-darkbg/80 border border-gray-800 text-xs font-semibold text-gray-300 focus:outline-none focus:border-accentBlue">
+                            <option value="">All Categories</option>
+                            <option value="Academy Selection">Academy Selection</option>
+                            <option value="Club Scouting">Club Scouting</option>
+                            <option value="State Trials">State Trials</option>
+                            <option value="National Camp">National Camp</option>
+                            <option value="Open Category">Open Category</option>
+                        </select>
+                        <select id="filter-age-chip" onchange="applyTrialFilters()" class="px-3 py-2 rounded-xl bg-darkbg/80 border border-gray-800 text-xs font-semibold text-gray-300 focus:outline-none focus:border-accentBlue">
+                            <option value="">All Ages</option>
+                            <option value="U-16">U-16</option>
+                            <option value="U-18">U-18</option>
+                            <option value="U-21">U-21</option>
+                            <option value="Senior">Senior</option>
+                            <option value="Open">Open</option>
+                        </select>
+                        <select id="filter-status-chip" onchange="applyTrialFilters()" class="px-3 py-2 rounded-xl bg-darkbg/80 border border-gray-800 text-xs font-semibold text-gray-300 focus:outline-none focus:border-accentBlue">
+                            <option value="">All Statuses</option>
+                            <option value="REG OPEN">REG OPEN</option>
+                            <option value="CLOSING SOON">CLOSING SOON</option>
+                        </select>
+                        <button onclick="clearTrialFilters()" class="px-3 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 text-xs font-semibold text-gray-300 transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-rotate-left"></i><span>Clear</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="trials-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"><div class="md:col-span-3 text-gray-500">Loading trials…</div></div>
+        </section>
+
+        <!-- ================= PAGE 7: OPPORTUNITIES ================= -->
+<section id="page-opportunities" class="tab-content hidden space-y-8">
+    <div class="max-w-3xl mx-auto text-center space-y-4">
+        <h2 class="text-3xl sm:text-5xl font-black uppercase tracking-tight">
+            Scholarship Opportunities
+        </h2>
+        <p class="text-gray-400 text-base leading-relaxed">
+            Explore scholarship opportunities designed to support talented athletes
+            and families from different backgrounds.
+        </p>
+    </div>
+
+    <!-- FIVE SCHOLARSHIP BOXES -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <!-- Scholarship 1 -->
+        <div class="glass-card p-6 rounded-3xl border border-gray-800 space-y-4">
+            <span class="text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-accentBlue/10 text-accentBlue">
+                Youth Scholarship
+            </span>
+
+            <h3 class="text-xl font-bold">Scholarship for Under 18</h3>
+
+            <p class="text-sm text-gray-400 leading-relaxed">
+                Financial support for athletes below 18 years who demonstrate
+                sporting potential and require assistance for training or education.
+            </p>
+
+            <div class="text-xs text-gray-500">
+                <b class="text-gray-300">Eligibility:</b>
+                Athletes under 18 with active participation in sports.
+            </div>
+
+            <button
+                onclick="openScholarshipForm('Scholarship for Under 18')"
+                class="w-full py-2.5 rounded-xl bg-accentBlue hover:bg-accentNeon text-darkbg font-bold text-xs uppercase tracking-wider transition">
+                Apply Now
+            </button>
+        </div>
+
+        <!-- Scholarship 2 -->
+        <div class="glass-card p-6 rounded-3xl border border-gray-800 space-y-4">
+            <span class="text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-accentGreen/10 text-accentGreen">
+                Athlete Scholarship
+            </span>
+
+            <h3 class="text-xl font-bold">Scholarship for Above 18</h3>
+
+            <p class="text-sm text-gray-400 leading-relaxed">
+                Support for athletes aged 18 and above who are pursuing competitive
+                sports and need financial assistance for development.
+            </p>
+
+            <div class="text-xs text-gray-500">
+                <b class="text-gray-300">Eligibility:</b>
+                Athletes aged 18+ with competitive sporting experience.
+            </div>
+
+            <button
+                onclick="openScholarshipForm('Scholarship for Above 18')"
+                class="w-full py-2.5 rounded-xl bg-accentGreen hover:bg-emerald-400 text-darkbg font-bold text-xs uppercase tracking-wider transition">
+                Apply Now
+            </button>
+        </div>
+
+        <!-- Scholarship 3 -->
+        <div class="glass-card p-6 rounded-3xl border border-gray-800 space-y-4">
+            <span class="text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-pink-500/10 text-pink-400">
+                Women in Sports
+            </span>
+
+            <h3 class="text-xl font-bold">Scholarship for Women</h3>
+
+            <p class="text-sm text-gray-400 leading-relaxed">
+                Dedicated financial assistance for women athletes to encourage
+                participation, training, education and competitive opportunities.
+            </p>
+
+            <div class="text-xs text-gray-500">
+                <b class="text-gray-300">Eligibility:</b>
+                Women athletes actively pursuing sports or athletic development.
+            </div>
+
+            <button
+                onclick="openScholarshipForm('Scholarship for Women')"
+                class="w-full py-2.5 rounded-xl bg-pink-500 hover:bg-pink-400 text-white font-bold text-xs uppercase tracking-wider transition">
+                Apply Now
+            </button>
+        </div>
+
+        <!-- Scholarship 4 -->
+        <div class="glass-card p-6 rounded-3xl border border-gray-800 space-y-4">
+            <span class="text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-purple-500/10 text-purple-400">
+                Family Support
+            </span>
+
+            <h3 class="text-xl font-bold">Scholarships for Children of Defence Personnels</h3>
+
+            <p class="text-sm text-gray-400 leading-relaxed">
+                Dedicated financial support for eligible families, helping ease educational expenses and empower the children of those who serve our country with pride and purpose.
+            </p>
+
+            <div class="text-xs text-gray-500">
+                <b class="text-gray-300">Eligibility:</b>
+                 Children of serving, retired, or deceased personnel from the Army, Navy, or Air Force, meeting the required academic and financial criteria.
+            </div>
+
+            <button
+                onclick="openScholarshipForm('Scholarships for Children of Defence Personnels')"
+                class="w-full py-2.5 rounded-xl bg-purple-500 hover:bg-purple-400 text-white font-bold text-xs uppercase tracking-wider transition">
+                Apply Now
+            </button>
+        </div>
+
+        <!-- Scholarship 5 -->
+        <div class="glass-card p-6 rounded-3xl border border-gray-800 space-y-4">
+            <span class="text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-yellow-400/10 text-yellow-400">
+                Family Assistance
+            </span>
+
+            <h3 class="text-xl font-bold">Scholarship for Single Parents</h3>
+
+            <p class="text-sm text-gray-400 leading-relaxed">
+                Financial assistance for single parents and their dependents to help
+                manage education, training and development-related expenses.
+            </p>
+
+            <div class="text-xs text-gray-500">
+                <b class="text-gray-300">Eligibility:</b>
+                Single parents or eligible dependents requiring financial assistance.
+            </div>
+
+            <button
+                onclick="openScholarshipForm('Scholarship for Single Parents')"
+                class="w-full py-2.5 rounded-xl bg-yellow-400 hover:bg-yellow-300 text-darkbg font-bold text-xs uppercase tracking-wider transition">
+                Apply Now
+            </button>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- ================= 5-CATEGORY SCHOLARSHIP APPLICATION MODAL ================= -->
+<div id="scholarshipModal"
+     class="fixed inset-0 z-[9999] hidden items-center justify-center bg-black/85 backdrop-blur-md p-4 overflow-y-auto">
+
+    <div class="w-full max-w-xl max-h-[92vh] overflow-y-auto glass-card rounded-3xl border border-cyan-500/30 p-6 sm:p-8 space-y-6 shadow-2xl shadow-cyan-950/50">
+
+        <!-- Header -->
+        <div class="flex justify-between items-start border-b border-gray-800 pb-4">
+            <div>
+                <span id="scholarshipCategoryBadge" class="text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full bg-cyan-400/10 text-cyan-300 border border-cyan-400/30">
+                    Category Form
+                </span>
+                <h3 id="scholarshipTitle" class="text-2xl font-black mt-2 text-white">
+                    Scholarship Application
+                </h3>
+                <p id="scholarshipSubtitle" class="text-xs text-gray-400 mt-1">
+                    Please complete all required fields below. * Required
+                </p>
+            </div>
+            <button type="button" onclick="closeScholarshipForm()" class="text-gray-400 hover:text-white text-2xl p-1 leading-none">&times;</button>
+        </div>
+
+        <!-- Strict Single Quota Alert Box if already applied or cancelled -->
+        <div id="scholarshipQuotaWarning" class="hidden p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs leading-relaxed space-y-2">
+            <div class="font-black flex items-center gap-1.5 text-sm">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <span>One Scholarship Per Person Policy</span>
+            </div>
+            <p id="scholarshipQuotaMsg">You have already applied for a scholarship. You can apply for only one scholarship.</p>
+        </div>
+
+        <!-- Main Form -->
+        <form id="scholarshipForm" onsubmit="submitScholarshipApplication(event)" class="space-y-5" novalidate>
+            <input type="hidden" id="selectedScholarshipCategory" name="category">
+            <input type="hidden" id="selectedScholarshipTitle" name="categoryTitle">
+
+            <!-- COMMON QUESTIONS: Full Name, Email, Phone -->
+            <div class="space-y-1">
+                <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider">
+                    Full Name <span class="text-red-400 font-black">* Required</span>
+                </label>
+                <input type="text" id="scholarshipFullName" name="fullName" required class="w-full p-3 rounded-xl bg-darkbg/80 border border-gray-700 text-white outline-none focus:border-cyan-400 text-sm transition" placeholder="Enter your full name">
+                <span id="error-scholarshipFullName" class="inline-error text-[11px] text-red-400 hidden block mt-1">This field is required.</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="space-y-1">
+                    <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider">
+                        Email Address <span class="text-red-400 font-black">* Required</span>
+                    </label>
+                    <input type="email" id="scholarshipEmail" name="email" required class="w-full p-3 rounded-xl bg-darkbg/80 border border-gray-700 text-white outline-none focus:border-cyan-400 text-sm transition" placeholder="example@domain.com">
+                    <span id="error-scholarshipEmail" class="inline-error text-[11px] text-red-400 hidden block mt-1">Please enter a valid email address.</span>
+                </div>
+
+                <div class="space-y-1">
+                    <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider">
+                        Phone Number <span class="text-red-400 font-black">* Required</span>
+                    </label>
+                    <input type="tel" id="scholarshipPhone" name="phone" required maxlength="10" class="w-full p-3 rounded-xl bg-darkbg/80 border border-gray-700 text-white outline-none focus:border-cyan-400 text-sm transition" placeholder="10-digit Indian mobile number">
+                    <span id="error-scholarshipPhone" class="inline-error text-[11px] text-red-400 hidden block mt-1">Please enter a valid 10-digit Indian mobile number.</span>
+                </div>
+            </div>
+
+            <!-- CATEGORY 1 & 2: AGE & DOB & FAMILY INCOME -->
+            <div id="section-age-dob-income" class="hidden space-y-4 pt-2 border-t border-gray-800/80">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                        <label id="label-scholarshipAge" class="block text-xs font-bold text-gray-300 uppercase tracking-wider">
+                            Current Age <span class="text-red-400 font-black">* Required</span>
+                        </label>
+                        <input type="number" id="scholarshipAge" name="age" min="1" max="100" class="w-full p-3 rounded-xl bg-darkbg/80 border border-gray-700 text-white outline-none focus:border-cyan-400 text-sm transition" placeholder="Age in years">
+                        <span id="error-scholarshipAge" class="inline-error text-[11px] text-red-400 hidden block mt-1">Age validation error.</span>
+                    </div>
+
+                    <div class="space-y-1">
+                        <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider">
+                            Date of Birth <span class="text-red-400 font-black">* Required</span>
+                        </label>
+                        <input type="date" id="scholarshipDob" name="dob" class="w-full p-3 rounded-xl bg-darkbg/80 border border-gray-700 text-white outline-none focus:border-cyan-400 text-sm transition">
+                        <span id="error-scholarshipDob" class="inline-error text-[11px] text-red-400 hidden block mt-1">Date of birth is required and must match age.</span>
+                    </div>
+                </div>
+
+                <div class="space-y-1">
+                    <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider">
+                        Family Annual Income (₹) <span class="text-red-400 font-black">* Required</span>
+                    </label>
+                    <input type="number" id="scholarshipFamilyIncome" name="familyIncome" min="1" step="any" class="w-full p-3 rounded-xl bg-darkbg/80 border border-gray-700 text-white outline-none focus:border-cyan-400 text-sm transition" placeholder="e.g. 250000">
+                    <span id="error-scholarshipFamilyIncome" class="inline-error text-[11px] text-red-400 hidden block mt-1">Family annual income must be a valid positive amount.</span>
+                </div>
+            </div>
+
+            <!-- CATEGORY 1 SPECIFIC: PARENT/GUARDIAN -->
+            <div id="section-under18" class="hidden space-y-4 pt-2 border-t border-gray-800/80">
+                <div class="space-y-1">
+                    <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider">
+                        Parent / Guardian Name <span class="text-red-400 font-black">* Required</span>
+                    </label>
+                    <input type="text" id="scholarshipParentName" name="parentGuardianName" class="w-full p-3 rounded-xl bg-darkbg/80 border border-gray-700 text-white outline-none focus:border-cyan-400 text-sm transition" placeholder="Parent or guardian's full name">
+                    <span id="error-scholarshipParentName" class="inline-error text-[11px] text-red-400 hidden block mt-1">This field is required.</span>
+                </div>
+
+                <div class="space-y-1">
+                    <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider">
+                        Parent / Guardian ID Proof <span class="text-red-400 font-black">* Required</span>
+                    </label>
+                    <input type="file" id="scholarshipParentIdDoc" accept=".pdf,.jpg,.jpeg,.png" class="w-full p-2.5 rounded-xl bg-darkbg/80 border border-gray-700 text-gray-300 text-xs file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-cyan-400 file:text-darkbg">
+                    <p class="text-[10px] text-gray-500">Aadhaar / Voter ID / PAN Card (PDF, JPG, PNG max 5MB)</p>
+                    <span id="error-scholarshipParentIdDoc" class="inline-error text-[11px] text-red-400 hidden block mt-1">Please upload a valid Parent/Guardian ID proof.</span>
+                </div>
+            </div>
+
+            <!-- AGE PROOF DOCUMENT (Category 1 & 2) -->
+            <div id="section-age-proof" class="hidden space-y-1 pt-2 border-t border-gray-800/80">
+                <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider">
+                    Age Proof Document <span class="text-red-400 font-black">* Required</span>
+                </label>
+                <input type="file" id="scholarshipAgeProofDoc" accept=".pdf,.jpg,.jpeg,.png" class="w-full p-2.5 rounded-xl bg-darkbg/80 border border-gray-700 text-gray-300 text-xs file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-cyan-400 file:text-darkbg">
+                <p class="text-[10px] text-gray-500">Birth Certificate, Aadhaar Card, or Other valid age-proof document (PDF, JPG, PNG max 5MB)</p>
+                <span id="error-scholarshipAgeProofDoc" class="inline-error text-[11px] text-red-400 hidden block mt-1">Please upload a valid age proof document.</span>
+            </div>
+
+            <!-- APPLICANT ID PROOF (Category 2, 4, 5) -->
+            <div id="section-applicant-id" class="hidden space-y-1 pt-2 border-t border-gray-800/80">
+                <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider">
+                    Applicant ID Proof <span class="text-red-400 font-black">* Required</span>
+                </label>
+                <input type="file" id="scholarshipApplicantIdDoc" accept=".pdf,.jpg,.jpeg,.png" class="w-full p-2.5 rounded-xl bg-darkbg/80 border border-gray-700 text-gray-300 text-xs file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-cyan-400 file:text-darkbg">
+                <p class="text-[10px] text-gray-500">Aadhaar / Voter ID / Passport / Student ID (PDF, JPG, PNG max 5MB)</p>
+                <span id="error-scholarshipApplicantIdDoc" class="inline-error text-[11px] text-red-400 hidden block mt-1">Please upload a valid applicant ID proof.</span>
+            </div>
+
+            <!-- CATEGORY 3 SPECIFIC: AADHAAR CARD FOR WOMEN -->
+            <div id="section-women" class="hidden space-y-1 pt-2 border-t border-gray-800/80">
+                <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider">
+                    Aadhaar Card <span class="text-red-400 font-black">* Required</span>
+                </label>
+                <input type="file" id="scholarshipWomenAadhaarDoc" accept=".pdf,.jpg,.jpeg,.png" class="w-full p-2.5 rounded-xl bg-darkbg/80 border border-gray-700 text-gray-300 text-xs file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-pink-500 file:text-white">
+                <p class="text-[10px] text-gray-500">Upload Applicant Aadhaar Card for verification (PDF, JPG, PNG max 5MB)</p>
+                <span id="error-scholarshipWomenAadhaarDoc" class="inline-error text-[11px] text-red-400 hidden block mt-1">Aadhaar upload is mandatory.</span>
+            </div>
+
+            <!-- CATEGORY 4 SPECIFIC: DEFENCE PERSONNEL -->
+            <div id="section-defence" class="hidden space-y-4 pt-2 border-t border-gray-800/80">
+                <div class="space-y-1">
+                    <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider">
+                        Defence Personnel Relationship <span class="text-red-400 font-black">* Required</span>
+                    </label>
+                    <select id="scholarshipDefenceRelationship" name="defenceRelationship" class="w-full p-3 rounded-xl bg-darkbg/80 border border-gray-700 text-white outline-none focus:border-cyan-400 text-sm transition">
+                        <option value="">Select relationship…</option>
+                        <option value="Mother">Mother</option>
+                        <option value="Father">Father</option>
+                        <option value="Other blood relative only">Other blood relative only</option>
+                    </select>
+                    <span id="error-scholarshipDefenceRelationship" class="inline-error text-[11px] text-red-400 hidden block mt-1">Relationship must be selected from Mother, Father, or Other blood relative only.</span>
+                </div>
+
+                <div class="space-y-1">
+                    <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider">
+                        Supporting Person's Full Name <span class="text-red-400 font-black">* Required</span>
+                    </label>
+                    <input type="text" id="scholarshipSupportingName" name="supportingPersonName" class="w-full p-3 rounded-xl bg-darkbg/80 border border-gray-700 text-white outline-none focus:border-cyan-400 text-sm transition" placeholder="Defence personnel full name">
+                    <span id="error-scholarshipSupportingName" class="inline-error text-[11px] text-red-400 hidden block mt-1">This field is required.</span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                        <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider">
+                            Current Grade / Year of Study <span class="text-red-400 font-black">* Required</span>
+                        </label>
+                        <input type="text" id="scholarshipCurrentGrade" name="currentGrade" class="w-full p-3 rounded-xl bg-darkbg/80 border border-gray-700 text-white outline-none focus:border-cyan-400 text-sm transition" placeholder="e.g. Class 11 / 2nd Year B.Sc">
+                        <span id="error-scholarshipCurrentGrade" class="inline-error text-[11px] text-red-400 hidden block mt-1">Grade/year field cannot be empty.</span>
+                    </div>
+
+                    <div class="space-y-1">
+                        <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider">
+                            Grade / Year Being Maintained <span class="text-red-400 font-black">* Required</span>
+                        </label>
+                        <input type="text" id="scholarshipMaintainedGrade" name="maintainedGrade" class="w-full p-3 rounded-xl bg-darkbg/80 border border-gray-700 text-white outline-none focus:border-cyan-400 text-sm transition" placeholder="e.g. Grade A / 85%+ Aggregate">
+                        <span id="error-scholarshipMaintainedGrade" class="inline-error text-[11px] text-red-400 hidden block mt-1">Grade/year field cannot be empty.</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                        <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider">
+                            Do you require stationery? <span class="text-red-400 font-black">* Required</span>
+                        </label>
+                        <select id="scholarshipStationery" name="stationeryRequired" class="w-full p-3 rounded-xl bg-darkbg/80 border border-gray-700 text-white outline-none focus:border-cyan-400 text-sm transition">
+                            <option value="">Select Yes or No…</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                        <span id="error-scholarshipStationery" class="inline-error text-[11px] text-red-400 hidden block mt-1">Please select Yes or No.</span>
+                    </div>
+
+                    <div class="space-y-1">
+                        <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider">
+                            Other educational resources/support? <span class="text-red-400 font-black">* Required</span>
+                        </label>
+                        <select id="scholarshipResources" name="resourcesRequired" onchange="toggleDefenceResourcesList(this.value)" class="w-full p-3 rounded-xl bg-darkbg/80 border border-gray-700 text-white outline-none focus:border-cyan-400 text-sm transition">
+                            <option value="">Select Yes or No…</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                        <span id="error-scholarshipResources" class="inline-error text-[11px] text-red-400 hidden block mt-1">Please select Yes or No.</span>
+                    </div>
+                </div>
+
+                <div id="defence-resources-list-wrap" class="hidden space-y-1">
+                    <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider">
+                        List the Required Resources <span class="text-red-400 font-black">* Required</span>
+                    </label>
+                    <textarea id="scholarshipResourceList" name="requiredResourcesList" rows="3" class="w-full p-3 rounded-xl bg-darkbg/80 border border-gray-700 text-white outline-none focus:border-cyan-400 text-sm transition" placeholder="List specific textbooks, online courses, training kits, or tutoring support required…"></textarea>
+                    <span id="error-scholarshipResourceList" class="inline-error text-[11px] text-red-400 hidden block mt-1">Please list the required resources when Yes is selected.</span>
+                </div>
+
+                <div class="space-y-1">
+                    <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider">
+                        Defence Personnel / Supporting Person's ID Proof <span class="text-red-400 font-black">* Required</span>
+                    </label>
+                    <input type="file" id="scholarshipDefenceIdDoc" accept=".pdf,.jpg,.jpeg,.png" class="w-full p-2.5 rounded-xl bg-darkbg/80 border border-gray-700 text-gray-300 text-xs file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-purple-500 file:text-white">
+                    <p class="text-[10px] text-gray-500">Service ID / Discharge Book / Canteen Card / Dependent Card (PDF, JPG, PNG max 5MB)</p>
+                    <span id="error-scholarshipDefenceIdDoc" class="inline-error text-[11px] text-red-400 hidden block mt-1">Defence personnel ID proof is mandatory.</span>
+                </div>
+            </div>
+
+            <!-- CATEGORY 5 SPECIFIC: SINGLE PARENTS -->
+            <div id="section-single-parent" class="hidden space-y-4 pt-2 border-t border-gray-800/80">
+                <div class="space-y-1">
+                    <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider">
+                        Which year did you lose one of your parents? <span class="text-red-400 font-black">* Required</span>
+                    </label>
+                    <input type="number" id="scholarshipLossYear" name="lossYear" min="1950" max="2026" class="w-full p-3 rounded-xl bg-darkbg/80 border border-gray-700 text-white outline-none focus:border-cyan-400 text-sm transition" placeholder="e.g. 2019">
+                    <span id="error-scholarshipLossYear" class="inline-error text-[11px] text-red-400 hidden block mt-1">Year must be valid and cannot be in the future.</span>
+                </div>
+
+                <div class="space-y-1">
+                    <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider">
+                        Family Annual Income (₹) <span class="text-red-400 font-black">* Required</span>
+                    </label>
+                    <input type="number" id="scholarshipSingleIncome" name="singleIncome" min="1" step="any" class="w-full p-3 rounded-xl bg-darkbg/80 border border-gray-700 text-white outline-none focus:border-cyan-400 text-sm transition" placeholder="e.g. 180000">
+                    <span id="error-scholarshipSingleIncome" class="inline-error text-[11px] text-red-400 hidden block mt-1">Family annual income must be a valid positive amount.</span>
+                </div>
+            </div>
+
+            <!-- SUBMIT BUTTON & GENERAL ERROR FEEDBACK -->
+            <div class="pt-4 border-t border-gray-800 space-y-3">
+                <div id="scholarshipFormGeneralError" class="hidden p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-medium"></div>
+
+                <button type="submit" id="scholarshipSubmitBtn" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-cyan-400 via-blue-500 to-emerald-400 text-darkbg font-black text-sm uppercase tracking-wider shadow-lg shadow-cyan-500/20 hover:scale-[1.02] active:scale-95 transition disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center gap-2">
+                    <span id="scholarshipSubmitBtnText">Submit Scholarship Application</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ================= SUCCESS POPUP ================= -->
+<div id="scholarshipSuccess"
+     class="fixed inset-0 z-[10000] hidden items-center justify-center bg-black/85 backdrop-blur-sm p-4">
+
+    <div class="glass-card w-full max-w-sm rounded-3xl border border-emerald-400/40 p-8 text-center space-y-4 shadow-2xl">
+
+        <div class="w-16 h-16 rounded-full bg-emerald-400/15 border border-emerald-400/40 text-emerald-400 text-3xl font-black mx-auto flex items-center justify-center">
+            ✓
+        </div>
+
+        <h3 class="text-2xl font-black text-white">
+            Application Submitted!
+        </h3>
+
+        <p id="scholarshipSuccessMsg" class="text-sm text-gray-300 leading-relaxed">
+            Your scholarship application has been successfully submitted and is awaiting review.
+        </p>
+
+        <button
+            onclick="closeScholarshipSuccess()"
+            class="w-full py-3 rounded-xl bg-emerald-400 hover:bg-emerald-300 text-darkbg font-black text-xs uppercase tracking-wider transition">
+            Done
+        </button>
+
+    </div>
+</div>
+
+        <!-- ================= EXPECTED IMPACT SECTION (Displayed globally or on solution) ================= -->
+        <section class="mt-24 pt-16 border-t border-gray-800 space-y-12">
+            <div class="max-w-3xl mx-auto text-center space-y-4">
+                <div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-accentBlue/10 border border-accentBlue/30 text-accentNeon text-xs font-bold tracking-wide uppercase">
+                    <i class="fa-solid fa-chart-pie"></i> <span>Measurable National Outcome</span>
+                </div>
+                <h2 class="text-3xl sm:text-4xl font-black uppercase tracking-tight">Expected Impact on Indian Sports</h2>
+                <p class="text-gray-400 text-base leading-relaxed">
+                    By scaling digital talent identification, AthleteLink AI drives profound socio-economic and competitive transformations.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="glass-card p-6 rounded-2xl border border-gray-800 space-y-3">
+                    <div class="text-accentBlue text-xl font-black"><i class="fa-solid fa-globe"></i></div>
+                    <h3 class="font-bold text-base">Rural Talent Inclusion</h3>
+                    <p class="text-xs text-gray-400 leading-relaxed">Unlocks hidden prodigies in remote villages who previously lacked visibility, ensuring true meritocracy in selection.</p>
+                </div>
+                <div class="glass-card p-6 rounded-2xl border border-gray-800 space-y-3">
+                    <div class="text-accentGreen text-xl font-black"><i class="fa-solid fa-medal"></i></div>
+                    <h3 class="font-bold text-base">Olympic Medal Pipeline</h3>
+                    <p class="text-xs text-gray-400 leading-relaxed">Builds a data-backed continuous feeder system that drastically improves India’s podium conversion rate at international games.</p>
+                </div>
+                <div class="glass-card p-6 rounded-2xl border border-gray-800 space-y-3">
+                    <div class="text-accentNeon text-xl font-black"><i class="fa-solid fa-shield-halved"></i></div>
+                    <h3 class="text-xs text-gray-400 uppercase tracking-wider font-bold">Architecture Ready</h3>
+                    <p class="text-xs text-gray-400 leading-relaxed">Built on robust Java Spring Boot backend structure, MySQL relational schemas, and cloud-ready microservices.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-20 glass-card border-t border-gray-800 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-accentBlue to-accentGreen flex items-center justify-center">
+                    <i class="fa-solid fa-bolt text-white text-sm"></i>
+                </div>
+                <span class="text-lg font-black tracking-wider uppercase text-white">AthleteLink <span class="text-accentBlue">AI</span></span>
+            </div>
+            <p class="text-xs text-gray-500 text-center">© 2026 AthleteLink AI. Empowering India's Sports Future. Built for Hackathon Excellence.</p>
+            <div class="flex space-x-4 text-gray-400 text-sm">
+                <a href="#" class="hover:text-accentNeon transition"><i class="fa-brands fa-twitter"></i></a>
+                <a href="#" class="hover:text-accentNeon transition"><i class="fa-brands fa-linkedin"></i></a>
+                <a href="#" class="hover:text-accentNeon transition"><i class="fa-brands fa-instagram"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ================= AUTH MODAL (Login / Register) ================= -->
+    <div id="auth-overlay" class="auth-overlay hidden">
+        <div class="glass-card relative w-full max-w-md rounded-3xl border border-cyan-400/30 p-8 glow-blue">
+
+            <button onclick="closeAuth()" class="absolute top-5 right-5 text-gray-400 hover:text-white transition">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+
+            <div class="text-center mb-6">
+                <div class="w-14 h-14 mx-auto rounded-2xl bg-cyan-400/15 flex items-center justify-center mb-3">
+                    <i class="fa-solid fa-person-running text-cyan-300 text-2xl"></i>
+                </div>
+                <h2 id="auth-title" class="text-2xl font-black text-white">Welcome Back</h2>
+                <p id="auth-subtitle" class="text-gray-400 text-sm mt-1">Login to access your AthleteLink dashboard</p>
+            </div>
+
+            <div id="auth-banner" class="auth-banner"></div>
+
+            <!-- LOGIN FORM -->
+            <form id="login-form" class="space-y-4 mt-4" onsubmit="return handleLogin(event)">
+                <div>
+                    <label class="block text-xs font-bold uppercase text-gray-400 mb-1.5">Email</label>
+                    <input type="email" id="login-email" required
+                        class="w-full bg-darkbg border border-gray-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-accentBlue"
+                        placeholder="you@example.com">
+                    <div class="auth-field-error" id="login-email-error"></div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase text-gray-400 mb-1.5">Password</label>
+                    <input type="password" id="login-password" required
+                        class="w-full bg-darkbg border border-gray-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-accentBlue"
+                        placeholder="••••••••">
+                    <div class="auth-field-error" id="login-password-error"></div>
+                </div>
+                <button type="submit" id="login-submit-btn"
+                    class="w-full py-3.5 rounded-xl bg-gradient-to-r from-cyan-400 via-blue-500 to-emerald-400 text-white font-black shadow-xl shadow-cyan-500/30 hover:scale-[1.02] transition">
+                    Login
+                </button>
+                <p class="text-center text-sm text-gray-400">
+                    Don't have an account?
+                    <button type="button" onclick="switchAuthMode('register')" class="text-cyan-300 font-bold hover:underline">Create one</button>
+                </p>
+            </form>
+
+            <!-- REGISTER FORM -->
+            <form id="register-form" class="hidden space-y-4 mt-4" onsubmit="return handleRegister(event)">
+                <div>
+                    <label class="block text-xs font-bold uppercase text-gray-400 mb-1.5">Full Name</label>
+                    <input type="text" id="register-name" required
+                        class="w-full bg-darkbg border border-gray-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-accentBlue"
+                        placeholder="Your full name">
+                    <div class="auth-field-error" id="register-name-error"></div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase text-gray-400 mb-1.5">Email</label>
+                    <input type="email" id="register-email" required
+                        class="w-full bg-darkbg border border-gray-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-accentBlue"
+                        placeholder="you@example.com">
+                    <div class="auth-field-error" id="register-email-error"></div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-gray-400 mb-1.5">Sport</label>
+                        <input type="text" id="register-sport"
+                            class="w-full bg-darkbg border border-gray-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-accentBlue"
+                            placeholder="e.g. Athletics">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-gray-400 mb-1.5">Location</label>
+                        <input type="text" id="register-location"
+                            class="w-full bg-darkbg border border-gray-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-accentBlue"
+                            placeholder="City, State">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase text-gray-400 mb-1.5">Password</label>
+                    <input type="password" id="register-password" required
+                        class="w-full bg-darkbg border border-gray-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-accentBlue"
+                        placeholder="Min. 6 characters">
+                    <div class="auth-field-error" id="register-password-error"></div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase text-gray-400 mb-1.5">Confirm Password</label>
+                    <input type="password" id="register-confirm-password" required
+                        class="w-full bg-darkbg border border-gray-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-accentBlue"
+                        placeholder="Re-enter password">
+                    <div class="auth-field-error" id="register-confirm-password-error"></div>
+                </div>
+                <button type="submit" id="register-submit-btn"
+                    class="w-full py-3.5 rounded-xl bg-gradient-to-r from-cyan-400 via-blue-500 to-emerald-400 text-white font-black shadow-xl shadow-cyan-500/30 hover:scale-[1.02] transition">
+                    Create Account
+                </button>
+                <p class="text-center text-sm text-gray-400">
+                    Already have an account?
+                    <button type="button" onclick="switchAuthMode('login')" class="text-cyan-300 font-bold hover:underline">Login</button>
+                </p>
+            </form>
+
+        </div>
+    </div>
+
+
+    <!-- Functional platform modals -->
+    <div id="achievement-modal" class="hidden fixed inset-0 z-[150] bg-black/80 backdrop-blur-sm p-4 overflow-y-auto">
+      <div class="max-w-3xl mx-auto mt-10 mb-10 glass-card rounded-3xl border border-gray-700 p-6 sm:p-8">
+        <div class="flex justify-between items-center mb-6"><div><h2 class="text-2xl font-black">Add Achievement</h2><p class="text-xs text-gray-500 mt-1">Saved to your MySQL athlete profile.</p></div><button onclick="closeModal('achievement-modal')" class="text-gray-400 hover:text-white text-xl">&times;</button></div>
+        <form onsubmit="submitAchievement(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div><label class="form-label">Achievement / Event Name *</label><input name="title" required class="form-input" placeholder="District Athletics Championship"></div>
+          <div><label class="form-label">Achievement Type *</label><select name="type" required class="form-input"><option value="">Select type</option><option>Competition</option><option>Tournament</option><option>Championship</option><option>Award</option><option>Other</option></select></div>
+          <div><label class="form-label">Sport *</label><input name="sport" required class="form-input" placeholder="Athletics"></div>
+          <div><label class="form-label">Level *</label><select name="level" required class="form-input"><option value="">Select level</option><option>School</option><option>College</option><option>District</option><option>State</option><option>National</option><option>International</option></select></div>
+          <div><label class="form-label">Year *</label><input name="year" type="number" min="1900" max="2100" required class="form-input" placeholder="2026"></div>
+          <div><label class="form-label">Academic Year</label><input name="academicYear" class="form-input" placeholder="2025–26"></div>
+          <div><label class="form-label">School / College / Institution *</label><input name="institution" required class="form-input" placeholder="My College"></div>
+          <div><label class="form-label">Position / Rank</label><select name="position" class="form-input"><option value="">Select</option><option>1st</option><option>2nd</option><option>3rd</option><option>Other</option></select></div>
+          <div><label class="form-label">Medal / Award</label><input name="medalAward" class="form-input" placeholder="Gold Medal"></div>
+          <div><label class="form-label">Event Date</label><input name="eventDate" type="date" class="form-input"></div>
+          <div><label class="form-label">Location</label><input name="location" class="form-input" placeholder="Chennai, Tamil Nadu"></div>
+          <div><label class="form-label">Certificate Details</label><input name="certificateDetails" class="form-input" placeholder="Certificate ID / details"></div>
+          <div class="md:col-span-2"><label class="form-label">Certificate URL</label><input name="certificateUrl" type="url" class="form-input" placeholder="https://..."></div>
+          <div class="md:col-span-2"><label class="form-label">Description</label><textarea name="description" rows="3" class="form-input" placeholder="Briefly describe the achievement…"></textarea></div>
+          <div class="md:col-span-2 flex justify-end gap-3 pt-2"><button type="button" onclick="closeModal('achievement-modal')" class="px-5 py-2.5 rounded-xl bg-gray-800 text-white font-bold text-sm">Cancel</button><button class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-cyan-400 to-emerald-400 text-darkbg font-black text-sm">Save Achievement</button></div>
+        </form>
+      </div>
+    </div>
+    <div id="trial-modal" class="hidden fixed inset-0 z-[150] bg-black/80 backdrop-blur-sm p-4 overflow-y-auto"><div class="max-w-3xl mx-auto mt-10 mb-10 glass-card rounded-3xl border border-gray-700 p-6 sm:p-8"><div class="flex justify-between items-center mb-6"><div><div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-accentGreen/10 border border-accentGreen/30 text-accentGreen text-[10px] font-black uppercase tracking-widest"><span class="w-1.5 h-1.5 rounded-full bg-accentGreen"></span> REG OPEN</div><h2 id="trial-modal-title" class="text-2xl font-black mt-3">Trial Application</h2><p id="trial-modal-meta" class="text-xs text-gray-500 mt-1">Complete your athlete details below. Your profile information has been pre-filled where available.</p></div><button onclick="closeModal('trial-modal')" class="text-gray-400 hover:text-white text-xl">&times;</button></div><div id="trial-form-summary" class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6"></div><form id="trial-form" onsubmit="submitTrialApplication(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4"><input type="hidden" id="trial-id" name="trialId"><div><label class="form-label">Athlete Name *</label><input name="athleteName" required maxlength="120" class="form-input"></div><div><label class="form-label">Email *</label><input name="email" type="email" required maxlength="180" class="form-input"></div><div><label class="form-label">Phone *</label><input name="phone" required maxlength="40" class="form-input" placeholder="10-digit phone number"></div><div><label class="form-label">Your Location *</label><input name="location" required maxlength="180" class="form-input" placeholder="Chennai, Tamil Nadu"></div><div><label class="form-label">Sport *</label><input name="sport" required maxlength="100" class="form-input"></div><div><label class="form-label">Position / Role *</label><input name="position" required maxlength="100" class="form-input" placeholder="Defender / Batter / Sprinter"></div><div><label class="form-label">Age *</label><input name="age" type="number" min="12" max="25" required class="form-input"></div><div><label class="form-label">School / College / Institution *</label><input name="institution" required maxlength="180" class="form-input" placeholder="School / College name"></div><div><label class="form-label">Experience</label><input name="experience" maxlength="120" class="form-input" placeholder="3 years"></div><div><label class="form-label">Relevant Skills</label><input name="skills" maxlength="500" class="form-input" placeholder="Technique, match experience, strengths…"></div><div class="md:col-span-2"><label class="form-label">Achievements</label><textarea name="achievements" rows="2" maxlength="1500" class="form-input" placeholder="Key sporting achievements, medals, rankings…"></textarea></div><div class="md:col-span-2"><label class="form-label">Short Introduction *</label><textarea name="introduction" rows="3" maxlength="1000" required class="form-input" placeholder="Briefly introduce yourself as an athlete…"></textarea></div><div class="md:col-span-2"><label class="form-label">Additional Information</label><textarea name="additionalInfo" rows="2" maxlength="1000" class="form-input" placeholder="Anything the trial selectors should know?"></textarea></div><div class="md:col-span-2 flex items-center justify-between gap-4 pt-2"><p class="text-[11px] text-gray-500">By submitting, your application is stored in MySQL and a confirmation email is triggered after the application is saved.</p><div class="flex gap-3 shrink-0"><button type="button" onclick="closeModal('trial-modal')" class="px-5 py-2.5 rounded-xl bg-gray-800 font-bold text-sm">Cancel</button><button id="trial-submit-btn" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-cyan-400 to-emerald-400 text-darkbg font-black text-sm">Submit Application</button></div></div></form></div></div>
+    <div id="coach-connection-modal" class="hidden fixed inset-0 z-[155] bg-black/80 backdrop-blur-sm p-4 overflow-y-auto">
+      <div class="max-w-xl mx-auto mt-20 glass-card rounded-3xl border border-gray-700 p-6 sm:p-8">
+        <div class="flex justify-between items-center mb-6"><div><h2 class="text-2xl font-black">Connect With Coach</h2><p class="text-xs text-gray-500 mt-1">Send a short introduction with your request to <span id="coach-connection-name" class="text-cyan-300 font-bold"></span>.</p></div><button onclick="closeModal('coach-connection-modal')" class="text-gray-400 hover:text-white text-xl">&times;</button></div>
+        <form onsubmit="submitCoachConnection(event)" class="space-y-4">
+          <input type="hidden" id="coach-connection-id">
+          <div><label class="form-label">Message</label><textarea id="coach-connection-message" maxlength="500" rows="5" class="form-input" placeholder="Hi, I am an athlete looking for guidance in my sport. I would like to connect and learn about training opportunities."></textarea></div>
+          <div class="flex justify-end gap-3"><button type="button" onclick="closeModal('coach-connection-modal')" class="px-5 py-2.5 rounded-xl bg-gray-800 font-bold text-sm">Cancel</button><button class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-cyan-400 to-emerald-400 text-darkbg font-black text-sm">Send Connection Request</button></div>
+        </form>
+      </div>
+    </div>
+    <div id="scout-connection-modal" class="hidden fixed inset-0 z-[155] bg-black/80 backdrop-blur-sm p-4 overflow-y-auto"><div class="max-w-xl mx-auto mt-20 glass-card rounded-3xl border border-gray-700 p-6 sm:p-8"><div class="flex justify-between items-center mb-6"><div><h2 class="text-2xl font-black">Connect With Scout</h2><p class="text-xs text-gray-500 mt-1">Send a request to <span id="scout-connection-name" class="text-cyan-300 font-bold"></span>.</p></div><button onclick="closeModal('scout-connection-modal')" class="text-gray-400 hover:text-white text-xl">&times;</button></div><form onsubmit="submitScoutConnection(event)" class="space-y-4"><input type="hidden" id="scout-connection-id"><textarea id="scout-connection-message" maxlength="500" rows="5" class="form-input" placeholder="Introduce yourself and your sporting goals."></textarea><div class="flex justify-end gap-3"><button type="button" onclick="closeModal('scout-connection-modal')" class="px-5 py-2.5 rounded-xl bg-gray-800 font-bold text-sm">Cancel</button><button class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-cyan-400 to-emerald-400 text-darkbg font-black text-sm">Send Scout Request</button></div></form></div></div>
+    <div id="result-modal" class="hidden fixed inset-0 z-[160] bg-black/80 backdrop-blur-sm p-4 overflow-y-auto"><div class="max-w-xl mx-auto mt-20 glass-card rounded-3xl border border-gray-700 p-6 sm:p-8"><div id="result-modal-content"></div><div class="text-right mt-6"><button onclick="closeModal('result-modal')" class="px-5 py-2.5 rounded-xl bg-gray-800 font-bold text-sm">Close</button></div></div></div>
+
+    <!-- Add Performance Metric / PR Modal (Feature 2) -->
+    <div id="metric-modal" class="hidden fixed inset-0 z-[150] bg-black/80 backdrop-blur-sm p-4 overflow-y-auto">
+      <div class="max-w-2xl mx-auto mt-10 mb-10 glass-card rounded-3xl border border-gray-700 p-6 sm:p-8">
+        <div class="flex justify-between items-center mb-6">
+          <div>
+            <div class="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-[10px] font-black uppercase tracking-widest">
+              <i class="fa-solid fa-stopwatch text-accentNeon"></i> Athletic Test Entry
+            </div>
+            <h2 class="text-2xl font-black mt-2">Log Performance Record (PR)</h2>
+            <p class="text-xs text-gray-400 mt-1">Record physical test benchmarks to track your athletic progression and improve your AI scouting score.</p>
+          </div>
+          <button onclick="closeModal('metric-modal')" class="text-gray-400 hover:text-white text-xl">&times;</button>
+        </div>
+
+        <!-- Quick Select Sport Presets -->
+        <div class="mb-5 p-3 rounded-2xl bg-darkbg/70 border border-gray-800">
+          <div class="text-[10px] font-black uppercase tracking-wider text-gray-400 mb-2">Quick Benchmarks:</div>
+          <div class="flex flex-wrap gap-2">
+            <button type="button" onclick="selectMetricPreset('100m Sprint', 'seconds', 'Speed & Agility')" class="text-xs px-3 py-1.5 rounded-xl bg-gray-800 hover:bg-cyan-500/20 hover:text-cyan-300 border border-gray-700 font-bold transition">🏃 100m Sprint</button>
+            <button type="button" onclick="selectMetricPreset('Vertical Jump', 'cm', 'Strength & Power')" class="text-xs px-3 py-1.5 rounded-xl bg-gray-800 hover:bg-emerald-500/20 hover:text-emerald-300 border border-gray-700 font-bold transition">🦘 Vertical Jump</button>
+            <button type="button" onclick="selectMetricPreset('Yo-Yo Test', 'Level', 'Endurance')" class="text-xs px-3 py-1.5 rounded-xl bg-gray-800 hover:bg-yellow-500/20 hover:text-yellow-300 border border-gray-700 font-bold transition">⏱ Yo-Yo Test</button>
+            <button type="button" onclick="selectMetricPreset('1500m Run', 'minutes', 'Endurance')" class="text-xs px-3 py-1.5 rounded-xl bg-gray-800 hover:bg-cyan-500/20 hover:text-cyan-300 border border-gray-700 font-bold transition">🏃 1500m Run</button>
+            <button type="button" onclick="selectMetricPreset('Bench Press', 'kg', 'Strength & Power')" class="text-xs px-3 py-1.5 rounded-xl bg-gray-800 hover:bg-purple-500/20 hover:text-purple-300 border border-gray-700 font-bold transition">🏋 Bench Press</button>
+            <button type="button" onclick="selectMetricPreset('Bowling Speed', 'km/h', 'Sport-Specific')" class="text-xs px-3 py-1.5 rounded-xl bg-gray-800 hover:bg-emerald-500/20 hover:text-emerald-300 border border-gray-700 font-bold transition">⚡ Bowling Speed</button>
+          </div>
+        </div>
+
+        <form id="metric-form" onsubmit="submitMetric(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="md:col-span-2">
+            <label class="form-label">Metric / Test Name *</label>
+            <input id="metric-input-name" name="metricName" required class="form-input" placeholder="e.g. 100m Sprint, Standing Broad Jump, Yo-Yo Test">
+          </div>
+          <div>
+            <label class="form-label">Metric Value (Score / Result) *</label>
+            <input name="metricValue" type="number" step="0.01" required class="form-input" placeholder="e.g. 11.25, 68, 18.2">
+          </div>
+          <div>
+            <label class="form-label">Unit of Measure *</label>
+            <input id="metric-input-unit" name="unit" required class="form-input" placeholder="e.g. seconds, cm, kg, km/h, Level">
+          </div>
+          <div>
+            <label class="form-label">Category</label>
+            <select id="metric-input-category" name="category" class="form-input">
+              <option value="Speed & Agility">Speed &amp; Agility</option>
+              <option value="Strength & Power">Strength &amp; Power</option>
+              <option value="Endurance">Endurance</option>
+              <option value="Sport-Specific">Sport-Specific</option>
+            </select>
+          </div>
+          <div>
+            <label class="form-label">Recorded Date *</label>
+            <input name="recordedDate" type="date" required class="form-input">
+          </div>
+          <div class="md:col-span-2">
+            <label class="form-label">Context / Notes (Optional)</label>
+            <input name="notes" maxlength="250" class="form-input" placeholder="e.g. Recorded at State Junior Trials, laser timer used.">
+          </div>
+          <div class="md:col-span-2 flex justify-end gap-3 pt-2">
+            <button type="button" onclick="closeModal('metric-modal')" class="px-5 py-2.5 rounded-xl bg-gray-800 text-white font-bold text-sm">Cancel</button>
+            <button class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-cyan-400 to-emerald-400 text-darkbg font-black text-sm shadow-lg shadow-cyan-500/20">
+              Save Record &amp; Update AI Score
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Official Scouting CV & QR Gate Pass Modal (Feature 1) -->
+    <div id="scouting-card-modal" class="hidden fixed inset-0 z-[160] bg-black/85 backdrop-blur-md p-4 overflow-y-auto">
+      <div class="max-w-3xl mx-auto mt-6 mb-10">
+        <div id="scouting-card-content">
+          <!-- Populated dynamically by openScoutingCardModal() -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Benchmark Drill Submission Modal (Feature 3) -->
+    <div id="challenge-modal" class="hidden fixed inset-0 z-[165] bg-black/80 backdrop-blur-sm p-4 overflow-y-auto">
+      <div class="max-w-xl mx-auto mt-10 mb-10 glass-card rounded-3xl border border-gray-700 p-6 sm:p-8">
+        <div class="flex justify-between items-center mb-6">
+          <div>
+            <div class="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-[10px] font-black uppercase tracking-widest">
+              <i class="fa-solid fa-trophy text-yellow-400"></i> Skills Arena
+            </div>
+            <h2 class="text-2xl font-black mt-2">Submit Benchmark Drill Proof</h2>
+            <p class="text-xs text-gray-400 mt-1">Submit your athletic benchmark test to unlock badges and rank on the National Leaderboard.</p>
+          </div>
+          <button onclick="closeModal('challenge-modal')" class="text-gray-400 hover:text-white text-xl">&times;</button>
+        </div>
+
+        <form id="challenge-submit-form" onsubmit="submitChallengeForm(event)" class="space-y-4 text-xs">
+          <div>
+            <label class="form-label">Drill Type *</label>
+            <select id="challenge-form-type" onchange="onChallengeDrillChange(this.value)" required class="form-input">
+              <option value="REACTION_TAP">30s Rapid Reaction Reflex Tap</option>
+              <option value="PLANK_HOLD">Core Stability Plank Endurance</option>
+              <option value="JUMP_ROPE">60-Second Jump Rope Cadence</option>
+              <option value="SHUTTLE_RUN">Pro Agility 5-10-5 Shuttle Run</option>
+              <option value="BROAD_JUMP">Standing Broad Jump Power</option>
+            </select>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="form-label">Test Score / Result *</label>
+              <input id="challenge-form-score" type="number" step="0.01" required class="form-input" placeholder="e.g. 215, 180, 160">
+            </div>
+            <div>
+              <label class="form-label">Measurement Unit</label>
+              <input id="challenge-form-unit" type="text" readonly value="ms" class="form-input bg-gray-900 text-cyan-300 font-mono">
+            </div>
+          </div>
+
+          <div>
+            <label class="form-label">Video Verification Proof (Optional link)</label>
+            <input id="challenge-form-video" type="url" placeholder="https://youtube.com/... or Google Drive link" class="form-input">
+            <span class="text-[10px] text-gray-500 mt-1 block">Providing a video link gives your submission an official 'Verified Athlete' tick mark.</span>
+          </div>
+
+          <div>
+            <label class="form-label">Testing Notes (Optional)</label>
+            <textarea id="challenge-form-notes" rows="2" placeholder="e.g. Completed during morning track session; certified by school coach." class="form-input"></textarea>
+          </div>
+
+          <div class="flex justify-end gap-3 pt-3">
+            <button type="button" onclick="closeModal('challenge-modal')" class="px-5 py-2.5 rounded-xl bg-gray-800 text-white font-bold">Cancel</button>
+            <button type="submit" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-cyan-400 to-emerald-400 text-gray-950 font-black shadow-lg shadow-cyan-500/20">
+              Verify Drill &amp; Unlock Badge
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <style> .form-label{display:block;font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#9ca3af;margin-bottom:.45rem}.form-input{width:100%;background:#0b1220;border:1px solid #374151;border-radius:.8rem;padding:.7rem .85rem;color:#fff;font-size:.875rem;outline:none}.form-input:focus{border-color:#38bdf8;box-shadow:0 0 0 2px rgba(56,189,248,.12)} textarea.form-input{resize:vertical} </style>
+<!-- ================= ATHLETELINK AI HELP CHATBOT ================= -->
+
+<style>
+    #al-help-widget {
+        position: fixed;
+        right: 22px;
+        bottom: 22px;
+        z-index: 5000;
+        font-family: inherit;
+    }
+
+    /* Small speech bubble */
+    #al-help-bubble {
+        position: absolute;
+        right: 0;
+        bottom: 76px;
+        white-space: nowrap;
+        padding: 10px 15px;
+        border: 1px solid rgba(56, 189, 248, 0.28);
+        background: rgba(8, 15, 30, 0.96);
+        backdrop-filter: blur(12px);
+        border-radius: 14px;
+        color: #e5f9ff;
+        font-size: 13px;
+        font-weight: 800;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
+        animation: alFloat 2.6s ease-in-out infinite;
+    }
+
+    #al-help-bubble::after {
+        content: "";
+        position: absolute;
+        right: 22px;
+        bottom: -7px;
+        width: 12px;
+        height: 12px;
+        background: #080f1e;
+        border-right: 1px solid rgba(56, 189, 248, 0.28);
+        border-bottom: 1px solid rgba(56, 189, 248, 0.28);
+        transform: rotate(45deg);
+    }
+
+    /* Floating chatbot button */
+    #al-help-toggle {
+        width: 60px;
+        height: 60px;
+        border: 1px solid rgba(56, 189, 248, 0.5);
+        border-radius: 50%;
+        cursor: pointer;
+        color: #07111f;
+        background: linear-gradient(
+            135deg,
+            #67e8f9,
+            #38bdf8 50%,
+            #34d399
+        );
+        box-shadow:
+            0 12px 35px rgba(34, 211, 238, 0.28),
+            0 0 0 6px rgba(56, 189, 248, 0.06);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        transition: 0.25s;
+    }
+
+    #al-help-toggle:hover {
+        transform: translateY(-3px) scale(1.04);
+        box-shadow:
+            0 16px 42px rgba(34, 211, 238, 0.38),
+            0 0 0 8px rgba(56, 189, 248, 0.08);
+    }
+
+    /* Chat window */
+    #al-help-window {
+        display: none;
+        position: absolute;
+        right: 0;
+        bottom: 74px;
+        width: min(370px, calc(100vw - 32px));
+        height: 540px;
+        max-height: calc(100vh - 110px);
+        overflow: hidden;
+        background: rgba(7, 13, 27, 0.98);
+        border: 1px solid rgba(56, 189, 248, 0.24);
+        border-radius: 22px;
+        box-shadow:
+            0 25px 80px rgba(0, 0, 0, 0.55),
+            0 0 45px rgba(34, 211, 238, 0.08);
+        backdrop-filter: blur(18px);
+        flex-direction: column;
+    }
+
+    #al-help-window.al-open {
+        display: flex;
+        animation: alIn 0.2s ease-out;
+    }
+
+    /* Header */
+    .al-chat-head {
+        padding: 16px 17px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: linear-gradient(
+            135deg,
+            rgba(34, 211, 238, 0.09),
+            rgba(52, 211, 153, 0.05)
+        );
+    }
+
+    .al-chat-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .al-chat-avatar {
+        width: 38px;
+        height: 38px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #67e8f9, #34d399);
+        color: #07111f;
+        font-size: 18px;
+    }
+
+    .al-chat-title strong {
+        display: block;
+        color: #fff;
+        font-size: 14px;
+    }
+
+    .al-chat-title span {
+        display: block;
+        color: #94a3b8;
+        font-size: 10px;
+        margin-top: 2px;
+    }
+
+    #al-chat-close {
+        border: 0;
+        background: transparent;
+        color: #94a3b8;
+        cursor: pointer;
+        font-size: 22px;
+        line-height: 1;
+        padding: 4px;
+    }
+
+    #al-chat-close:hover {
+        color: #fff;
+    }
+
+    /* Messages */
+    #al-chat-messages {
+        flex: 1;
+        overflow-y: auto;
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        scroll-behavior: smooth;
+    }
+
+    .al-msg {
+        max-width: 88%;
+        padding: 10px 12px;
+        border-radius: 15px;
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+    .al-bot {
+        align-self: flex-start;
+        background: rgba(255, 255, 255, 0.07);
+        border: 1px solid rgba(255, 255, 255, 0.07);
+        color: #e5e7eb;
+        border-top-left-radius: 5px;
+    }
+
+    .al-user {
+        align-self: flex-end;
+        background: linear-gradient(
+            135deg,
+            rgba(56, 189, 248, 0.22),
+            rgba(52, 211, 153, 0.16)
+        );
+        border: 1px solid rgba(56, 189, 248, 0.18);
+        color: #ecfeff;
+        border-top-right-radius: 5px;
+    }
+
+    /* Suggested questions */
+    #al-suggestions {
+        padding: 0 14px 10px;
+        display: flex;
+        gap: 6px;
+        overflow-x: auto;
+    }
+
+    .al-suggest {
+        flex: 0 0 auto;
+        border: 1px solid rgba(56, 189, 248, 0.2);
+        background: rgba(56, 189, 248, 0.06);
+        color: #a5f3fc;
+        border-radius: 999px;
+        padding: 7px 10px;
+        font-size: 10px;
+        font-weight: 800;
+        cursor: pointer;
+    }
+
+    .al-suggest:hover {
+        background: rgba(56, 189, 248, 0.14);
+    }
+
+    /* Input */
+    .al-chat-input {
+        padding: 10px;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        display: flex;
+        gap: 7px;
+    }
+
+    .al-chat-input input {
+        min-width: 0;
+        flex: 1;
+        background: #0b1220;
+        border: 1px solid #263449;
+        border-radius: 12px;
+        padding: 10px 11px;
+        color: #fff;
+        font-size: 12px;
+        outline: none;
+    }
+
+    .al-chat-input input:focus {
+        border-color: #38bdf8;
+    }
+
+    .al-chat-input button {
+        width: 40px;
+        border: 0;
+        border-radius: 12px;
+        cursor: pointer;
+        background: linear-gradient(135deg, #38bdf8, #34d399);
+        color: #07111f;
+        font-weight: 900;
+    }
+
+    .al-chat-input button:hover {
+        filter: brightness(1.08);
+    }
+
+    @keyframes alFloat {
+        0%, 100% {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(-4px);
+        }
+    }
+
+    @keyframes alIn {
+        from {
+            opacity: 0;
+            transform: translateY(8px) scale(0.98);
+        }
+
+        to {
+            opacity: 1;
+            transform: none;
+        }
+    }
+
+    @media (max-width: 520px) {
+        #al-help-widget {
+            right: 14px;
+            bottom: 14px;
+        }
+
+        #al-help-window {
+            bottom: 70px;
+            width: calc(100vw - 28px);
+            height: 500px;
+        }
+
+        #al-help-bubble {
+            font-size: 11px;
+            padding: 8px 11px;
+        }
+
+        .al-msg {
+            font-size: 11px;
+        }
+    }
+</style>
+
+
+<!-- CHATBOT HTML -->
+<div id="al-help-widget" aria-label="AthleteLink AI Help">
+
+    <div id="al-help-bubble">
+        ☁️ Need help? Touch me!
+    </div>
+
+    <button
+        id="al-help-toggle"
+        type="button"
+        aria-label="Open AthleteLink AI Help">
+        💬
+    </button>
+
+    <div
+        id="al-help-window"
+        role="dialog"
+        aria-label="AthleteLink AI Assistant">
+
+        <div class="al-chat-head">
+
+            <div class="al-chat-title">
+
+                <div class="al-chat-avatar">
+                    ✦
+                </div>
+
+                <div>
+                    <strong>AthleteLink AI Assistant</strong>
+
+                    <span>
+                        Here to help you discover your next opportunity
+                    </span>
+                </div>
+
+            </div>
+
+            <button
+                id="al-chat-close"
+                type="button"
+                aria-label="Close chat">
+                &times;
+            </button>
+
+        </div>
+
+
+        <div id="al-chat-messages"></div>
+
+
+        <div id="al-suggestions">
+
+            <button
+                class="al-suggest"
+                type="button"
+                data-q="What is AthleteLink AI?">
+                What is AthleteLink?
+            </button>
+
+            <button
+                class="al-suggest"
+                type="button"
+                data-q="Are scholarships available for everyone?">
+                Scholarships
+            </button>
+
+            <button
+                class="al-suggest"
+                type="button"
+                data-q="How do I show my talent?">
+                Show my talent
+            </button>
+
+            <button
+                class="al-suggest"
+                type="button"
+                data-q="How do I find opportunities?">
+                Opportunities
+            </button>
+
+        </div>
+
+
+        <form
+            class="al-chat-input"
+            id="al-chat-form">
+
+            <input
+                id="al-chat-input"
+                autocomplete="off"
+                placeholder="Ask me anything about AthleteLink..."
+                aria-label="Type your question">
+
+            <button
+                type="submit"
+                aria-label="Send message">
+                ➤
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<script>
+(function () {
+
+    const toggle = document.getElementById("al-help-toggle");
+    const win = document.getElementById("al-help-window");
+    const close = document.getElementById("al-chat-close");
+    const bubble = document.getElementById("al-help-bubble");
+    const msgs = document.getElementById("al-chat-messages");
+    const form = document.getElementById("al-chat-form");
+    const input = document.getElementById("al-chat-input");
+
+    if (!toggle || !win || !msgs || !form) {
+        return;
+    }
+
+
+    /* ================= CHATBOT KNOWLEDGE ================= */
+
+    const answers = [
+
+        {
+            keys: [
+                "what is athletelink",
+                "what is athletic ai",
+                "what is athlete link",
+                "about athletelink"
+            ],
+
+            answer:
+                "AthleteLink AI is India's smart sports talent network. Think of it like a LinkedIn-style platform built for athletes — helping athletes showcase their skills and achievements, connect with coaches and scouts, discover opportunities, and find pathways that fit their sporting goals."
+        },
+
+
+        {
+            keys: [
+                "scholarship",
+                "scholarships",
+                "financial support",
+                "funding"
+            ],
+
+            answer:
+                "Yes! AthleteLink can help users discover scholarship opportunities. Scholarships can be available to different groups, while special support categories can include women, children of armed-forces personnel, and students from single-parent families, depending on the specific scholarship or program. Always check the individual opportunity's eligibility requirements."
+        },
+
+
+        {
+            keys: [
+                "armed forces",
+                "army child",
+                "military child",
+                "defence child",
+                "defense child"
+            ],
+
+            answer:
+                "AthleteLink can highlight scholarship opportunities that provide additional support for children of armed-forces personnel. Eligibility and benefits depend on the individual scholarship."
+        },
+
+
+        {
+            keys: [
+                "women",
+                "female athlete",
+                "girl athlete"
+            ],
+
+            answer:
+                "Yes. AthleteLink can help surface opportunities and scholarships designed specifically for women athletes. Individual programs may have their own eligibility requirements."
+        },
+
+
+        {
+            keys: [
+                "single parent",
+                "single-parent",
+                "single parents"
+            ],
+
+            answer:
+                "There can be scholarship and support programs for students from single-parent families. AthleteLink can help users discover relevant opportunities, while each program's eligibility rules determine who qualifies."
+        },
+
+
+        {
+            keys: [
+                "show my talent",
+                "showcase my talent",
+                "show my skills",
+                "showcase talent",
+                "how do people know"
+            ],
+
+            answer:
+                "Start with a strong athlete profile. Add your sport, position, skills, achievements, competition history, certificates, experience, and a clear introduction. A complete profile makes it easier for coaches, scouts, and opportunity providers to understand your potential."
+        },
+
+
+        {
+            keys: [
+                "ai assess",
+                "talent assessment",
+                "assess my talent",
+                "ai talent"
+            ],
+
+            answer:
+                "AI Talent Assessment can help organize and evaluate information in an athlete profile, such as skills, achievements, experience, and sporting interests, to identify strengths and suitable pathways. It supports human decision-making rather than replacing coaches or scouts."
+        },
+
+
+        {
+            keys: [
+                "train",
+                "training",
+                "improve performance",
+                "improve my performance"
+            ],
+
+            answer:
+                "Build a consistent training routine around your sport, position, fitness, technique, recovery, and measurable goals. AthleteLink can help you present your sporting profile and discover relevant coaches, academies, trials, and opportunities."
+        },
+
+
+        {
+            keys: [
+                "opportunit",
+                "find opportunity",
+                "available opportunity",
+                "what opportunities"
+            ],
+
+            answer:
+                "AthleteLink brings opportunities into one place — such as trials, scholarships, competitions, coaching connections, academies, and other sports pathways. Explore the Opportunities section and look for options that match your sport, age category, location, and goals."
+        },
+
+
+        {
+            keys: [
+                "coach",
+                "connect with coach",
+                "coaches"
+            ],
+
+            answer:
+                "Complete your athlete profile first, then explore coaches relevant to your sport. A clear introduction and evidence of your achievements can make your connection request stronger."
+        },
+
+
+        {
+            keys: [
+                "scout",
+                "scouts",
+                "get noticed"
+            ],
+
+            answer:
+                "Scouts need useful evidence of potential. Keep your profile complete, add verified achievements and experience, highlight your strengths, and keep your sporting information current."
+        },
+
+
+        {
+            keys: [
+                "match",
+                "matching",
+                "matchmaking"
+            ],
+
+            answer:
+                "AI matching can compare athlete information with relevant opportunities, coaches, scouts, or pathways using details such as sport, skills, experience, achievements, and preferences."
+        },
+
+
+        {
+            keys: [
+                "register",
+                "sign up",
+                "create account",
+                "account"
+            ],
+
+            answer:
+                "Use the Join as Athlete button to create your account. After registration, complete your athlete profile so you can make the most of matching, opportunities, coaches, scouts, and achievements."
+        },
+
+
+        {
+            keys: [
+                "achievement",
+                "certificate",
+                "upload achievement"
+            ],
+
+            answer:
+                "Add your achievements with details such as event, sport, level, year, institution, position or rank, medals or awards, and certificate information. This gives coaches and scouts stronger evidence of your sporting journey."
+        }
+
+    ];
+
+
+    /* ================= MESSAGE FUNCTION ================= */
+
+    function addMsg(text, type) {
+
+        const div = document.createElement("div");
+
+        div.className =
+            "al-msg " +
+            (type === "user" ? "al-user" : "al-bot");
+
+        div.textContent = text;
+
+        msgs.appendChild(div);
+
+        msgs.scrollTop = msgs.scrollHeight;
+    }
+
+
+    /* ================= QUESTION MATCHING ================= */
+
+    function normalize(text) {
+
+        return text
+            .toLowerCase()
+            .replace(/[^a-z0-9\s-]/g, " ");
+    }
+
+
+    function getAnswer(question) {
+
+        const normalized = normalize(question);
+
+        let bestAnswer = null;
+        let bestScore = 0;
+
+
+        answers.forEach(function (item) {
+
+            let score = 0;
+
+
+            item.keys.forEach(function (key) {
+
+                if (normalized.includes(key)) {
+
+                    score += key.length > 8 ? 3 : 2;
+
+                }
+
+            });
+
+
+            if (score > bestScore) {
+
+                bestScore = score;
+                bestAnswer = item.answer;
+
+            }
+
+        });
+
+
+        return bestAnswer ||
+
+            "I can help with AthleteLink, scholarships, talent showcasing, training, coaches, scouts, AI matching, achievements, registration, and opportunities. Try asking: How do I show my talent? or Are scholarships available?";
+
+    }
+
+
+    /* ================= SEND MESSAGE ================= */
+
+    function send(question) {
+
+        question = (question || "").trim();
+
+        if (!question) {
+            return;
+        }
+
+
+        addMsg(question, "user");
+
+
+        setTimeout(function () {
+
+            addMsg(getAnswer(question), "bot");
+
+        }, 180);
+
+
+        input.value = "";
+
+    }
+
+
+    /* ================= OPEN CHAT ================= */
+
+    toggle.addEventListener("click", function () {
+
+        win.classList.toggle("al-open");
+
+        bubble.style.display = "none";
+
+
+        if (
+            win.classList.contains("al-open") &&
+            !msgs.children.length
+        ) {
+
+            addMsg(
+                "Hi! 👋 I'm the AthleteLink AI Assistant. I can help you understand the platform, scholarships, training, talent showcasing, and opportunities. What would you like to know?",
+                "bot"
+            );
+
+            input.focus();
+
+        }
+
+    });
+
+
+    /* ================= CLOSE CHAT ================= */
+
+    close.addEventListener("click", function () {
+
+        win.classList.remove("al-open");
+
+    });
+
+
+    /* ================= SEND FORM ================= */
+
+    form.addEventListener("submit", function (event) {
+
+        event.preventDefault();
+
+        send(input.value);
+
+    });
+
+
+    /* ================= SUGGESTED QUESTIONS ================= */
+
+    document
+        .querySelectorAll(".al-suggest")
+        .forEach(function (button) {
+
+            button.addEventListener("click", function () {
+
+                send(button.dataset.q);
+
+            });
+
+        });
+
+
+})();
+</script>
+
+<!-- ================= END ATHLETELINK AI HELP CHATBOT ================= -->
+    <!-- Site interaction logic (tabs, filters, chart, matching demo) -->
+    <script src="./js/app.js"></script>
+    <!-- Auth + API integration logic -->
+    <script src="./js/auth.js"></script>
+</body>
+</html>
+
+

@@ -1,0 +1,26 @@
+AthleteLink AI - Triple-check verification
+
+Static verification performed before delivery:
+- ZIP integrity: PASS
+- Spring Boot project structure: PASS
+- Port 8880 configured: PASS
+- MySQL/JDBC configuration present: PASS
+- Achievement API + frontend form present: PASS
+- Achievement persistence tables/SQL present: PASS
+- Trial application form + API present: PASS
+- Trial application location field present: PASS
+- Trial application confirmation email service present: PASS
+- Trial slots + booking API/database present: PASS
+- Duplicate booking protection present: PASS
+- Booking confirmation email service present: PASS
+- Nearby coach endpoint + browser geolocation flow present: PASS
+- Coach connection form/API/database present: PASS
+- Scout connection API/database present: PASS
+- Notifications API/database present: PASS
+- Frontend served from Spring Boot static resources: PASS
+- Frontend uses same-origin /api calls: PASS
+- Unwanted frontend resend-email/verify-email controls searched for in app.js: NOT FOUND
+- SMTP uses environment properties; no Gmail credentials hardcoded: PASS
+
+Important runtime limitation:
+Maven is not installed in the verification environment, so a fresh Maven compile/start and real Gmail delivery cannot be claimed as tested here. On the user's Windows PC, SMTP credentials (Gmail App Password) must be configured before real email can be delivered.

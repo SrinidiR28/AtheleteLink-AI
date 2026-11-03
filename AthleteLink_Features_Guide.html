@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AthleteLink AI – Comprehensive Features & Technical Explanation Guide</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+    
+    @page {
+        size: A4 portrait;
+        margin: 15mm 18mm 15mm 18mm;
+        @bottom-right {
+            content: "Page " counter(page) " of " counter(pages);
+            font-size: 8pt;
+            color: #64748b;
+        }
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        color: #1e293b;
+        background: #ffffff;
+        line-height: 1.55;
+        font-size: 9.5pt;
+        margin: 0;
+        padding: 0;
+    }
+
+    h1, h2, h3, h4 { color: #0f172a; margin-top: 0; font-weight: 800; }
+    h1 { font-size: 20pt; line-height: 1.2; margin-bottom: 4px; }
+    h2 { font-size: 13pt; border-bottom: 2px solid #0284c7; padding-bottom: 4px; margin-top: 20px; margin-bottom: 10px; color: #0369a1; }
+    h3 { font-size: 10.5pt; margin-top: 12px; margin-bottom: 4px; color: #0f172a; }
+    p { margin-top: 0; margin-bottom: 8px; text-align: justify; }
+
+    .header-banner {
+        border-bottom: 3px solid #0284c7;
+        padding-bottom: 12px;
+        margin-bottom: 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .badge {
+        display: inline-block;
+        padding: 3px 8px;
+        background: #e0f2fe;
+        color: #0369a1;
+        border: 1px solid #7dd3fc;
+        border-radius: 9999px;
+        font-size: 8pt;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .feature-card {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-left: 4px solid #0284c7;
+        border-radius: 6px;
+        padding: 10px 14px;
+        margin-bottom: 12px;
+        page-break-inside: avoid;
+    }
+    .feature-card.green { border-left-color: #10b981; }
+    .feature-card.amber { border-left-color: #f59e0b; }
+    .feature-card.purple { border-left-color: #8b5cf6; }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 8px;
+        margin-bottom: 12px;
+        font-size: 8.5pt;
+        page-break-inside: avoid;
+    }
+    th, td {
+        padding: 6px 10px;
+        border: 1px solid #cbd5e1;
+        text-align: left;
+    }
+    th {
+        background: #f1f5f9;
+        font-weight: 700;
+        color: #334155;
+    }
+    tr:nth-child(even) td { background: #f8fafc; }
+
+    .callout {
+        background: #ecfdf5;
+        border: 1px solid #a7f3d0;
+        border-radius: 6px;
+        padding: 8px 12px;
+        font-size: 8.5pt;
+        color: #065f46;
+        margin-top: 8px;
+        margin-bottom: 10px;
+    }
+    .callout-title { font-weight: 800; text-transform: uppercase; margin-bottom: 2px; }
+
+    .code-box {
+        background: #0f172a;
+        color: #38bdf8;
+        font-family: 'Consolas', 'Courier New', monospace;
+        padding: 8px 12px;
+        border-radius: 5px;
+        font-size: 8pt;
+        margin: 6px 0 10px 0;
+        line-height: 1.4;
+    }
+
+    .page-break { page-break-after: always; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header-banner">
+    <div>
+        <h1>🏅 AthleteLink AI</h1>
+        <div style="font-size: 10.5pt; color: #64748b; font-weight: 600;">Complete Feature Architecture, Technical Walkthrough & Presentation Manual</div>
+    </div>
+    <div style="text-align: right;">
+        <span class="badge">Version 2.4 Production</span><br>
+        <span style="font-size: 8pt; color: #94a3b8; font-weight: 500;">Confidential &amp; Presentation-Ready</span>
+    </div>
+</div>
+
+<h2>1. Executive Summary &amp; Platform Architecture</h2>
+<p>
+    <strong>AthleteLink AI</strong> is an intelligent sports talent discovery, scholarship management, and athlete development ecosystem. It bridges the critical divide between grassroots athletic prodigies across India and national sports federations, academies, coaches, and scouts. The technology stack utilizes a robust <strong>Spring Boot 3.3.4 (Java 17)</strong> backend with lightweight <strong>Spring JDBC</strong>, <strong>MySQL 8.0</strong> persistence, <strong>JWT stateless authentication</strong>, and a responsive frontend with interactive browser-based fitness testing engines.
+</p>
+
+<table>
+    <tr>
+        <th style="width: 25%;">Layer</th>
+        <th style="width: 35%;">Technology</th>
+        <th style="width: 40%;">Core Responsibility</th>
+    </tr>
+    <tr>
+        <td><strong>Backend API</strong></td>
+        <td>Spring Boot 3.3.4, Java 17, Spring Security</td>
+        <td>Stateless REST API, JWT auth filter, transaction control, input validation.</td>
+    </tr>
+    <tr>
+        <td><strong>Data Persistence</strong></td>
+        <td>MySQL 8.0, Spring JDBC Template</td>
+        <td>High-throughput schema with automated safe column/table self-healing.</td>
+    </tr>
+    <tr>
+        <td><strong>Frontend Client</strong></td>
+        <td>HTML5, Vanilla JS (ES6+), Tailwind CSS</td>
+        <td>Single-page dynamic application, high-fps reaction testing canvas, QR generator.</td>
+    </tr>
+    <tr>
+        <td><strong>AI Talent Engine</strong></td>
+        <td>Multi-variable dynamic algorithm</td>
+        <td>Computes dynamic talent index based on verified PRs, biometric consistency, and age.</td>
+    </tr>
+</table>
+
+<h2>2. Feature 1: Digital Athlete Scouting Card &amp; QR Trial Gate Pass</h2>
+<div class="feature-card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+        <h3 style="margin: 0; color: #0284c7;">A. Digital Scouting Card &amp; Printable CV</h3>
+        <span class="badge">Feature 1.1</span>
+    </div>
+    <p>
+        Provides every registered athlete with an official, tamper-evident digital sporting CV. It showcases the athlete's verified bio-data, sport role, physical attributes, dynamic <strong>AI Talent Index (/99)</strong>, benchmark test history, and tournament honors.
+    </p>
+    <ul style="margin: 4px 0 6px 16px; padding: 0; font-size: 9pt; color: #334155;">
+        <li><strong>Single-Page A4 PDF Printing Fixed:</strong> Resolved the browser multi-page fragmentation issue. A dedicated <code>@media print</code> CSS stylesheet isolates the scouting sheet, switches dark elements to high-contrast paper formatting, hides non-printable modal buttons (<code>.no-print</code>), and ensures exact 1-page A4 printouts.</li>
+        <li><strong>Phone QR Scanner &amp; Wi-Fi Access:</strong> Previously, localhost QR codes were unreachable on mobile phones. The system now automatically provides the laptop's Wi-Fi LAN IP (<code>10.65.24.238:8080</code>) and a 1-click toggle between <strong>Phone on Wi-Fi</strong>, <strong>Laptop (localhost)</strong>, and <strong>Offline Digital vCard</strong>. Any smartphone scanning the QR code instantly renders the verified card over the local Wi-Fi without internet or external hosting!</li>
+    </ul>
+</div>
+
+<div class="feature-card green">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+        <h3 style="margin: 0; color: #059669;">B. Official Trial Gate Pass &amp; Reception QR Check-In</h3>
+        <span class="badge" style="background:#d1fae5; color:#047857; border-color:#6ee7b7;">Feature 1.2</span>
+    </div>
+    <p>
+        Eliminates paper tickets and unauthorized entry at athletic trial events. When an athlete books a trial slot, the platform generates a digital confirmation gate pass equipped with an encrypted Gate Pass QR code.
+    </p>
+    <ul style="margin: 4px 0 6px 16px; padding: 0; font-size: 9pt; color: #334155;">
+        <li><strong>Venue Check-In Endpoint:</strong> Scanning the QR code triggers <code>GET /api/trials/checkin?token=...</code>.</li>
+        <li><strong>Database Mutation:</strong> The booking record status changes from <code>CONFIRMED</code> to <code>CHECKED_IN</code> and logs the exact <code>checked_in_at</code> timestamp.</li>
+        <li><strong>Automated In-App Notification:</strong> Dispatches real-time attendance verification notifications to the athlete and academy trial director.</li>
+    </ul>
+</div>
+
+<div class="page-break"></div>
+
+<h2>3. Feature 2: Athlete Performance Metrics &amp; Personal Records (PR) Tracker</h2>
+<p>
+    The <strong>Performance Metrics &amp; PR Tracker</strong> allows athletes to record standardized athletic benchmarks across speed, endurance, power, and ballistic velocity.
+</p>
+
+<div class="feature-card amber">
+    <h3 style="color: #d97706;">Dynamic AI Talent Index Boost</h3>
+    <p>
+        In <code>PlatformService.java</code>, logging real athletic benchmarks dynamically influences the athlete's <strong>AI Talent Index</strong>. While incomplete profiles begin at a baseline of 40 points, verified performance logs contribute up to <strong>+15 bonus points</strong>:
+    </p>
+    <div class="code-box">
+int aiScore = 40;
+if (achievements.size() >= 1) aiScore += Math.min(35, achievements.size() * 10);
+if (metrics.size() >= 3) aiScore += 15;        // Multi-discipline physical verification
+else if (metrics.size() >= 1) aiScore += 8;
+if (user.get("sport") != null) aiScore += 12;
+if (user.get("location") != null) aiScore += 8;
+if (trialCount > 0) aiScore += 5;
+aiScore = Math.min(99, aiScore);
+    </div>
+    <p>
+        <strong>Personal Records (PR) Intelligence:</strong> The system automatically detects whether a newly entered metric surpasses previous attempts. For sprint times, lower is better; for lifts and jumps, higher is better. Top records are surfaced as glowing badges in the dashboard.
+    </p>
+</div>
+
+<table>
+    <tr>
+        <th>Preset Benchmark</th>
+        <th>Discipline / Category</th>
+        <th>Standard Unit</th>
+        <th>Evaluation Logic</th>
+    </tr>
+    <tr>
+        <td><strong>100m Sprint</strong></td>
+        <td>Speed &amp; Acceleration</td>
+        <td>Seconds (s)</td>
+        <td>Lower is better (e.g. 10.85s > 11.40s)</td>
+    </tr>
+    <tr>
+        <td><strong>Vertical Jump</strong></td>
+        <td>Explosive Power</td>
+        <td>Centimeters (cm)</td>
+        <td>Higher is better (e.g. 72cm)</td>
+    </tr>
+    <tr>
+        <td><strong>Yo-Yo Recovery Test</strong></td>
+        <td>Aerobic / Anaerobic Pacing</td>
+        <td>Level / Shuttles</td>
+        <td>Higher is better (e.g. 19.4)</td>
+    </tr>
+    <tr>
+        <td><strong>Bench Press</strong></td>
+        <td>Upper Body Strength</td>
+        <td>Kilograms (kg)</td>
+        <td>Higher is better (e.g. 110kg)</td>
+    </tr>
+    <tr>
+        <td><strong>Bowling / Pitch Speed</strong></td>
+        <td>Ballistic Rotational Velocity</td>
+        <td>km/h</td>
+        <td>Higher is better (e.g. 138 km/h)</td>
+    </tr>
+</table>
+
+<h2>4. Feature 3: National Athlete Skills &amp; Fitness Drills Arena (Interactive)</h2>
+<p>
+    Replaced static, theoretical problem statements with a <strong>live, gamified physical skills testing arena</strong> directly in the browser and field tracking interface.
+</p>
+
+<div class="feature-card purple">
+    <h3 style="color: #7c3aed;">1. 30-Second Rapid Reflex &amp; Reaction Tap Test</h3>
+    <p>
+        A live interactive canvas drill. Random neural target stimuli appear across a specialized agility grid. Athletes tap targets as quickly as possible. The system tracks millisecond latency between stimulus and touch:
+    </p>
+    <ul style="margin: 4px 0 6px 16px; padding: 0; font-size: 8.5pt; color: #334155;">
+        <li><strong>&lt; 230 ms:</strong> ⚡ Lightning Reflexes (National Elite Tier)</li>
+        <li><strong>230 – 280 ms:</strong> ⚡ Fast Reflexes (Pro Level)</li>
+        <li><strong>&gt; 280 ms:</strong> ⚡ Quick Reflexes (Verified Baseline)</li>
+    </ul>
+    <p style="margin-bottom: 0;">Athletes can 1-click submit their score to unlock verified badges and rank on the national leaderboard.</p>
+</div>
+
+<div class="feature-card">
+    <h3 style="color: #0284c7;">2. Core Stability Plank Endurance Stopwatch</h3>
+    <p>
+        An interactive, high-precision timer with milestone bells at 60s (Bronze), 120s (Silver), 180s (Gold), and 240s+ (Titanium Core). Integrates strict biomechanical form guidance cues.
+    </p>
+</div>
+
+<div class="feature-card green">
+    <h3 style="color: #059669;">3. 60-Second Jump Rope Cadence Tracker &amp; National Leaderboard</h3>
+    <p>
+        Auditory and visual cadence pulse with a high-speed rep tap counter. Includes the <strong>National Leaderboard</strong> (<code>GET /api/challenges/leaderboard</code>) allowing scouts to sort and filter top-ranked athletes across all drills with verified video links.
+    </p>
+</div>
+
+<div class="page-break"></div>
+
+<h2>5. Feature 4: AI Athletic Recovery &amp; Injury Readiness Lab (New Section)</h2>
+<p>
+    In modern high-performance sports, injury prevention and physiological workload management are the #1 determinants of athletic longevity. This brand-new dedicated section provides scientific daily recovery intelligence.
+</p>
+
+<div class="feature-card green">
+    <h3 style="color: #059669;">A. Daily Athletic Readiness Engine &amp; AI Gauge</h3>
+    <p>
+        Athletes perform a 60-second morning check-in recording key physiological markers. The weighted algorithm computes the <strong>Daily Readiness Index (0–100%)</strong>:
+    </p>
+    <div class="code-box">
+// Weighted Algorithmic Model
+int sleepScore = (int) Math.min(100, (sleepHours / 8.0) * 100);
+int hrScore = (restingHr <= 52) ? 100 : (restingHr <= 60 ? 90 : (restingHr <= 70 ? 75 : 55));
+int sorenessScore = (11 - sorenessLevel) * 10;
+int fatigueScore = (11 - fatigueLevel) * 10;
+int hydroScore = (int) Math.min(100, (hydrationLiters / 3.0) * 100);
+
+int readiness = Math.round(sleepScore*0.25 + hrScore*0.20 + sorenessScore*0.20 + fatigueScore*0.20 + hydroScore*0.15);
+    </div>
+    <ul style="margin: 4px 0 6px 16px; padding: 0; font-size: 8.5pt; color: #334155;">
+        <li><strong>85 – 100% (Optimal):</strong> Low Injury Risk. Cleared for maximal sprint speed and maximum power lifting.</li>
+        <li><strong>65 – 84% (Moderate):</strong> Moderate Risk. Prescribed technical and tactical drills; deload heavy eccentric lifts.</li>
+        <li><strong>&lt; 65% (Fatigue Warning):</strong> Elevated Risk. Automated system notification triggered recommending active recovery, foam rolling, and contrast hydrotherapy.</li>
+    </ul>
+</div>
+
+<div class="feature-card">
+    <h3 style="color: #0284c7;">B. Sport-Specific Injury Prehab &amp; Parasympathetic Recovery Orb</h3>
+    <ul style="margin: 4px 0 6px 16px; padding: 0; font-size: 8.5pt; color: #334155;">
+        <li><strong>Targeted Prehab Guidelines:</strong> Select your discipline (Athletics, Cricket, Football, Badminton) to view evidence-based corrective exercises (e.g. Nordic Hamstring Lowers, Rotator Cuff Y-T-W, ACL Deceleration Landings) with clinical dosage recommendations.</li>
+        <li><strong>3-Minute 4-7-8 Parasympathetic Recovery Breathing Orb:</strong> An interactive visual breathing circle (Inhale 4s, Hold 7s, Exhale 8s) that triggers the vagus nerve to reduce post-workout cortisol and accelerate heart-rate recovery.</li>
+    </ul>
+</div>
+
+<h2>6. Presentation &amp; Viva Demo Script (How to Explain to Others)</h2>
+
+<div class="callout">
+    <div class="callout-title">💡 Recommended 3-Minute Live Demo Sequence</div>
+    <ol style="margin: 4px 0 0 16px; padding: 0; line-height: 1.5;">
+        <li><strong>Step 1 – Dashboard &amp; AI Talent Index:</strong> Open <code>http://localhost:8080/#dashboard</code>. Point to the top banner showing <em>AI Talent Index</em> (e.g. 85/99). Explain that this isn't static text; it's dynamically evaluated based on physical test PRs and achievements.</li>
+        <li><strong>Step 2 – Digital Scouting Card &amp; Wi-Fi QR:</strong> Click <em>"Official Scouting Card &amp; QR"</em>. Show the high-res printable CV. Click <em>"📱 Phone on Wi-Fi"</em> and show your phone camera scanning it over local Wi-Fi. Then click <em>"Print / Save PDF"</em> to demonstrate the single clean A4 page layout!</li>
+        <li><strong>Step 3 – Skills &amp; Fitness Drills Arena:</strong> Click <em>"Challenges &amp; Arena"</em> in the nav bar. Click <em>"Start 30s Reflex Drill"</em>. Tap the targets live to demonstrate millisecond latency tracking. Hit <em>"Save to Profile"</em> to show instant badge unlocking and AI score boosting.</li>
+        <li><strong>Step 4 – AI Recovery Lab:</strong> Click <em>"Recovery Lab"</em> in the nav. Adjust the resting HR and sleep sliders to show the live AI Readiness Gauge recalculating from 60% to 92%. Show the sport-specific prehab protocols and the 4-7-8 breathing timer.</li>
+    </ol>
+</div>
+
+<h2>7. Local Execution &amp; Network Configuration</h2>
+<div class="code-box">
+# 1. Run the pre-compiled JAR with your local MySQL password:
+cd "C:\Users\Shanmuga Priya\.gemini\antigravity\scratch\athletelink\backend"
+java -jar target/athletelink-backend-1.0.0.jar --spring.datasource.password=YOUR_PASSWORD
+
+# 2. Access on Laptop:
+http://localhost:8080
+
+# 3. Access on Mobile Phone (Connected to same Wi-Fi):
+http://10.65.24.238:8080
+</div>
+
+<p style="text-align: center; color: #64748b; font-size: 8pt; margin-top: 15px;">
+    AthleteLink AI Platform • Built with Spring Boot 3.3.4, MySQL 8.0 &amp; Modern Web Standards
+</p>
+
+</body>
+</html>

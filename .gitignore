@@ -1,0 +1,27 @@
+# Build artifacts
+backend/target/
+*.class
+
+# IDE
+.vscode/
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Node
+node_modules/
+
+# Logs
+*.log
+
+# Test scripts
+test_*.ps1
+
+# Env files with secrets
+.env
+backend/.env
+*.env

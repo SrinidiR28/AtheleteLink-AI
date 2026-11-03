@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard – AthleteLink AI</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkbg: '#0a0f1d',
+                        cardbg: '#111827',
+                        cardborder: '#1f2937',
+                        accentBlue: '#0ea5e9',
+                        accentGreen: '#10b981',
+                        accentNeon: '#22d3ee',
+                        accentEmerald: '#34d399',
+                        sidebarbg: '#080d1a'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Chart.js for analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Config script -->
+    <script src="./js/config.js"></script>
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            color: #f3f4f6;
+            background-color: #0a0f1d;
+            background-image:
+                linear-gradient(rgba(10, 15, 29, 0.92), rgba(10, 15, 29, 0.96)),
+                url('https://i.ibb.co/5gLrmQrB/Screenshot-2026-07-27-150159.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+
+        .glass-card {
+            background: rgba(17, 24, 39, 0.72);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+            transition: all 0.25s ease;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(34, 211, 238, 0.3);
+        }
+
+        .glow-blue {
+            box-shadow: 0 0 25px rgba(14, 165, 233, 0.2), 0 0 50px rgba(14, 165, 233, 0.05);
+        }
+
+        .glow-green {
+            box-shadow: 0 0 25px rgba(16, 185, 129, 0.2), 0 0 50px rgba(16, 185, 129, 0.05);
+        }
+
+        ::-webkit-scrollbar {
+            width: 7px;
+            height: 7px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(10, 15, 29, 0.8);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(#0ea5e9, #10b981);
+            border-radius: 8px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.7rem 1rem;
+            border-radius: 0.85rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #9ca3af;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        .nav-item:hover {
+            color: #22d3ee;
+            background: rgba(14, 165, 233, 0.08);
+            border-color: rgba(14, 165, 233, 0.15);
+        }
+
+        .nav-item.active {
+            color: #ffffff;
+            background: linear-gradient(90deg, rgba(14, 165, 233, 0.2), rgba(16, 185, 129, 0.12));
+            border-color: rgba(34, 211, 238, 0.35);
+            box-shadow: 0 4px 20px rgba(14, 165, 233, 0.15);
+        }
+
+        .nav-item.active i {
+            color: #22d3ee;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.72rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #9ca3af;
+            margin-bottom: 0.35rem;
+        }
+
+        .form-input {
+            width: 100%;
+            background: #0b1220;
+            border: 1px solid #374151;
+            border-radius: 0.75rem;
+            padding: 0.65rem 0.85rem;
+            color: #ffffff;
+            font-size: 0.875rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus {
+            border-color: #38bdf8;
+            box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.15);
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.25rem 0.65rem;
+            border-radius: 9999px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .badge-cyan { background: rgba(14, 165, 233, 0.12); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
+        .badge-green { background: rgba(16, 185, 129, 0.12); color: #34d399; border: 1px solid rgba(52, 211, 153, 0.3); }
+        .badge-yellow { background: rgba(245, 158, 11, 0.12); color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.3); }
+        .badge-red { background: rgba(239, 68, 68, 0.12); color: #f87171; border: 1px solid rgba(248, 113, 113, 0.3); }
+        .badge-purple { background: rgba(168, 85, 247, 0.12); color: #c084fc; border: 1px solid rgba(192, 132, 252, 0.3); }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- Top Admin Header -->
+    <header class="sticky top-0 z-40 bg-[#080d19]/95 backdrop-blur-xl border-b border-cyan-400/20 px-4 sm:px-6 lg:px-8 h-18 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <button id="sidebar-toggle-btn" class="lg:hidden p-2 rounded-xl bg-white/5 border border-white/10 text-cyan-300 hover:bg-white/10">
+                <i class="fa-solid fa-bars text-lg"></i>
+            </button>
+            <a href="/" class="flex items-center gap-3">
+                <div class="w-10 h-10 flex items-center justify-center">
+                    <img src="https://i.ibb.co/nMdMJfM7/Screenshot-2026-07-30-115340.png" alt="AthleteLink Logo" class="w-10 h-10 object-contain">
+                </div>
+                <div>
+                    <div class="text-lg font-black tracking-wide text-white">
+                        ATHLETE<span class="text-cyan-400">LINK</span> <span class="text-emerald-400">AI</span>
+                        <span class="ml-2 px-2 py-0.5 rounded-md bg-gradient-to-r from-cyan-500/20 to-emerald-500/20 border border-cyan-400/30 text-[10px] font-black uppercase text-cyan-300">Admin Control</span>
+                    </div>
+                    <div class="text-[9px] tracking-[0.2em] text-gray-400 uppercase font-bold">India's Smart Sports Talent Network</div>
+                </div>
+            </a>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <a href="/" class="hidden md:flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white/5 border border-white/10 text-xs font-bold text-gray-300 hover:text-white hover:bg-white/10 transition">
+                <i class="fa-solid fa-globe text-cyan-400"></i> Public Website
+            </a>
+            
+            <div id="admin-user-badge" class="hidden sm:flex items-center gap-2 px-3.5 py-2 rounded-xl bg-cyan-400/10 border border-cyan-400/30">
+                <div class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
+                <i class="fa-solid fa-shield-halved text-cyan-300 text-sm"></i>
+                <span id="admin-header-email" class="text-xs font-bold text-cyan-200">admin@athletelink.ai</span>
+            </div>
+
+            <button onclick="adminLogout()" class="px-3.5 py-2 rounded-xl border border-red-500/30 bg-red-500/10 text-red-300 text-xs font-bold hover:bg-red-500/20 transition">
+                <i class="fa-solid fa-right-from-bracket mr-1"></i> Logout
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Container with Sidebar + Content -->
+    <div class="flex-1 flex overflow-hidden">
+        
+        <!-- Sidebar Navigation -->
+        <aside id="admin-sidebar" class="fixed lg:static inset-y-0 left-0 z-30 w-64 bg-[#080d19]/95 lg:bg-[#080d19]/80 backdrop-blur-xl border-r border-cyan-400/15 p-4 flex flex-col justify-between transform -translate-x-full lg:translate-x-0 transition-transform duration-300 overflow-y-auto">
+            <div class="space-y-1.5 pt-16 lg:pt-0">
+                <div class="px-3 py-2 text-[10px] font-black uppercase tracking-widest text-cyan-400/70">Platform Management</div>
+                
+                <div class="nav-item active" onclick="switchAdminTab('dashboard')">
+                    <i class="fa-solid fa-gauge w-5 text-center"></i> <span>Dashboard</span>
+                </div>
+                <div class="nav-item" onclick="switchAdminTab('users')">
+                    <i class="fa-solid fa-users w-5 text-center"></i> <span>Users</span>
+                </div>
+                <div class="nav-item" onclick="switchAdminTab('athletes')">
+                    <i class="fa-solid fa-person-running w-5 text-center"></i> <span>Athletes</span>
+                </div>
+                <div class="nav-item" onclick="switchAdminTab('coaches')">
+                    <i class="fa-solid fa-person-chalkboard w-5 text-center"></i> <span>Coaches</span>
+                </div>
+                <div class="nav-item" onclick="switchAdminTab('scouts')">
+                    <i class="fa-solid fa-binoculars w-5 text-center"></i> <span>Scouts</span>
+                </div>
+
+                <div class="pt-3 px-3 py-2 text-[10px] font-black uppercase tracking-widest text-cyan-400/70">Programs & Talent</div>
+
+                <div class="nav-item" onclick="switchAdminTab('opportunities')">
+                    <i class="fa-solid fa-trophy w-5 text-center"></i> <span>Opportunities</span>
+                </div>
+                <div class="nav-item" onclick="switchAdminTab('trials')">
+                    <i class="fa-solid fa-stopwatch-20 w-5 text-center"></i> <span>Trials</span>
+                </div>
+                <div class="nav-item" onclick="switchAdminTab('scholarships')">
+                    <i class="fa-solid fa-graduation-cap w-5 text-center"></i> <span>Scholarships</span>
+                </div>
+                <div class="nav-item" onclick="switchAdminTab('applications')">
+                    <i class="fa-solid fa-file-signature w-5 text-center"></i> <span>Applications</span>
+                </div>
+                <div class="nav-item" onclick="switchAdminTab('achievements')">
+                    <i class="fa-solid fa-medal w-5 text-center"></i> <span>Achievements</span>
+                </div>
+
+                <div class="pt-3 px-3 py-2 text-[10px] font-black uppercase tracking-widest text-cyan-400/70">Platform Core</div>
+
+                <div class="nav-item" onclick="switchAdminTab('announcements')">
+                    <i class="fa-solid fa-bullhorn w-5 text-center"></i> <span>Announcements</span>
+                </div>
+                <div class="nav-item" onclick="switchAdminTab('settings')">
+                    <i class="fa-solid fa-sliders w-5 text-center"></i> <span>Settings</span>
+                </div>
+            </div>
+
+            <!-- Sidebar Footer -->
+            <div class="pt-4 border-t border-gray-800 text-[11px] text-gray-500 space-y-1">
+                <div class="flex items-center justify-between text-gray-400 font-bold">
+                    <span>Spring Boot</span> <span class="text-emerald-400">:8880</span>
+                </div>
+                <div class="flex items-center justify-between text-gray-400 font-bold">
+                    <span>MySQL DB</span> <span class="text-cyan-400">:3306</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Workspace Area -->
+        <main class="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto max-w-7xl mx-auto w-full">
+            
+            <!-- Global Admin Alert / Toast Notification -->
+            <div id="admin-toast-container"></div>
+
+            <!-- ================= TAB 1: DASHBOARD OVERVIEW ================= -->
+            <section id="tab-dashboard" class="space-y-8">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-400/10 border border-cyan-400/20 text-cyan-300 text-xs font-bold tracking-wide uppercase mb-2">
+                            <i class="fa-solid fa-chart-line"></i> Operational Overview
+                        </div>
+                        <h1 class="text-2xl sm:text-3xl font-black text-white">Platform Intelligence & Analytics</h1>
+                        <p class="text-xs text-gray-400 mt-1">Real-time telemetry and management controls for India's sports talent ecosystem.</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="loadAdminStats()" class="px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 hover:border-cyan-400 text-xs font-bold text-cyan-300 transition">
+                            <i class="fa-solid fa-rotate mr-1.5"></i> Refresh Data
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 8 Metric KPI Cards Grid -->
+                <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <!-- Total Users -->
+                    <div class="glass-card p-5 rounded-2xl border border-gray-800 hover:border-cyan-400/50">
+                        <div class="flex items-center justify-between text-gray-400 mb-2">
+                            <span class="text-xs font-bold uppercase tracking-wider">Total Users</span>
+                            <div class="w-9 h-9 rounded-xl bg-cyan-400/15 text-cyan-300 flex items-center justify-center"><i class="fa-solid fa-users"></i></div>
+                        </div>
+                        <div id="kpi-users" class="text-2xl sm:text-3xl font-black text-white">--</div>
+                        <div class="text-[11px] text-cyan-300 mt-1 flex items-center gap-1 font-semibold">
+                            <i class="fa-solid fa-circle-check text-[9px] text-emerald-400"></i> Registered accounts
+                        </div>
+                    </div>
+
+                    <!-- Total Athletes -->
+                    <div class="glass-card p-5 rounded-2xl border border-gray-800 hover:border-emerald-400/50">
+                        <div class="flex items-center justify-between text-gray-400 mb-2">
+                            <span class="text-xs font-bold uppercase tracking-wider">Athletes</span>
+                            <div class="w-9 h-9 rounded-xl bg-emerald-400/15 text-emerald-300 flex items-center justify-center"><i class="fa-solid fa-person-running"></i></div>
+                        </div>
+                        <div id="kpi-athletes" class="text-2xl sm:text-3xl font-black text-white">--</div>
+                        <div class="text-[11px] text-emerald-300 mt-1 flex items-center gap-1 font-semibold">
+                            <i class="fa-solid fa-medal text-[9px]"></i> Active profiles
+                        </div>
+                    </div>
+
+                    <!-- Total Coaches -->
+                    <div class="glass-card p-5 rounded-2xl border border-gray-800 hover:border-blue-400/50">
+                        <div class="flex items-center justify-between text-gray-400 mb-2">
+                            <span class="text-xs font-bold uppercase tracking-wider">Coaches</span>
+                            <div class="w-9 h-9 rounded-xl bg-blue-400/15 text-blue-300 flex items-center justify-center"><i class="fa-solid fa-person-chalkboard"></i></div>
+                        </div>
+                        <div id="kpi-coaches" class="text-2xl sm:text-3xl font-black text-white">--</div>
+                        <div class="text-[11px] text-blue-300 mt-1 flex items-center gap-1 font-semibold">
+                            <i class="fa-solid fa-location-dot text-[9px]"></i> Geotagged trainers
+                        </div>
+                    </div>
+
+                    <!-- Total Scouts -->
+                    <div class="glass-card p-5 rounded-2xl border border-gray-800 hover:border-yellow-400/50">
+                        <div class="flex items-center justify-between text-gray-400 mb-2">
+                            <span class="text-xs font-bold uppercase tracking-wider">Scouts</span>
+                            <div class="w-9 h-9 rounded-xl bg-yellow-400/15 text-yellow-300 flex items-center justify-center"><i class="fa-solid fa-binoculars"></i></div>
+                        </div>
+                        <div id="kpi-scouts" class="text-2xl sm:text-3xl font-black text-white">--</div>
+                        <div class="text-[11px] text-yellow-300 mt-1 flex items-center gap-1 font-semibold">
+                            <i class="fa-solid fa-magnifying-glass text-[9px]"></i> Talent finders
+                        </div>
+                    </div>
+
+                    <!-- Total Opportunities -->
+                    <div class="glass-card p-5 rounded-2xl border border-gray-800 hover:border-cyan-400/50">
+                        <div class="flex items-center justify-between text-gray-400 mb-2">
+                            <span class="text-xs font-bold uppercase tracking-wider">Opportunities</span>
+                            <div class="w-9 h-9 rounded-xl bg-cyan-400/15 text-cyan-300 flex items-center justify-center"><i class="fa-solid fa-trophy"></i></div>
+                        </div>
+                        <div id="kpi-opportunities" class="text-2xl sm:text-3xl font-black text-white">--</div>
+                        <div class="text-[11px] text-cyan-300 mt-1 flex items-center gap-1 font-semibold">
+                            <i class="fa-solid fa-bolt text-[9px]"></i> Academies & grants
+                        </div>
+                    </div>
+
+                    <!-- Total Trials -->
+                    <div class="glass-card p-5 rounded-2xl border border-gray-800 hover:border-emerald-400/50">
+                        <div class="flex items-center justify-between text-gray-400 mb-2">
+                            <span class="text-xs font-bold uppercase tracking-wider">Trials</span>
+                            <div class="w-9 h-9 rounded-xl bg-emerald-400/15 text-emerald-300 flex items-center justify-center"><i class="fa-solid fa-stopwatch-20"></i></div>
+                        </div>
+                        <div id="kpi-trials" class="text-2xl sm:text-3xl font-black text-white">--</div>
+                        <div class="text-[11px] text-emerald-300 mt-1 flex items-center gap-1 font-semibold">
+                            <i class="fa-solid fa-calendar-check text-[9px]"></i> Regional open trials
+                        </div>
+                    </div>
+
+                    <!-- Total Scholarships -->
+                    <div class="glass-card p-5 rounded-2xl border border-gray-800 hover:border-purple-400/50">
+                        <div class="flex items-center justify-between text-gray-400 mb-2">
+                            <span class="text-xs font-bold uppercase tracking-wider">Scholarships</span>
+                            <div class="w-9 h-9 rounded-xl bg-purple-400/15 text-purple-300 flex items-center justify-center"><i class="fa-solid fa-graduation-cap"></i></div>
+                        </div>
+                        <div id="kpi-scholarships" class="text-2xl sm:text-3xl font-black text-white">--</div>
+                        <div class="text-[11px] text-purple-300 mt-1 flex items-center gap-1 font-semibold">
+                            <i class="fa-solid fa-indian-rupee-sign text-[9px]"></i> 5 Category programs
+                        </div>
+                    </div>
+
+                    <!-- Total Applications -->
+                    <div class="glass-card p-5 rounded-2xl border border-gray-800 hover:border-accentNeon/50">
+                        <div class="flex items-center justify-between text-gray-400 mb-2">
+                            <span class="text-xs font-bold uppercase tracking-wider">Applications</span>
+                            <div class="w-9 h-9 rounded-xl bg-accentNeon/15 text-accentNeon flex items-center justify-center"><i class="fa-solid fa-file-signature"></i></div>
+                        </div>
+                        <div id="kpi-applications" class="text-2xl sm:text-3xl font-black text-white">--</div>
+                        <div class="text-[11px] text-accentNeon mt-1 flex items-center gap-1 font-semibold">
+                            <i class="fa-solid fa-paper-plane text-[9px]"></i> Submitted requests
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts & Performance Analytics Section -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Sports Breakdown Chart -->
+                    <div class="glass-card p-6 rounded-3xl border border-gray-800 space-y-4">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-bold text-base flex items-center gap-2"><i class="fa-solid fa-chart-pie text-cyan-400"></i> Athlete Sport Distribution</h3>
+                            <span class="text-xs text-gray-400">By discipline</span>
+                        </div>
+                        <div class="relative h-64 flex items-center justify-center">
+                            <canvas id="chart-sports"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Applications & Conversion Chart -->
+                    <div class="glass-card p-6 rounded-3xl border border-gray-800 space-y-4">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-bold text-base flex items-center gap-2"><i class="fa-solid fa-chart-column text-emerald-400"></i> Applications by Status</h3>
+                            <span class="text-xs text-gray-400">Pipeline health</span>
+                        </div>
+                        <div class="relative h-64 flex items-center justify-center">
+                            <canvas id="chart-applications"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Platform Activity Feed -->
+                <div class="glass-card p-6 rounded-3xl border border-gray-800 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-bold text-base flex items-center gap-2"><i class="fa-solid fa-clock-rotate-left text-cyan-400"></i> Recent Platform Activity</h3>
+                        <span class="text-xs text-gray-400">Live feed</span>
+                    </div>
+                    <div id="dashboard-activity-feed" class="space-y-2.5">
+                        <div class="text-xs text-gray-500 py-4 text-center">Loading activity feed…</div>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- ================= TAB 2: USERS MANAGEMENT ================= -->
+            <section id="tab-users" class="hidden space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-2xl font-black">User Directory</h2>
+                        <p class="text-xs text-gray-400">View, search, filter roles, and manage activation state for all registered users.</p>
+                    </div>
+                    <button onclick="openAddUserModal()" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-400 to-emerald-400 text-darkbg font-black text-xs uppercase tracking-wider flex items-center gap-2 hover:opacity-95 transition">
+                        <i class="fa-solid fa-user-plus"></i> Add New User
+                    </button>
+                </div>
+
+                <!-- Controls / Filter bar -->
+                <div class="glass-card p-4 rounded-2xl border border-gray-800 flex flex-col sm:flex-row gap-3">
+                    <div class="flex-1 relative">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-gray-400 text-sm"></i>
+                        <input type="text" id="users-search" oninput="filterUsersTable()" placeholder="Search by name, email, or sport…" class="form-input pl-10">
+                    </div>
+                    <div class="flex gap-3">
+                        <select id="users-filter-role" onchange="filterUsersTable()" class="form-input w-36">
+                            <option value="ALL">All Roles</option>
+                            <option value="ATHLETE">Athlete</option>
+                            <option value="ADMIN">Admin</option>
+                        </select>
+                        <select id="users-filter-status" onchange="filterUsersTable()" class="form-input w-36">
+                            <option value="ALL">All Status</option>
+                            <option value="ACTIVE">Active</option>
+                            <option value="INACTIVE">Inactive</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Users Table -->
+                <div class="glass-card rounded-2xl border border-gray-800 overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-white/5 border-b border-gray-800 text-gray-400 font-bold uppercase text-[10px]">
+                                <tr>
+                                    <th class="p-4">User</th>
+                                    <th class="p-4">Email</th>
+                                    <th class="p-4">Sport / Location</th>
+                                    <th class="p-4">Role</th>
+                                    <th class="p-4">Status</th>
+                                    <th class="p-4">Registered</th>
+                                    <th class="p-4 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="users-table-body" class="divide-y divide-gray-800">
+                                <tr><td colspan="7" class="p-6 text-center text-gray-500">Loading users…</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- ================= TAB 3: ATHLETES MANAGEMENT ================= -->
+            <section id="tab-athletes" class="hidden space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-2xl font-black">Athlete Talent Network</h2>
+                        <p class="text-xs text-gray-400">Review sporting resumes, achievements, certificates, and participation data.</p>
+                    </div>
+                </div>
+
+                <!-- Controls -->
+                <div class="glass-card p-4 rounded-2xl border border-gray-800 flex flex-col sm:flex-row gap-3">
+                    <div class="flex-1 relative">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-gray-400 text-sm"></i>
+                        <input type="text" id="athletes-search" oninput="filterAthletesTable()" placeholder="Search athlete by name, email, sport or location…" class="form-input pl-10">
+                    </div>
+                    <select id="athletes-filter-sport" onchange="filterAthletesTable()" class="form-input w-48">
+                        <option value="ALL">All Sports</option>
+                    </select>
+                </div>
+
+                <!-- Athletes Table -->
+                <div class="glass-card rounded-2xl border border-gray-800 overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-white/5 border-b border-gray-800 text-gray-400 font-bold uppercase text-[10px]">
+                                <tr>
+                                    <th class="p-4">Athlete</th>
+                                    <th class="p-4">Sport</th>
+                                    <th class="p-4">Location</th>
+                                    <th class="p-4 text-center">Achievements</th>
+                                    <th class="p-4 text-center">Applications</th>
+                                    <th class="p-4 text-center">Bookings</th>
+                                    <th class="p-4 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="athletes-table-body" class="divide-y divide-gray-800">
+                                <tr><td colspan="7" class="p-6 text-center text-gray-500">Loading athletes…</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- ================= TAB 4: COACHES MANAGEMENT ================= -->
+            <section id="tab-coaches" class="hidden space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-2xl font-black">Coach Directory & Connections</h2>
+                        <p class="text-xs text-gray-400">Manage high-performance coaches and review athlete connection requests.</p>
+                    </div>
+                    <button onclick="openAddCoachModal()" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-400 to-emerald-400 text-darkbg font-black text-xs uppercase tracking-wider flex items-center gap-2 hover:opacity-95 transition">
+                        <i class="fa-solid fa-plus"></i> Add Coach
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 gap-6">
+                    <div class="glass-card rounded-2xl border border-gray-800 overflow-hidden">
+                        <div class="p-4 border-b border-gray-800 flex items-center justify-between">
+                            <h3 class="font-bold text-sm text-cyan-300">Registered Coaches</h3>
+                            <span id="coaches-count-badge" class="badge badge-cyan">0 Coaches</span>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-white/5 border-b border-gray-800 text-gray-400 font-bold uppercase text-[10px]">
+                                    <tr>
+                                        <th class="p-4">Name & Organization</th>
+                                        <th class="p-4">Sports</th>
+                                        <th class="p-4">Specialization</th>
+                                        <th class="p-4">Experience</th>
+                                        <th class="p-4">Location (Coords)</th>
+                                        <th class="p-4 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="coaches-table-body" class="divide-y divide-gray-800">
+                                    <tr><td colspan="6" class="p-6 text-center text-gray-500">Loading coaches…</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Coach Connection Requests -->
+                    <div class="glass-card rounded-2xl border border-gray-800 overflow-hidden">
+                        <div class="p-4 border-b border-gray-800">
+                            <h3 class="font-bold text-sm text-emerald-300">Incoming Coach Connection Requests</h3>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-white/5 border-b border-gray-800 text-gray-400 font-bold uppercase text-[10px]">
+                                    <tr>
+                                        <th class="p-4">Athlete</th>
+                                        <th class="p-4">Target Coach</th>
+                                        <th class="p-4">Message</th>
+                                        <th class="p-4">Date</th>
+                                        <th class="p-4">Status</th>
+                                        <th class="p-4 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="coach-connections-table-body" class="divide-y divide-gray-800">
+                                    <tr><td colspan="6" class="p-6 text-center text-gray-500">Loading connection requests…</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- ================= TAB 5: SCOUTS MANAGEMENT ================= -->
+            <section id="tab-scouts" class="hidden space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-2xl font-black">Scout Network & Connections</h2>
+                        <p class="text-xs text-gray-400">Manage talent discovery scouts and review athlete scouting requests.</p>
+                    </div>
+                    <button onclick="openAddScoutModal()" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-400 to-emerald-400 text-darkbg font-black text-xs uppercase tracking-wider flex items-center gap-2 hover:opacity-95 transition">
+                        <i class="fa-solid fa-plus"></i> Add Scout
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 gap-6">
+                    <div class="glass-card rounded-2xl border border-gray-800 overflow-hidden">
+                        <div class="p-4 border-b border-gray-800 flex items-center justify-between">
+                            <h3 class="font-bold text-sm text-yellow-300">Verified Scouts</h3>
+                            <span id="scouts-count-badge" class="badge badge-yellow">0 Scouts</span>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-white/5 border-b border-gray-800 text-gray-400 font-bold uppercase text-[10px]">
+                                    <tr>
+                                        <th class="p-4">Name & Organization</th>
+                                        <th class="p-4">Sports</th>
+                                        <th class="p-4">Specialization</th>
+                                        <th class="p-4">Experience</th>
+                                        <th class="p-4">Location</th>
+                                        <th class="p-4 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="scouts-table-body" class="divide-y divide-gray-800">
+                                    <tr><td colspan="6" class="p-6 text-center text-gray-500">Loading scouts…</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Scout Connection Requests -->
+                    <div class="glass-card rounded-2xl border border-gray-800 overflow-hidden">
+                        <div class="p-4 border-b border-gray-800">
+                            <h3 class="font-bold text-sm text-yellow-300">Scout Connection Requests</h3>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-white/5 border-b border-gray-800 text-gray-400 font-bold uppercase text-[10px]">
+                                    <tr>
+                                        <th class="p-4">Athlete</th>
+                                        <th class="p-4">Target Scout</th>
+                                        <th class="p-4">Message</th>
+                                        <th class="p-4">Date</th>
+                                        <th class="p-4">Status</th>
+                                        <th class="p-4 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="scout-connections-table-body" class="divide-y divide-gray-800">
+                                    <tr><td colspan="6" class="p-6 text-center text-gray-500">Loading scout requests…</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- ================= TAB 6: OPPORTUNITIES MANAGEMENT ================= -->
+            <section id="tab-opportunities" class="hidden space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-2xl font-black">Opportunities Management</h2>
+                        <p class="text-xs text-gray-400">Create, edit, and toggle residential academies, sponsorships, and trial grants.</p>
+                    </div>
+                    <button onclick="openAddOpportunityModal()" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-400 to-emerald-400 text-darkbg font-black text-xs uppercase tracking-wider flex items-center gap-2 hover:opacity-95 transition">
+                        <i class="fa-solid fa-plus"></i> Add Opportunity
+                    </button>
+                </div>
+
+                <div class="glass-card rounded-2xl border border-gray-800 overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-white/5 border-b border-gray-800 text-gray-400 font-bold uppercase text-[10px]">
+                                <tr>
+                                    <th class="p-4">Name</th>
+                                    <th class="p-4">Type</th>
+                                    <th class="p-4">Slug ID</th>
+                                    <th class="p-4">Deadline</th>
+                                    <th class="p-4">Status</th>
+                                    <th class="p-4">Applications</th>
+                                    <th class="p-4 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="opportunities-table-body" class="divide-y divide-gray-800">
+                                <tr><td colspan="7" class="p-6 text-center text-gray-500">Loading opportunities…</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- ================= TAB 7: TRIALS MANAGEMENT ================= -->
+            <section id="tab-trials" class="hidden space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-2xl font-black">Trial Management</h2>
+                        <p class="text-xs text-gray-400">Manage trials, venues, registration status, categories, and time slot capacities.</p>
+                    </div>
+                    <button onclick="openAddTrialModal()" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-400 to-emerald-400 text-darkbg font-black text-xs uppercase tracking-wider flex items-center gap-2 hover:opacity-95 transition">
+                        <i class="fa-solid fa-plus"></i> Add New Trial
+                    </button>
+                </div>
+
+                <div class="glass-card rounded-2xl border border-gray-800 overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-white/5 border-b border-gray-800 text-gray-400 font-bold uppercase text-[10px]">
+                                <tr>
+                                    <th class="p-4">Trial Name</th>
+                                    <th class="p-4">Sport / Org</th>
+                                    <th class="p-4">Venue & Date</th>
+                                    <th class="p-4">Category / Age</th>
+                                    <th class="p-4">Status</th>
+                                    <th class="p-4">Capacity & Bookings</th>
+                                    <th class="p-4 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="trials-table-body" class="divide-y divide-gray-800">
+                                <tr><td colspan="7" class="p-6 text-center text-gray-500">Loading trials…</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- ================= TAB 8: SCHOLARSHIPS MANAGEMENT ================= -->
+            <section id="tab-scholarships" class="hidden space-y-8">
+                <!-- Sub-section 1: Scholarship Programs Catalog -->
+                <div class="space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div>
+                            <h2 class="text-2xl font-black">Scholarship Programs</h2>
+                            <p class="text-xs text-gray-400">Manage sports grants & endowments across 5 categories including Armed-Forces & Single-Parent wards.</p>
+                        </div>
+                        <button onclick="openAddScholarshipModal()" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-400 to-emerald-400 text-darkbg font-black text-xs uppercase tracking-wider flex items-center gap-2 hover:opacity-95 transition">
+                            <i class="fa-solid fa-plus"></i> Add Scholarship
+                        </button>
+                    </div>
+
+                    <div class="glass-card rounded-2xl border border-gray-800 overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-white/5 border-b border-gray-800 text-gray-400 font-bold uppercase text-[10px]">
+                                    <tr>
+                                        <th class="p-4">Title & Organization</th>
+                                        <th class="p-4">Category</th>
+                                        <th class="p-4">Eligibility Criteria</th>
+                                        <th class="p-4">Stipend / Benefits</th>
+                                        <th class="p-4">Deadline</th>
+                                        <th class="p-4">Status</th>
+                                        <th class="p-4 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="scholarships-table-body" class="divide-y divide-gray-800">
+                                    <tr><td colspan="7" class="p-6 text-center text-gray-500">Loading scholarships…</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sub-section 2: Submitted Scholarship Applications Review & Approval -->
+                <div class="space-y-4 pt-6 border-t border-gray-800/80">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div>
+                            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-400/10 border border-cyan-400/30 text-cyan-300 text-[10px] font-black uppercase tracking-widest">
+                                <i class="fa-solid fa-file-signature"></i> 5-Category Applications
+                            </div>
+                            <h3 class="text-xl font-black text-white mt-2">Scholarship Applications & Approvals</h3>
+                            <p class="text-xs text-gray-400">Review answers, verify uploaded ID/age/proof documents, and approve applications with automated email notifications.</p>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <select id="scholarship-apps-filter-cat" onchange="filterScholarshipAppsTable()" class="form-input w-48">
+                                <option value="ALL">All 5 Categories</option>
+                                <option value="UNDER_18">Under 18</option>
+                                <option value="ABOVE_18">Above 18</option>
+                                <option value="WOMEN">Women</option>
+                                <option value="DEFENCE_CHILDREN">Children of Defence</option>
+                                <option value="SINGLE_PARENT">Single Parents</option>
+                            </select>
+                            <select id="scholarship-apps-filter-status" onchange="filterScholarshipAppsTable()" class="form-input w-36">
+                                <option value="ALL">All Status</option>
+                                <option value="SUBMITTED">SUBMITTED</option>
+                                <option value="APPROVED">APPROVED</option>
+                                <option value="REJECTED">REJECTED</option>
+                                <option value="CANCELLED">CANCELLED</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="glass-card rounded-2xl border border-gray-800 overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-white/5 border-b border-gray-800 text-gray-400 font-bold uppercase text-[10px]">
+                                    <tr>
+                                        <th class="p-4">Applicant & Contact</th>
+                                        <th class="p-4">Scholarship Category</th>
+                                        <th class="p-4">Key Criteria / Details</th>
+                                        <th class="p-4">Uploaded Documents</th>
+                                        <th class="p-4">Submitted On</th>
+                                        <th class="p-4">Status</th>
+                                        <th class="p-4 text-right">Approval Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="scholarship-apps-table-body" class="divide-y divide-gray-800">
+                                    <tr><td colspan="7" class="p-6 text-center text-gray-500">Loading scholarship applications…</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- ================= TAB 9: APPLICATIONS MANAGEMENT ================= -->
+            <section id="tab-applications" class="hidden space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-2xl font-black">Submitted Applications</h2>
+                        <p class="text-xs text-gray-400">Review athlete trial and opportunity applications with one-click status transitions.</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <select id="applications-filter-type" onchange="filterApplicationsTable()" class="form-input w-40">
+                            <option value="ALL">All Types</option>
+                            <option value="TRIAL">Trial Apps</option>
+                            <option value="OPPORTUNITY">Opportunity Apps</option>
+                        </select>
+                        <select id="applications-filter-status" onchange="filterApplicationsTable()" class="form-input w-40">
+                            <option value="ALL">All Status</option>
+                            <option value="SUBMITTED">SUBMITTED</option>
+                            <option value="UNDER REVIEW">UNDER REVIEW</option>
+                            <option value="SHORTLISTED">SHORTLISTED</option>
+                            <option value="APPROVED">APPROVED</option>
+                            <option value="REJECTED">REJECTED</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="glass-card rounded-2xl border border-gray-800 overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-white/5 border-b border-gray-800 text-gray-400 font-bold uppercase text-[10px]">
+                                <tr>
+                                    <th class="p-4">Applicant</th>
+                                    <th class="p-4">Type & Program</th>
+                                    <th class="p-4">Sport / Position</th>
+                                    <th class="p-4">Details</th>
+                                    <th class="p-4">Applied Date</th>
+                                    <th class="p-4">Status</th>
+                                    <th class="p-4 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="applications-table-body" class="divide-y divide-gray-800">
+                                <tr><td colspan="7" class="p-6 text-center text-gray-500">Loading applications…</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- ================= TAB 10: ACHIEVEMENTS REVIEW ================= -->
+            <section id="tab-achievements" class="hidden space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-2xl font-black">Achievements & Certificates Review</h2>
+                        <p class="text-xs text-gray-400">Verify athlete medal claims and official certificates before showcasing on the talent network.</p>
+                    </div>
+                    <select id="achievements-filter-status" onchange="filterAchievementsTable()" class="form-input w-44">
+                        <option value="ALL">All Verification</option>
+                        <option value="PENDING">Pending Review</option>
+                        <option value="VERIFIED">Verified</option>
+                        <option value="REJECTED">Rejected</option>
+                    </select>
+                </div>
+
+                <div class="glass-card rounded-2xl border border-gray-800 overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-white/5 border-b border-gray-800 text-gray-400 font-bold uppercase text-[10px]">
+                                <tr>
+                                    <th class="p-4">Athlete</th>
+                                    <th class="p-4">Achievement Title</th>
+                                    <th class="p-4">Sport & Level</th>
+                                    <th class="p-4">Award / Position</th>
+                                    <th class="p-4">Year / Institution</th>
+                                    <th class="p-4">Certificate</th>
+                                    <th class="p-4">Status</th>
+                                    <th class="p-4 text-right">Verification</th>
+                                </tr>
+                            </thead>
+                            <tbody id="achievements-table-body" class="divide-y divide-gray-800">
+                                <tr><td colspan="8" class="p-6 text-center text-gray-500">Loading achievements…</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- ================= TAB 11: ANNOUNCEMENTS ================= -->
+            <section id="tab-announcements" class="hidden space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-2xl font-black">Platform Announcements</h2>
+                        <p class="text-xs text-gray-400">Broadcast important trial dates, new scholarships, and system announcements to athletes.</p>
+                    </div>
+                    <button onclick="openAddAnnouncementModal()" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-400 to-emerald-400 text-darkbg font-black text-xs uppercase tracking-wider flex items-center gap-2 hover:opacity-95 transition">
+                        <i class="fa-solid fa-bullhorn"></i> New Announcement
+                    </button>
+                </div>
+
+                <div class="glass-card rounded-2xl border border-gray-800 overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-white/5 border-b border-gray-800 text-gray-400 font-bold uppercase text-[10px]">
+                                <tr>
+                                    <th class="p-4">Title</th>
+                                    <th class="p-4">Category</th>
+                                    <th class="p-4">Priority</th>
+                                    <th class="p-4">Content</th>
+                                    <th class="p-4">Date</th>
+                                    <th class="p-4 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="announcements-table-body" class="divide-y divide-gray-800">
+                                <tr><td colspan="6" class="p-6 text-center text-gray-500">Loading announcements…</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- ================= TAB 12: SETTINGS & SYSTEM ================= -->
+            <section id="tab-settings" class="hidden space-y-6">
+                <div>
+                    <h2 class="text-2xl font-black">Platform Settings & Diagnostics</h2>
+                    <p class="text-xs text-gray-400">Runtime health, environment diagnostics, database metrics, and administrator credentials.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Server & Runtime card -->
+                    <div class="glass-card p-6 rounded-3xl border border-gray-800 space-y-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-cyan-400/20 text-cyan-300 flex items-center justify-center"><i class="fa-solid fa-server"></i></div>
+                            <div>
+                                <h3 class="font-bold text-sm text-white">Backend Environment</h3>
+                                <p class="text-[11px] text-gray-400">Java Spring Boot 3</p>
+                            </div>
+                        </div>
+                        <div class="space-y-2 text-xs text-gray-300">
+                            <div class="flex justify-between py-1 border-b border-gray-800"><span class="text-gray-500">HTTP Port</span><span class="font-bold text-cyan-300">8880</span></div>
+                            <div class="flex justify-between py-1 border-b border-gray-800"><span class="text-gray-500">Status</span><span class="badge badge-green">ONLINE</span></div>
+                            <div class="flex justify-between py-1 border-b border-gray-800"><span class="text-gray-500">JVM Version</span><span id="sys-jvm" class="font-bold">--</span></div>
+                            <div class="flex justify-between py-1"><span class="text-gray-500">Memory Usage</span><span id="sys-memory" class="font-bold text-emerald-400">--</span></div>
+                        </div>
+                    </div>
+
+                    <!-- MySQL Database card -->
+                    <div class="glass-card p-6 rounded-3xl border border-gray-800 space-y-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-400/20 text-emerald-300 flex items-center justify-center"><i class="fa-solid fa-database"></i></div>
+                            <div>
+                                <h3 class="font-bold text-sm text-white">MySQL Database</h3>
+                                <p class="text-[11px] text-gray-400">Schema: athletelink_db</p>
+                            </div>
+                        </div>
+                        <div class="space-y-2 text-xs text-gray-300">
+                            <div class="flex justify-between py-1 border-b border-gray-800"><span class="text-gray-500">Host / Port</span><span class="font-bold text-emerald-300">127.0.0.1:3306</span></div>
+                            <div class="flex justify-between py-1 border-b border-gray-800"><span class="text-gray-500">Connection</span><span class="badge badge-green">HEALTHY</span></div>
+                            <div class="flex justify-between py-1"><span class="text-gray-500">Active Tables</span><span id="sys-tables-count" class="font-bold text-cyan-300">--</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Admin Access Info card -->
+                    <div class="glass-card p-6 rounded-3xl border border-gray-800 space-y-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-purple-400/20 text-purple-300 flex items-center justify-center"><i class="fa-solid fa-user-shield"></i></div>
+                            <div>
+                                <h3 class="font-bold text-sm text-white">Default Admin Account</h3>
+                                <p class="text-[11px] text-gray-400">Initialized for Demo</p>
+                            </div>
+                        </div>
+                        <div class="space-y-2 text-xs text-gray-300">
+                            <div class="flex justify-between py-1 border-b border-gray-800"><span class="text-gray-500">Admin Email</span><span class="font-bold text-purple-300">admin@athletelink.ai</span></div>
+                            <div class="flex justify-between py-1 border-b border-gray-800"><span class="text-gray-500">Default Pass</span><span class="font-mono text-gray-300">Admin@123</span></div>
+                            <div class="flex justify-between py-1"><span class="text-gray-500">Role</span><span class="badge badge-purple">SUPER ADMIN</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Database Tables Explorer -->
+                <div class="glass-card rounded-3xl border border-gray-800 p-6 space-y-4">
+                    <h3 class="font-bold text-sm flex items-center gap-2"><i class="fa-solid fa-table-list text-cyan-400"></i> Database Tables Inventory</h3>
+                    <div id="sys-tables-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 text-xs">
+                        <div class="p-3 rounded-xl bg-darkbg border border-gray-800 text-center">Loading tables…</div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- ================= MODALS ================= -->
+
+    <!-- USER MODAL (Add / Edit) -->
+    <div id="modal-user" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm p-4 overflow-y-auto">
+        <div class="max-w-xl mx-auto mt-12 mb-12 glass-card rounded-3xl border border-gray-700 p-6 sm:p-8">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h3 id="modal-user-title" class="text-xl font-black">Add User</h3>
+                    <p class="text-xs text-gray-400">Manage user account details in MySQL.</p>
+                </div>
+                <button onclick="closeAdminModal('modal-user')" class="text-gray-400 hover:text-white text-xl">&times;</button>
+            </div>
+            <form id="form-user" onsubmit="saveUser(event)" class="space-y-4">
+                <input type="hidden" id="user-form-id">
+                <div>
+                    <label class="form-label">Full Name *</label>
+                    <input type="text" id="user-form-name" required class="form-input" placeholder="e.g. Neeraj Chopra">
+                </div>
+                <div>
+                    <label class="form-label">Email Address *</label>
+                    <input type="email" id="user-form-email" required class="form-input" placeholder="neeraj@olympics.in">
+                </div>
+                <div id="user-form-pass-group">
+                    <label class="form-label">Password <span id="user-form-pass-hint" class="text-[10px] text-gray-500">(Leave blank to keep current)</span></label>
+                    <input type="password" id="user-form-password" class="form-input" placeholder="••••••••">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="form-label">Sport</label>
+                        <input type="text" id="user-form-sport" class="form-input" placeholder="Javelin Throw">
+                    </div>
+                    <div>
+                        <label class="form-label">Location</label>
+                        <input type="text" id="user-form-location" class="form-input" placeholder="Haryana, India">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="form-label">Role *</label>
+                        <select id="user-form-role" class="form-input">
+                            <option value="ATHLETE">ATHLETE</option>
+                            <option value="ADMIN">ADMIN</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="form-label">Status *</label>
+                        <select id="user-form-status" class="form-input">
+                            <option value="ACTIVE">ACTIVE</option>
+                            <option value="INACTIVE">INACTIVE</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="flex justify-end gap-3 pt-4 border-t border-gray-800">
+                    <button type="button" onclick="closeAdminModal('modal-user')" class="px-5 py-2.5 rounded-xl bg-gray-800 text-white font-bold text-xs">Cancel</button>
+                    <button type="submit" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-cyan-400 to-emerald-400 text-darkbg font-black text-xs">Save User</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ATHLETE PROFILE VIEW MODAL -->
+    <div id="modal-athlete-profile" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm p-4 overflow-y-auto">
+        <div class="max-w-3xl mx-auto mt-8 mb-8 glass-card rounded-3xl border border-gray-700 p-6 sm:p-8 space-y-6">
+            <div class="flex justify-between items-start">
+                <div class="flex items-center gap-4">
+                    <div id="athlete-modal-avatar" class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-cyan-400 to-emerald-400 flex items-center justify-center text-darkbg font-black text-2xl">
+                        A
+                    </div>
+                    <div>
+                        <h3 id="athlete-modal-name" class="text-2xl font-black text-white">Athlete Name</h3>
+                        <p id="athlete-modal-email" class="text-xs text-cyan-300">athlete@example.com</p>
+                        <div class="flex items-center gap-2 mt-1.5">
+                            <span id="athlete-modal-sport" class="badge badge-cyan">Athletics</span>
+                            <span id="athlete-modal-loc" class="badge badge-green">Location</span>
+                        </div>
+                    </div>
+                </div>
+                <button onclick="closeAdminModal('modal-athlete-profile')" class="text-gray-400 hover:text-white text-xl">&times;</button>
+            </div>
+            
+            <!-- Profile Details Content -->
+            <div id="athlete-modal-content" class="space-y-6 text-xs">
+                <div>Loading profile details…</div>
+            </div>
+
+            <div class="flex justify-end">
+                <button onclick="closeAdminModal('modal-athlete-profile')" class="px-6 py-2.5 rounded-xl bg-gray-800 text-white font-bold text-xs">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- COACH MODAL (Add / Edit) -->
+    <div id="modal-coach" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm p-4 overflow-y-auto">
+        <div class="max-w-xl mx-auto mt-10 mb-10 glass-card rounded-3xl border border-gray-700 p-6 sm:p-8">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h3 id="modal-coach-title" class="text-xl font-black">Add Coach</h3>
+                    <p class="text-xs text-gray-400">Save coach and geolocation coordinates to MySQL.</p>
+                </div>
+                <button onclick="closeAdminModal('modal-coach')" class="text-gray-400 hover:text-white text-xl">&times;</button>
+            </div>
+            <form id="form-coach" onsubmit="saveCoach(event)" class="space-y-4">
+                <input type="hidden" id="coach-form-id">
+                <div><label class="form-label">Coach Name *</label><input type="text" id="coach-form-name" required class="form-input" placeholder="e.g. Kavya Raman"></div>
+                <div><label class="form-label">Organization *</label><input type="text" id="coach-form-org" required class="form-input" placeholder="Chennai High Performance Centre"></div>
+                <div><label class="form-label">Sports *</label><input type="text" id="coach-form-sports" required class="form-input" placeholder="Athletics, Track & Field"></div>
+                <div><label class="form-label">Specialization</label><input type="text" id="coach-form-spec" class="form-input" placeholder="Sprint technique & conditioning"></div>
+                <div><label class="form-label">Experience</label><input type="text" id="coach-form-exp" class="form-input" placeholder="11 years"></div>
+                <div><label class="form-label">Location (City, State) *</label><input type="text" id="coach-form-loc" required class="form-input" placeholder="Chennai, Tamil Nadu"></div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div><label class="form-label">Latitude</label><input type="number" step="0.0001" id="coach-form-lat" class="form-input" placeholder="13.0827"></div>
+                    <div><label class="form-label">Longitude</label><input type="number" step="0.0001" id="coach-form-lon" class="form-input" placeholder="80.2707"></div>
+                </div>
+                <div class="flex justify-end gap-3 pt-4 border-t border-gray-800">
+                    <button type="button" onclick="closeAdminModal('modal-coach')" class="px-5 py-2.5 rounded-xl bg-gray-800 text-white font-bold text-xs">Cancel</button>
+                    <button type="submit" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-cyan-400 to-emerald-400 text-darkbg font-black text-xs">Save Coach</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- SCOUT MODAL (Add / Edit) -->
+    <div id="modal-scout" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm p-4 overflow-y-auto">
+        <div class="max-w-xl mx-auto mt-10 mb-10 glass-card rounded-3xl border border-gray-700 p-6 sm:p-8">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h3 id="modal-scout-title" class="text-xl font-black">Add Scout</h3>
+                    <p class="text-xs text-gray-400">Save talent scout details to MySQL.</p>
+                </div>
+                <button onclick="closeAdminModal('modal-scout')" class="text-gray-400 hover:text-white text-xl">&times;</button>
+            </div>
+            <form id="form-scout" onsubmit="saveScout(event)" class="space-y-4">
+                <input type="hidden" id="scout-form-id">
+                <div><label class="form-label">Scout Name *</label><input type="text" id="scout-form-name" required class="form-input" placeholder="e.g. Arjun Mehta"></div>
+                <div><label class="form-label">Organization *</label><input type="text" id="scout-form-org" required class="form-input" placeholder="National Talent Discovery Network"></div>
+                <div><label class="form-label">Sports *</label><input type="text" id="scout-form-sports" required class="form-input" placeholder="Athletics, Track & Field"></div>
+                <div><label class="form-label">Specialization</label><input type="text" id="scout-form-spec" class="form-input" placeholder="Sprint & Performance scouting"></div>
+                <div><label class="form-label">Experience</label><input type="text" id="scout-form-exp" class="form-input" placeholder="12 years"></div>
+                <div><label class="form-label">Location *</label><input type="text" id="scout-form-loc" required class="form-input" placeholder="New Delhi"></div>
+                <div class="flex justify-end gap-3 pt-4 border-t border-gray-800">
+                    <button type="button" onclick="closeAdminModal('modal-scout')" class="px-5 py-2.5 rounded-xl bg-gray-800 text-white font-bold text-xs">Cancel</button>
+                    <button type="submit" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-cyan-400 to-emerald-400 text-darkbg font-black text-xs">Save Scout</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- OPPORTUNITY MODAL (Add / Edit) -->
+    <div id="modal-opportunity" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm p-4 overflow-y-auto">
+        <div class="max-w-xl mx-auto mt-10 mb-10 glass-card rounded-3xl border border-gray-700 p-6 sm:p-8">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h3 id="modal-opp-title" class="text-xl font-black">Add Opportunity</h3>
+                    <p class="text-xs text-gray-400">Save sports opportunity to MySQL.</p>
+                </div>
+                <button onclick="closeAdminModal('modal-opportunity')" class="text-gray-400 hover:text-white text-xl">&times;</button>
+            </div>
+            <form id="form-opportunity" onsubmit="saveOpportunity(event)" class="space-y-4">
+                <input type="hidden" id="opp-form-id">
+                <div><label class="form-label">Opportunity Name *</label><input type="text" id="opp-form-name" required class="form-input" placeholder="National Boxing Excellence Academy"></div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="form-label">Type *</label>
+                        <select id="opp-form-type" class="form-input">
+                            <option>Academy & Training</option>
+                            <option>Scholarship Grant</option>
+                            <option>Open Trials</option>
+                            <option>Sponsorship</option>
+                            <option>Competition</option>
+                        </select>
+                    </div>
+                    <div><label class="form-label">Slug ID</label><input type="text" id="opp-form-slug" class="form-input" placeholder="boxing-academy"></div>
+                </div>
+                <div><label class="form-label">Deadline</label><input type="date" id="opp-form-deadline" class="form-input"></div>
+                <div><label class="form-label">Description</label><textarea id="opp-form-desc" rows="3" class="form-input" placeholder="Describe the program eligibility and benefits…"></textarea></div>
+                <div class="flex justify-end gap-3 pt-4 border-t border-gray-800">
+                    <button type="button" onclick="closeAdminModal('modal-opportunity')" class="px-5 py-2.5 rounded-xl bg-gray-800 text-white font-bold text-xs">Cancel</button>
+                    <button type="submit" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-cyan-400 to-emerald-400 text-darkbg font-black text-xs">Save Opportunity</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- TRIAL MODAL (Add / Edit) -->
+    <div id="modal-trial" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm p-4 overflow-y-auto">
+        <div class="max-w-2xl mx-auto mt-8 mb-8 glass-card rounded-3xl border border-gray-700 p-6 sm:p-8">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h3 id="modal-trial-title" class="text-xl font-black">Add Trial</h3>
+                    <p class="text-xs text-gray-400">Configure trial venue, date, categories, and slot capacity.</p>
+                </div>
+                <button onclick="closeAdminModal('modal-trial')" class="text-gray-400 hover:text-white text-xl">&times;</button>
+            </div>
+            <form id="form-trial" onsubmit="saveTrial(event)" class="space-y-4">
+                <input type="hidden" id="trial-form-id">
+                <div><label class="form-label">Trial Name *</label><input type="text" id="trial-form-name" required class="form-input" placeholder="U19 Men's Hockey National Trials"></div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div><label class="form-label">Sport *</label><input type="text" id="trial-form-sport" required class="form-input" placeholder="Hockey"></div>
+                    <div><label class="form-label">Organization *</label><input type="text" id="trial-form-org" required class="form-input" placeholder="Hockey India"></div>
+                </div>
+                <div><label class="form-label">Venue *</label><input type="text" id="trial-form-venue" required class="form-input" placeholder="Major Dhyan Chand National Stadium, New Delhi"></div>
+                <div class="grid grid-cols-3 gap-3">
+                    <div><label class="form-label">Trial Date *</label><input type="date" id="trial-form-date" required class="form-input"></div>
+                    <div>
+                        <label class="form-label">Category</label>
+                        <select id="trial-form-category" class="form-input">
+                            <option>Men's</option>
+                            <option>Women's</option>
+                            <option>Open / Youth</option>
+                            <option>Junior</option>
+                            <option>Open</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="form-label">Age Category</label>
+                        <select id="trial-form-age" class="form-input">
+                            <option>U18</option>
+                            <option>U19</option>
+                            <option>U21</option>
+                            <option>Senior</option>
+                            <option>Youth</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-3 gap-3">
+                    <div>
+                        <label class="form-label">Registration Status</label>
+                        <select id="trial-form-reg-status" class="form-input">
+                            <option value="REG OPEN">REG OPEN</option>
+                            <option value="REG CLOSED">REG CLOSED</option>
+                            <option value="COMPLETED">COMPLETED</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="form-label">Initial Capacity</label>
+                        <input type="number" id="trial-form-capacity" value="30" min="5" max="200" class="form-input">
+                    </div>
+                    <div class="flex items-center pt-5">
+                        <label class="flex items-center gap-2 text-xs font-bold cursor-pointer">
+                            <input type="checkbox" id="trial-form-featured" class="w-4 h-4 rounded bg-darkbg border-gray-700 text-cyan-400">
+                            <span>Featured on Home</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="flex justify-end gap-3 pt-4 border-t border-gray-800">
+                    <button type="button" onclick="closeAdminModal('modal-trial')" class="px-5 py-2.5 rounded-xl bg-gray-800 text-white font-bold text-xs">Cancel</button>
+                    <button type="submit" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-cyan-400 to-emerald-400 text-darkbg font-black text-xs">Save Trial</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- SCHOLARSHIP MODAL (Add / Edit) -->
+    <div id="modal-scholarship" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm p-4 overflow-y-auto">
+        <div class="max-w-xl mx-auto mt-8 mb-8 glass-card rounded-3xl border border-gray-700 p-6 sm:p-8">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h3 id="modal-scholarship-title" class="text-xl font-black">Add Scholarship</h3>
+                    <p class="text-xs text-gray-400">Save scholarship program with eligibility category.</p>
+                </div>
+                <button onclick="closeAdminModal('modal-scholarship')" class="text-gray-400 hover:text-white text-xl">&times;</button>
+            </div>
+            <form id="form-scholarship" onsubmit="saveScholarship(event)" class="space-y-4">
+                <input type="hidden" id="scholarship-form-id">
+                <div><label class="form-label">Scholarship Title *</label><input type="text" id="scholarship-form-title" required class="form-input" placeholder="Veer Jawan Martyrs Children Sports Grant"></div>
+                <div><label class="form-label">Provider Organization *</label><input type="text" id="scholarship-form-org" required class="form-input" placeholder="Armed Forces Sports Control Board"></div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="form-label">Category *</label>
+                        <select id="scholarship-form-category" class="form-input">
+                            <option value="General">General</option>
+                            <option value="Women">Women</option>
+                            <option value="Children of armed-forces personnel">Children of armed-forces personnel</option>
+                            <option value="Single-parent families">Single-parent families</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div><label class="form-label">Application Deadline</label><input type="date" id="scholarship-form-deadline" class="form-input"></div>
+                </div>
+                <div><label class="form-label">Stipend / Financial Benefits *</label><input type="text" id="scholarship-form-amount" required class="form-input" placeholder="₹20,000/month + Full Kit Waiver"></div>
+                <div><label class="form-label">Eligibility Criteria</label><textarea id="scholarship-form-elig" rows="3" class="form-input" placeholder="Specify state-level ranking, age limit, or family criteria…"></textarea></div>
+                <div class="flex justify-end gap-3 pt-4 border-t border-gray-800">
+                    <button type="button" onclick="closeAdminModal('modal-scholarship')" class="px-5 py-2.5 rounded-xl bg-gray-800 text-white font-bold text-xs">Cancel</button>
+                    <button type="submit" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-cyan-400 to-emerald-400 text-darkbg font-black text-xs">Save Scholarship</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ANNOUNCEMENT MODAL (Add / Edit) -->
+    <div id="modal-announcement" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm p-4 overflow-y-auto">
+        <div class="max-w-xl mx-auto mt-10 mb-10 glass-card rounded-3xl border border-gray-700 p-6 sm:p-8">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h3 id="modal-announcement-title" class="text-xl font-black">New Platform Announcement</h3>
+                    <p class="text-xs text-gray-400">Broadcast updates to all athletes.</p>
+                </div>
+                <button onclick="closeAdminModal('modal-announcement')" class="text-gray-400 hover:text-white text-xl">&times;</button>
+            </div>
+            <form id="form-announcement" onsubmit="saveAnnouncement(event)" class="space-y-4">
+                <input type="hidden" id="announcement-form-id">
+                <div><label class="form-label">Announcement Title *</label><input type="text" id="announcement-form-title" required class="form-input" placeholder="Registrations Open for U19 Hockey Trials"></div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="form-label">Category *</label>
+                        <select id="announcement-form-category" class="form-input">
+                            <option value="New Trial">New Trial</option>
+                            <option value="New Scholarship">New Scholarship</option>
+                            <option value="New Opportunity">New Opportunity</option>
+                            <option value="Important Announcement">Important Announcement</option>
+                            <option value="Platform Update">Platform Update</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="form-label">Priority</label>
+                        <select id="announcement-form-priority" class="form-input">
+                            <option value="NORMAL">NORMAL</option>
+                            <option value="HIGH">HIGH</option>
+                            <option value="URGENT">URGENT</option>
+                        </select>
+                    </div>
+                </div>
+                <div><label class="form-label">Message Content *</label><textarea id="announcement-form-content" rows="4" required class="form-input" placeholder="Enter the detailed notice or instructions…"></textarea></div>
+                <div class="flex justify-end gap-3 pt-4 border-t border-gray-800">
+                    <button type="button" onclick="closeAdminModal('modal-announcement')" class="px-5 py-2.5 rounded-xl bg-gray-800 text-white font-bold text-xs">Cancel</button>
+                    <button type="submit" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-cyan-400 to-emerald-400 text-darkbg font-black text-xs">Publish</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- SCHOLARSHIP APPLICATION DETAILS & VERIFICATION MODAL -->
+    <div id="modal-scholarship-app-details" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm p-4 overflow-y-auto">
+        <div class="max-w-2xl mx-auto mt-8 mb-8 glass-card rounded-3xl border border-gray-700 p-6 sm:p-8 space-y-6">
+            <div class="flex justify-between items-start border-b border-gray-800 pb-4">
+                <div>
+                    <span id="sch-detail-badge" class="badge badge-purple text-[10px]">Scholarship Category</span>
+                    <h3 id="sch-detail-title" class="text-xl font-black text-white mt-1">Applicant Details</h3>
+                    <p id="sch-detail-applied" class="text-xs text-gray-400 mt-0.5">Applied on ...</p>
+                </div>
+                <button onclick="closeAdminModal('modal-scholarship-app-details')" class="text-gray-400 hover:text-white text-2xl leading-none">&times;</button>
+            </div>
+
+            <!-- Content Area -->
+            <div id="sch-detail-content" class="space-y-4 text-xs">
+                <!-- Dynamically injected -->
+            </div>
+
+            <div id="sch-detail-actions" class="flex justify-end gap-3 pt-4 border-t border-gray-800">
+                <!-- Dynamically injected Approve / Reject buttons -->
+            </div>
+        </div>
+    </div>
+
+    <!-- TRIAL BOOKING DATE & TIME CONFIRMATION MODAL (Admin) -->
+    <div id="modal-trial-booking" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm p-4 overflow-y-auto">
+        <div class="max-w-md mx-auto mt-16 glass-card rounded-3xl border border-cyan-400/30 p-6 sm:p-8 space-y-5">
+            <div class="flex justify-between items-start">
+                <div>
+                    <h3 class="text-xl font-black text-white">Confirm Trial Booking</h3>
+                    <p id="trial-booking-meta" class="text-xs text-gray-400 mt-1">Select date and slot time to assign to athlete and send confirmation email.</p>
+                </div>
+                <button onclick="closeAdminModal('modal-trial-booking')" class="text-gray-400 hover:text-white text-xl leading-none">&times;</button>
+            </div>
+
+            <form id="form-trial-booking" onsubmit="submitAdminTrialBooking(event)" class="space-y-4">
+                <input type="hidden" id="trial-booking-app-id">
+                <div>
+                    <label class="form-label">Athlete</label>
+                    <input type="text" id="trial-booking-athlete" readonly class="form-input bg-darkbg/50 opacity-80 text-cyan-300 font-bold">
+                </div>
+                <div>
+                    <label class="form-label">Trial Program</label>
+                    <input type="text" id="trial-booking-trial-name" readonly class="form-input bg-darkbg/50 opacity-80 text-white font-bold">
+                </div>
+                <div>
+                    <label class="form-label">Confirmed Trial Date *</label>
+                    <input type="date" id="trial-booking-date" required class="form-input">
+                </div>
+                <div>
+                    <label class="form-label">Confirmed Slot Time *</label>
+                    <input type="text" id="trial-booking-time" required class="form-input" placeholder="e.g. 09:30 AM - 11:30 AM">
+                </div>
+                <div class="flex justify-end gap-3 pt-2">
+                    <button type="button" onclick="closeAdminModal('modal-trial-booking')" class="px-5 py-2.5 rounded-xl bg-gray-800 text-white font-bold text-xs">Cancel</button>
+                    <button type="submit" id="trial-booking-btn" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-cyan-400 to-emerald-400 text-darkbg font-black text-xs">Confirm & Send Email</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ADMIN LOGIN MODAL (When not authenticated as Admin) -->
+    <div id="modal-admin-login" class="hidden fixed inset-0 z-50 bg-black/90 backdrop-blur-md p-4 flex items-center justify-center">
+        <div class="max-w-md w-full glass-card rounded-3xl border border-cyan-400/30 p-8 glow-blue relative">
+            <div class="text-center mb-6">
+                <div class="w-14 h-14 mx-auto rounded-2xl bg-cyan-400/15 border border-cyan-400/30 flex items-center justify-center mb-3">
+                    <i class="fa-solid fa-shield-halved text-cyan-300 text-2xl"></i>
+                </div>
+                <h2 class="text-2xl font-black text-white">Admin Authentication</h2>
+                <p class="text-xs text-gray-400 mt-1">Authorized access to AthleteLink AI command center.</p>
+            </div>
+
+            <div id="admin-login-error" class="hidden mb-4 p-3 rounded-xl bg-red-500/15 border border-red-500/30 text-xs font-bold text-red-300"></div>
+
+            <form onsubmit="handleAdminLogin(event)" class="space-y-4">
+                <div>
+                    <label class="form-label">Admin Email</label>
+                    <input type="email" id="admin-login-email" required class="form-input" value="admin@athletelink.ai">
+                </div>
+                <div>
+                    <label class="form-label">Admin Password</label>
+                    <input type="password" id="admin-login-password" required class="form-input" value="Admin@123">
+                </div>
+                <button type="submit" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-cyan-400 via-blue-500 to-emerald-400 text-darkbg font-black text-xs uppercase tracking-wider shadow-xl shadow-cyan-500/20 hover:scale-[1.02] transition">
+                    Sign In to Admin Portal
+                </button>
+            </form>
+
+            <div class="mt-6 pt-4 border-t border-gray-800 text-center space-y-2">
+                <button onclick="quickDemoLogin()" class="text-xs text-emerald-400 hover:underline font-bold flex items-center justify-center gap-1.5 mx-auto">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> 1-Click Demo Admin Login
+                </button>
+                <div>
+                    <a href="/" class="text-xs text-gray-500 hover:text-gray-300">← Return to AthleteLink Public Website</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin JS Logic -->
+    <script src="./js/admin.js"></script>
+</body>
+</html>

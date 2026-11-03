@@ -1,0 +1,54 @@
+ATHLETELINK AI - LOCAL DEMO SETUP
+================================
+
+REQUIREMENTS
+- Windows 10/11
+- Java 17
+- Maven 3.9+
+- MySQL Server
+
+1) DATABASE
+Create the database and load the schema from the project root:
+
+  Get-Content ".\database\schema.sql" | & "C:\Program Files\MySQL\MySQL Server 26.7\bin\mysql.exe" -u root -p athletelink_db
+
+Enter your MySQL root password when asked. The application defaults to root / 1234567, but DB_USERNAME and DB_PASSWORD environment variables can override this.
+
+2) START
+From the AthleteLinkAI folder:
+
+  cd backend
+  mvn spring-boot:run
+
+Or double-click START-ATHLETELINK.bat.
+
+Open:
+  http://localhost:8880
+
+3) REAL EMAIL DELIVERY (REQUIRED TO RECEIVE EMAIL IN YOUR INBOX)
+The application cannot send real Internet email without an SMTP account. For Gmail, enable 2-Step Verification on the Gmail account and create a Google App Password. NEVER put your normal Gmail password in this project.
+
+Create backend/.env with:
+
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=youraddress@gmail.com
+MAIL_PASSWORD=your-16-character-app-password
+MAIL_FROM=youraddress@gmail.com
+
+Restart Spring Boot after changing .env. Registration verification emails and trial booking confirmation emails will then be sent to the athlete email stored in the account.
+
+4) WITHOUT SMTP
+Bookings still work. A booking confirmation record and token are stored in MySQL, and the local confirmation URL is printed in the backend terminal and shown in the booking confirmation UI. Registration verification similarly prints a local verification URL.
+
+5) DEMO FLOW
+Register -> Login -> complete profile -> Add Achievement -> refresh -> Find Nearby Coaches -> Use My Location -> Connect -> Browse Trials -> Apply -> select slot -> Confirm Booking -> receive email (when SMTP is configured) -> view booking + notifications.
+
+6) NEARBY COACHES
+The browser asks for location permission. The backend calculates distance from the current coordinates to seeded demo coaches and stores the latest latitude/longitude on the logged-in user's profile. If location is denied, use the wider search button; coaches remain available by profile matching.
+
+7) IMPORTANT
+- Spring Boot serves the frontend. No npm start is required for the normal demo.
+- Frontend API base is /api.
+- Port is 8880.
+- Existing user data is not intentionally deleted by startup migrations.
