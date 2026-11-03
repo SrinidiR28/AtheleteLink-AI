@@ -56,6 +56,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()
                         // Trial catalog/details and public opportunities/announcements are public read-only data.
                         .requestMatchers(HttpMethod.GET, "/api/trials/**").permitAll()
+<<<<<<< HEAD
                         .requestMatchers(HttpMethod.GET, "/api/athletes/*/profile").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/athletes/*/scouting-card").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/athletes").permitAll()
@@ -64,6 +65,11 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/challenges/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/recovery/injury-guidelines").permitAll()
                         .requestMatchers("/api/confirm-booking", "/api/trials/applications/confirm", "/api/trials/checkin").permitAll()
+=======
+                        .requestMatchers(HttpMethod.GET, "/api/opportunities").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/announcements").permitAll()
+                        .requestMatchers("/api/confirm-booking", "/api/trials/applications/confirm").permitAll()
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
                         .requestMatchers("/api/health", "/api/stats", "/actuator/health").permitAll()
                         .requestMatchers("/api/admin/**").authenticated()
                         .anyRequest().authenticated()

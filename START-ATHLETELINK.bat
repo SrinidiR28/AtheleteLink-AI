@@ -1,4 +1,5 @@
 @echo off
+<<<<<<< HEAD
 setlocal
 cd /d "%~dp0backend"
 echo ========================================================
@@ -15,4 +16,9 @@ if exist "target\athletelink-backend-1.0.0.jar" (
     echo Running with Maven...
     mvn spring-boot:run
 )
+=======
+cd /d "%~dp0backend"
+echo Starting AthleteLink AI on http://localhost:8880
+mvn spring-boot:run
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
 pause

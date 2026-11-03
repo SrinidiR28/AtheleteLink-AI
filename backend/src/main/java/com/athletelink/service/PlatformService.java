@@ -8,10 +8,15 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+<<<<<<< HEAD
 import java.util.Set;
 import java.util.UUID;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+=======
+import java.util.UUID;
+import java.util.regex.Pattern;
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
 
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -19,11 +24,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.athletelink.dto.AchievementRequest;
+<<<<<<< HEAD
 import com.athletelink.dto.AthleteMetricRequest;
 import com.athletelink.dto.BookingRequest;
 import com.athletelink.dto.ChallengeSubmissionRequest;
 import com.athletelink.dto.CoachConnectionRequest;
 import com.athletelink.dto.ReadinessLogRequest;
+=======
+import com.athletelink.dto.BookingRequest;
+import com.athletelink.dto.CoachConnectionRequest;
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
 import com.athletelink.dto.ScholarshipApplicationRequest;
 import com.athletelink.dto.TrialApplicationRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -82,6 +92,7 @@ public class PlatformService {
         jdbc.execute("CREATE TABLE IF NOT EXISTS coach_connections (id BIGINT AUTO_INCREMENT PRIMARY KEY, user_id BIGINT NOT NULL, coach_id BIGINT NOT NULL, status VARCHAR(30) NOT NULL DEFAULT 'PENDING', message VARCHAR(500) NULL, created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, CONSTRAINT fk_coach_connection_user FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE, CONSTRAINT fk_coach_connection_coach FOREIGN KEY(coach_id) REFERENCES coaches(id) ON DELETE CASCADE, CONSTRAINT uq_coach_connection UNIQUE(user_id, coach_id)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
         addColumnIfMissing("users", "latitude", "DECIMAL(10,7) NULL");
         addColumnIfMissing("users", "longitude", "DECIMAL(10,7) NULL");
+<<<<<<< HEAD
         addColumnIfMissing("users", "role", "VARCHAR(30) NOT NULL DEFAULT 'ATHLETE'");
         jdbc.execute("CREATE TABLE IF NOT EXISTS bookings (id BIGINT AUTO_INCREMENT PRIMARY KEY, user_id BIGINT NOT NULL, trial_id BIGINT NOT NULL, slot_id BIGINT NOT NULL, booking_status VARCHAR(30) NOT NULL DEFAULT 'CONFIRMED', confirmation_token VARCHAR(120) NOT NULL UNIQUE, created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, CONSTRAINT fk_booking_user FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE, CONSTRAINT fk_booking_trial FOREIGN KEY(trial_id) REFERENCES trials(id) ON DELETE CASCADE, CONSTRAINT fk_booking_slot FOREIGN KEY(slot_id) REFERENCES trial_slots(id) ON DELETE CASCADE, CONSTRAINT uq_booking_user_slot UNIQUE(user_id, slot_id)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
         addColumnIfMissing("bookings", "checked_in_at", "DATETIME NULL");
@@ -97,6 +108,9 @@ public class PlatformService {
                 "created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, " +
                 "CONSTRAINT fk_metrics_user FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE" +
                 ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+=======
+        jdbc.execute("CREATE TABLE IF NOT EXISTS bookings (id BIGINT AUTO_INCREMENT PRIMARY KEY, user_id BIGINT NOT NULL, trial_id BIGINT NOT NULL, slot_id BIGINT NOT NULL, booking_status VARCHAR(30) NOT NULL DEFAULT 'CONFIRMED', confirmation_token VARCHAR(120) NOT NULL UNIQUE, created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, CONSTRAINT fk_booking_user FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE, CONSTRAINT fk_booking_trial FOREIGN KEY(trial_id) REFERENCES trials(id) ON DELETE CASCADE, CONSTRAINT fk_booking_slot FOREIGN KEY(slot_id) REFERENCES trial_slots(id) ON DELETE CASCADE, CONSTRAINT uq_booking_user_slot UNIQUE(user_id, slot_id)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
         jdbc.execute("CREATE TABLE IF NOT EXISTS notifications (id BIGINT AUTO_INCREMENT PRIMARY KEY, user_id BIGINT NOT NULL, title VARCHAR(180) NOT NULL, message VARCHAR(500) NOT NULL, is_read BOOLEAN NOT NULL DEFAULT FALSE, created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, CONSTRAINT fk_notification_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
         jdbc.execute("CREATE TABLE IF NOT EXISTS email_verifications (id BIGINT AUTO_INCREMENT PRIMARY KEY, user_id BIGINT NOT NULL, token VARCHAR(120) NOT NULL UNIQUE, expires_at DATETIME NOT NULL, verified BOOLEAN NOT NULL DEFAULT FALSE, created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, CONSTRAINT fk_verification_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
         jdbc.execute("CREATE TABLE IF NOT EXISTS booking_confirmations (id BIGINT AUTO_INCREMENT PRIMARY KEY, booking_id BIGINT NOT NULL UNIQUE, user_id BIGINT NOT NULL, email VARCHAR(180) NOT NULL, confirmation_token VARCHAR(120) NOT NULL UNIQUE, email_sent BOOLEAN NOT NULL DEFAULT FALSE, created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, confirmed_at DATETIME NULL, CONSTRAINT fk_confirmation_booking FOREIGN KEY(booking_id) REFERENCES bookings(id) ON DELETE CASCADE, CONSTRAINT fk_confirmation_user FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
@@ -143,6 +157,7 @@ public class PlatformService {
                 "CONSTRAINT fk_quota_user FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE" +
                 ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
 
+<<<<<<< HEAD
         jdbc.execute("CREATE TABLE IF NOT EXISTS athlete_challenges (" +
                 "id BIGINT AUTO_INCREMENT PRIMARY KEY, " +
                 "user_id BIGINT NOT NULL, " +
@@ -179,6 +194,11 @@ public class PlatformService {
         seedScouts();
         seedCoaches();
         seedChallengeBenchmarks();
+=======
+        seedTrialsAndSlots();
+        seedScouts();
+        seedCoaches();
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
     }
 
     /* ---------- Public Stats (real data from DB) ---------- */
@@ -593,6 +613,7 @@ public class PlatformService {
     public void deleteAchievement(long userId,long id) { if(jdbc.update("DELETE FROM achievements WHERE id=? AND user_id=?",id,userId)==0) throw new IllegalArgumentException("Achievement not found"); }
     public Map<String,Object> achievement(long userId,long id) { return jdbc.queryForMap("SELECT id,title,achievement_type,sport,level,achievement_year,academic_year,institution,position,result_label,medal_award,event_location,achieved_on,description,certificate_details,certificate_url,created_at FROM achievements WHERE id=? AND user_id=?", id,userId); }
 
+<<<<<<< HEAD
     // =========================================================================
     // ATHLETE PERFORMANCE METRICS & PERSONAL RECORDS (PR) TRACKER
     // =========================================================================
@@ -700,6 +721,8 @@ public class PlatformService {
         return card;
     }
 
+=======
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
     public List<Map<String,Object>> trials() { return jdbc.queryForList("SELECT t.id,t.name,t.sport,t.category,t.age_category,t.registration_status,t.featured,t.organization,t.venue,t.trial_date, COALESCE(SUM(s.capacity),0) total_capacity, COALESCE(SUM(s.booked_count),0) booked_count, COALESCE(SUM(s.capacity-s.booked_count),0) remaining_slots FROM trials t LEFT JOIN trial_slots s ON s.trial_id=t.id GROUP BY t.id ORDER BY t.trial_date"); }
     public List<Map<String,Object>> featuredTrials() { return jdbc.queryForList("SELECT t.id,t.name,t.sport,t.category,t.age_category,t.registration_status,t.organization,t.venue,t.trial_date,COALESCE(SUM(s.capacity-s.booked_count),0) remaining_slots FROM trials t LEFT JOIN trial_slots s ON s.trial_id=t.id WHERE t.featured=TRUE AND t.registration_status='REG OPEN' GROUP BY t.id ORDER BY t.trial_date LIMIT 5"); }
     public Map<String,Object> trial(long id) { return jdbc.queryForMap("SELECT t.id,t.name,t.sport,t.category,t.age_category,t.registration_status,t.organization,t.venue,t.trial_date,COALESCE(SUM(s.capacity-s.booked_count),0) remaining_slots FROM trials t LEFT JOIN trial_slots s ON s.trial_id=t.id WHERE t.id=? GROUP BY t.id",id); }
@@ -770,11 +793,19 @@ public class PlatformService {
         jdbc.update("INSERT INTO notifications(user_id,title,message) VALUES(?,?,?)",userId,"Trial booking confirmed","Your trial slot for " + slot.get("trial_name") + " on " + slot.get("slot_date") + " at " + slot.get("slot_time") + " is confirmed.");
         Map<String,Object> out=booking(userId,bookingId); out.put("confirmationUrl",link); out.put("emailSent",sent); return out;
     }
+<<<<<<< HEAD
     public List<Map<String,Object>> bookings(long userId){return jdbc.queryForList("SELECT b.id booking_id,b.booking_status status,b.confirmation_token,b.checked_in_at,b.created_at,s.id slot_id,s.slot_date,s.slot_time,t.id trial_id,t.name trial_name,t.sport,t.organization,t.venue,bc.email_sent,bc.confirmed_at FROM bookings b JOIN trial_slots s ON s.id=b.slot_id JOIN trials t ON t.id=b.trial_id LEFT JOIN booking_confirmations bc ON bc.booking_id=b.id WHERE b.user_id=? ORDER BY s.slot_date,s.slot_time",userId);}
     public Map<String,Object> booking(long userId,long id){return jdbc.queryForMap("SELECT b.id booking_id,b.booking_status status,b.confirmation_token,b.checked_in_at,b.created_at,s.id slot_id,s.slot_date,s.slot_time,t.id trial_id,t.name trial_name,t.sport,t.organization,t.venue,bc.email_sent,bc.confirmed_at FROM bookings b JOIN trial_slots s ON s.id=b.slot_id JOIN trials t ON t.id=b.trial_id LEFT JOIN booking_confirmations bc ON bc.booking_id=b.id WHERE b.user_id=? AND b.id=?",userId,id);}
     public Map<String,Object> confirm(String token){
         try {
             List<Map<String,Object>> list = jdbc.queryForList("SELECT b.id booking_id,b.booking_status,b.checked_in_at,bc.user_id,bc.email_sent,bc.created_at,bc.confirmed_at,u.full_name as athlete_name,u.email,s.slot_date,s.slot_time,t.id as trial_id,t.name trial_name,t.sport,t.organization,t.venue FROM booking_confirmations bc JOIN bookings b ON b.id=bc.booking_id JOIN trial_slots s ON s.id=b.slot_id JOIN trials t ON t.id=b.trial_id JOIN users u ON u.id=b.user_id WHERE bc.confirmation_token=?",token);
+=======
+    public List<Map<String,Object>> bookings(long userId){return jdbc.queryForList("SELECT b.id booking_id,b.booking_status status,b.confirmation_token,b.created_at,s.id slot_id,s.slot_date,s.slot_time,t.id trial_id,t.name trial_name,t.sport,t.organization,t.venue,bc.email_sent,bc.confirmed_at FROM bookings b JOIN trial_slots s ON s.id=b.slot_id JOIN trials t ON t.id=b.trial_id LEFT JOIN booking_confirmations bc ON bc.booking_id=b.id WHERE b.user_id=? ORDER BY s.slot_date,s.slot_time",userId);}
+    public Map<String,Object> booking(long userId,long id){return jdbc.queryForMap("SELECT b.id booking_id,b.booking_status status,b.confirmation_token,b.created_at,s.id slot_id,s.slot_date,s.slot_time,t.id trial_id,t.name trial_name,t.sport,t.organization,t.venue,bc.email_sent,bc.confirmed_at FROM bookings b JOIN trial_slots s ON s.id=b.slot_id JOIN trials t ON t.id=b.trial_id LEFT JOIN booking_confirmations bc ON bc.booking_id=b.id WHERE b.user_id=? AND b.id=?",userId,id);}
+    public Map<String,Object> confirm(String token){
+        try {
+            List<Map<String,Object>> list = jdbc.queryForList("SELECT b.id booking_id,b.booking_status,bc.user_id,bc.email_sent,bc.created_at,bc.confirmed_at,u.full_name as athlete_name,u.email,s.slot_date,s.slot_time,t.id as trial_id,t.name trial_name,t.sport,t.organization,t.venue FROM booking_confirmations bc JOIN bookings b ON b.id=bc.booking_id JOIN trial_slots s ON s.id=b.slot_id JOIN trials t ON t.id=b.trial_id JOIN users u ON u.id=b.user_id WHERE bc.confirmation_token=?",token);
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
             if (list.isEmpty()) return null;
             Map<String,Object> c = new LinkedHashMap<>(list.get(0));
             jdbc.update("UPDATE booking_confirmations SET confirmed_at=NOW() WHERE confirmation_token=? AND confirmed_at IS NULL",token);
@@ -786,6 +817,7 @@ public class PlatformService {
         }
     }
 
+<<<<<<< HEAD
     @Transactional
     public Map<String, Object> checkin(String token) {
         if (token == null || token.isBlank()) return null;
@@ -823,6 +855,8 @@ public class PlatformService {
         }
     }
 
+=======
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
     public List<Map<String,Object>> opportunities(){
         try {
             List<Map<String, Object>> list = jdbc.queryForList("SELECT slug as id, type, name, description, deadline FROM opportunities WHERE is_active=TRUE ORDER BY id ASC");
@@ -851,6 +885,7 @@ public class PlatformService {
 
     public List<Map<String,Object>> notifications(long userId){return jdbc.queryForList("SELECT id,title,message,is_read,created_at FROM notifications WHERE user_id=? ORDER BY created_at DESC,id DESC LIMIT 30",userId);}
     public void markNotificationRead(long userId,long id){jdbc.update("UPDATE notifications SET is_read=TRUE WHERE id=? AND user_id=?",id,userId);}
+<<<<<<< HEAD
     public Map<String,Object> matching(long userId) {
         Map<String,Object> user = jdbc.queryForMap("SELECT sport, location, latitude, longitude FROM users WHERE id=?", userId);
         String sport = Objects.toString(user.get("sport"), "").trim();
@@ -999,6 +1034,10 @@ public class PlatformService {
         if (!location.isBlank()) sb.append("Near ").append(location).append(".");
         return sb.toString().trim();
     }
+=======
+    public List<Map<String,Object>> matching(long userId){Map<String,Object> u=jdbc.queryForMap("SELECT sport,location FROM users WHERE id=?",userId);String sport=Objects.toString(u.get("sport"),"Athletics");List<Map<String,Object>> out=new ArrayList<>();out.add(match("National Athletics Performance Coach","Recommended Coach",96,"Recommendation based on your sport: "+sport));out.add(match("Khelo India Elite Development Grant","Scholarship Grant",93,"Funding opportunity aligned with your athlete profile."));out.add(match("National Federation Open Trials","Upcoming Trial",91,"Open trial recommendation for "+sport+" athletes."));return out;}
+    private Map<String,Object> match(String name,String type,int score,String reason){Map<String,Object>m=new LinkedHashMap<>();m.put("name",name);m.put("type",type);m.put("score",score);m.put("reason",reason);return m;}
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
     public List<Map<String,Object>> coaches(){
         return jdbc.queryForList("SELECT id,name,organization,sports,specialization,experience,location,latitude,longitude FROM coaches ORDER BY id");
     }
@@ -1056,8 +1095,11 @@ public class PlatformService {
     public Map<String,Object> dashboard(long userId){
         Map<String,Object> m=new LinkedHashMap<>();
         m.put("achievements",achievements(userId));
+<<<<<<< HEAD
         m.put("metrics",metrics(userId));
         m.put("metricsSummary",metricsSummary(userId));
+=======
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
         m.put("applications",applications(userId));
         m.put("scholarshipApplications",scholarshipApplications(userId));
         m.put("myScholarship",getMyScholarshipApplication(userId));
@@ -1066,6 +1108,7 @@ public class PlatformService {
         m.put("notifications",notifications(userId));
         return m;
     }
+<<<<<<< HEAD
     @Transactional
     public Map<String,Object> cancelBooking(long userId, long bookingId) {
         List<Map<String,Object>> bookings = jdbc.queryForList(
@@ -1572,3 +1615,8 @@ public class PlatformService {
     }
 }
 
+=======
+    private LocalDate parseDate(String v){return v==null||v.isBlank()?null:LocalDate.parse(v);}
+    private String clean(String v){return v==null?null:v.trim();}
+}
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40

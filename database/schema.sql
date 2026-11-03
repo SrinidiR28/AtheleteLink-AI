@@ -152,7 +152,10 @@ CREATE TABLE IF NOT EXISTS bookings (
     slot_id BIGINT NOT NULL,
     booking_status VARCHAR(30) NOT NULL DEFAULT 'CONFIRMED',
     confirmation_token VARCHAR(120) NOT NULL UNIQUE,
+<<<<<<< HEAD
     checked_in_at DATETIME NULL,
+=======
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     UNIQUE KEY uq_booking_user_slot(user_id, slot_id),
     CONSTRAINT fk_booking_user FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
@@ -160,6 +163,7 @@ CREATE TABLE IF NOT EXISTS bookings (
     CONSTRAINT fk_booking_slot FOREIGN KEY(slot_id) REFERENCES trial_slots(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+<<<<<<< HEAD
 CREATE TABLE IF NOT EXISTS athlete_metrics (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT NOT NULL,
@@ -173,6 +177,8 @@ CREATE TABLE IF NOT EXISTS athlete_metrics (
     CONSTRAINT fk_metrics_user FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+=======
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
 CREATE TABLE IF NOT EXISTS notifications (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT NOT NULL,
@@ -267,6 +273,7 @@ INSERT IGNORE INTO coaches(id,name,organization,sports,specialization,experience
 (3,'Meera Iyer','Elite Sports Performance Lab','Athletics, Multi-sport','Youth development & performance analysis','8 years','Bengaluru, Karnataka',12.9716,77.5946),
 (4,'Rohit Verma','National Wrestling Development Centre','Wrestling, Boxing','Combat sports conditioning','13 years','Rohtak, Haryana',28.8955,76.6066),
 (5,'Neha Kapoor','Hyderabad Elite Sports Academy','Badminton, Athletics','Junior athlete development','10 years','Hyderabad, Telangana',17.3850,78.4867);
+<<<<<<< HEAD
 
 -- Athlete Benchmark Drills & Skill Challenges (Feature 3)
 CREATE TABLE IF NOT EXISTS athlete_challenges (
@@ -302,3 +309,5 @@ CREATE TABLE IF NOT EXISTS athlete_readiness_logs (
     CONSTRAINT fk_readiness_user FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+=======
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40

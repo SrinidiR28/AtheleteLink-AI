@@ -124,7 +124,10 @@ CREATE TABLE IF NOT EXISTS bookings (
     slot_id BIGINT NOT NULL,
     booking_status VARCHAR(30) NOT NULL DEFAULT 'CONFIRMED',
     confirmation_token VARCHAR(120) NOT NULL UNIQUE,
+<<<<<<< HEAD
     checked_in_at DATETIME NULL,
+=======
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     UNIQUE KEY uq_booking_user_slot(user_id, slot_id),
     CONSTRAINT fk_booking_user FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
@@ -132,6 +135,7 @@ CREATE TABLE IF NOT EXISTS bookings (
     CONSTRAINT fk_booking_slot FOREIGN KEY(slot_id) REFERENCES trial_slots(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+<<<<<<< HEAD
 CREATE TABLE IF NOT EXISTS athlete_metrics (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT NOT NULL,
@@ -145,6 +149,8 @@ CREATE TABLE IF NOT EXISTS athlete_metrics (
     CONSTRAINT fk_metrics_user FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+=======
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
 CREATE TABLE IF NOT EXISTS notifications (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT NOT NULL,
@@ -199,6 +205,7 @@ INSERT IGNORE INTO scouts(id,name,organization,sports,specialization,experience,
 (1,'Arjun Mehta','National Talent Discovery Network','Athletics, Track & Field','Sprint & performance scouting','12 years','New Delhi'),
 (2,'Priya Nair','Elite Youth Sports Collective','Badminton, Athletics','Grassroots talent identification','9 years','Bengaluru'),
 (3,'Rahul Singh','National Wrestling Talent Hub','Wrestling, Boxing','Youth & combat sports scouting','15 years','Rohtak');
+<<<<<<< HEAD
 
 -- Athlete Benchmark Drills & Skill Challenges (Feature 3)
 CREATE TABLE IF NOT EXISTS athlete_challenges (
@@ -234,3 +241,5 @@ CREATE TABLE IF NOT EXISTS athlete_readiness_logs (
     CONSTRAINT fk_readiness_user FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+=======
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40

@@ -1,10 +1,15 @@
 // AthleteLink AI - site interaction + real platform features
 const PROTECTED_TABS = ["dashboard", "trials", "scouts"];
+<<<<<<< HEAD
 const ALL_TABS = ["home", "challenge", "solution", "dashboard", "matching", "directory", "scouts", "trials", "opportunities", "recovery"];
+=======
+const ALL_TABS = ["home", "challenge", "solution", "dashboard", "matching", "directory", "scouts", "trials", "opportunities"];
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
 
 function switchTab(tabId) {
     if (PROTECTED_TABS.includes(tabId) && !window.AuthState?.isLoggedIn()) { openAuth("login"); return; }
     ALL_TABS.forEach(t => document.getElementById("page-" + t)?.classList.toggle("hidden", t !== tabId));
+<<<<<<< HEAD
     // Update nav active state
     document.querySelectorAll('[data-nav-tab]').forEach(btn => {
         const isActive = btn.dataset.navTab === tabId;
@@ -20,6 +25,12 @@ function switchTab(tabId) {
     if (tabId === "recovery") loadRecoveryLab();
     window.scrollTo({top:0, behavior:"smooth"});
     window.location.hash = tabId;
+=======
+    if (tabId === "dashboard") loadDashboard();
+    if (tabId === "scouts") loadScouts();
+    if (tabId === "trials") loadTrials();
+    window.scrollTo({top:0, behavior:"smooth"});
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -30,6 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
     mobileMenuBtn?.addEventListener("click", toggle); mobileMenuBtn2?.addEventListener("click", toggle);
     loadOpportunityCards();
     loadLiveSportsPulse();
+<<<<<<< HEAD
     // Hash routing: #trials, #dashboard, #athlete/5, etc.
     const handleHash = () => {
         const hash = window.location.hash.replace('#','');
@@ -101,6 +113,9 @@ async function handleVideoUpload(input) {
         showFeatureToast(e.message, 'error');
     }
 }
+=======
+});
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
 async function loadLiveSportsPulse() {
     try {
         const stats = await apiRequest("/stats");
@@ -116,6 +131,7 @@ async function loadLiveSportsPulse() {
     } catch (e) { /* fallback to static real values */ }
 }
 function toggleMobileMenu(){document.getElementById("mobile-menu")?.classList.add("hidden");}
+<<<<<<< HEAD
 function filterAthletes(){
     const q=(document.getElementById("athlete-search")?.value||"").toLowerCase();
     const sport=document.getElementById("filter-sport")?.value||"all";
@@ -331,12 +347,22 @@ function renderProfileCompletion() {
         }).catch(() => {});
     } catch(e) { console.warn('Profile completion error', e); }
 }
+=======
+function filterAthletes(){const q=(document.getElementById("athlete-search")?.value||"").toLowerCase();const sport=document.getElementById("filter-sport")?.value||"all";document.querySelectorAll(".athlete-card").forEach(c=>c.style.display=c.dataset.name.toLowerCase().includes(q)&&(sport==="all"||c.dataset.sport===sport)?"block":"none");}
+function showFeatureToast(message,type="info"){let t=document.getElementById("feature-toast");if(!t){t=document.createElement("div");t.id="feature-toast";document.body.appendChild(t);}t.className="fixed bottom-6 right-6 z-[200] max-w-md px-5 py-3 rounded-xl border shadow-2xl text-sm font-bold "+(type==="error"?"bg-red-950 border-red-500 text-red-200":(type==="success"?"bg-emerald-950 border-emerald-500 text-emerald-200":"bg-gray-950 border-accentBlue text-white"));t.textContent=message;clearTimeout(window.__toastTimer);window.__toastTimer=setTimeout(()=>t.remove(),4000);}
+function esc(v){return String(v??"").replace(/[&<>'"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[c]));}
+
+async function runAIMatching(){const box=document.getElementById("matching-results");if(box)box.style.opacity=".4";try{const results=await apiRequest("/matching",{auth:true});box.innerHTML=results.map(r=>`<div class="p-4 rounded-2xl bg-darkbg/60 border border-gray-800"><div class="flex justify-between gap-3"><div><div class="text-xs font-bold text-accentBlue">${esc(r.type)}</div><h4 class="font-bold mt-1">${esc(r.name)}</h4><p class="text-xs text-gray-400 mt-1">${esc(r.reason)}</p></div><span class="text-sm font-black text-accentGreen">${r.score}%</span></div></div>`).join("");showFeatureToast("AI matching completed — recommendations updated.","success");}catch(e){showFeatureToast(e.message,"error");}finally{if(box)box.style.opacity="1";}}
+
+async function loadAthleteFeatures(){if(!AuthState?.isLoggedIn())return;try{await Promise.all([loadAchievements(),loadApplications(),loadBookings(),loadConnections(),loadNotifications(),loadProfileIntoDashboard(),loadDashboardTrials(),loadMyScholarship()]);}catch(e){console.warn(e);}}
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
 async function loadAchievements(){const list=document.getElementById("achievements-list");if(!list)return;const rows=await apiRequest("/achievements",{auth:true});if(!rows.length){list.innerHTML='<p class="text-xs text-gray-500">No achievements added yet.</p>';return;}list.innerHTML=rows.map(a=>`<div class="p-3.5 rounded-xl bg-darkbg/60 border border-gray-800"><div class="flex items-start justify-between gap-3"><div><div class="font-bold text-sm">${esc(a.title)}</div><div class="text-xs text-gray-400 mt-1">${esc(a.sport||"Sport not set")} • ${esc(a.level||"Level not set")}</div><div class="text-[11px] text-gray-500 mt-1">${esc(a.institution||"Institution not set")} • ${esc(a.achievement_year||a.achieved_on||"Year not set")}</div></div><button onclick="deleteAchievement(${a.id})" class="text-gray-500 hover:text-red-300" title="Delete"><i class="fa-solid fa-trash"></i></button></div><div class="mt-2 text-xs text-yellow-400 font-bold">${esc(a.medal_award||a.position||a.result_label||"Achievement")}</div></div>`).join("");}
 async function addAchievement(){openAchievementModal();}
 async function deleteAchievement(id){if(!confirm("Delete this achievement?"))return;try{await apiRequest(`/achievements/${id}`,{method:"DELETE",auth:true});await loadAchievements();showFeatureToast("Achievement deleted.","success");}catch(e){showFeatureToast(e.message,"error");}}
 
 async function submitAchievement(event){event.preventDefault();const f=event.target;const body=Object.fromEntries(new FormData(f).entries());body.year=Number(body.year);try{await apiRequest("/achievements",{method:"POST",auth:true,body});closeModal("achievement-modal");f.reset();await loadAchievements();showFeatureToast("Achievement saved securely to MySQL.","success");}catch(e){showFeatureToast(e.message,"error");}}
 
+<<<<<<< HEAD
 // =========================================================================
 // ATHLETE PERFORMANCE METRICS & PR TRACKER (FEATURE 2)
 // =========================================================================
@@ -673,6 +699,9 @@ function clearTrialFilters() {
     const s = document.getElementById('trial-search-input'); if(s) s.value = '';
     loadTrials();
 }
+=======
+async function loadTrials(){const box=document.getElementById("trials-grid");if(!box)return;box.innerHTML='<div class="md:col-span-3 text-center text-gray-500 py-10">Loading trials…</div>';try{const rows=await apiRequest("/trials");box.innerHTML=renderTrialCards(rows,false);}catch(e){box.innerHTML=`<div class="md:col-span-3 text-red-300">${esc(e.message)}</div>`;}}
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
 function renderTrialCards(rows,dashboard=false){if(!rows?.length)return '<div class="md:col-span-3 text-xs text-gray-500 py-8 text-center">No live trial opportunities are available right now.</div>';return rows.map(t=>{const remaining=Number(t.remaining_slots??0);const status=t.registration_status||"REG OPEN";const category=t.category||"Open Category";const age=t.age_category||"Youth";return `<div class="group glass-card p-5 rounded-3xl border border-gray-800 hover:border-accentBlue/60 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden"><div class="absolute -right-12 -top-12 w-32 h-32 rounded-full bg-accentBlue/10 blur-2xl group-hover:bg-accentGreen/10 transition"></div><div class="relative space-y-4"><div class="flex items-start justify-between gap-3"><div><span class="inline-flex px-2.5 py-1 rounded-full bg-accentBlue/10 border border-accentBlue/20 text-accentBlue text-[10px] font-black uppercase tracking-wider">${esc(t.sport)}</span><h4 class="text-lg font-black mt-3 leading-tight">${esc(t.name)}</h4></div><span class="shrink-0 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-accentGreen/10 border border-accentGreen/20 text-accentGreen text-[9px] font-black">● ${esc(status)}</span></div><div class="grid grid-cols-2 gap-2 text-[11px]"><div class="rounded-xl bg-darkbg/60 border border-gray-800 p-3"><span class="text-gray-500 block mb-1">Category</span><span class="font-bold text-gray-200">${esc(category)}</span></div><div class="rounded-xl bg-darkbg/60 border border-gray-800 p-3"><span class="text-gray-500 block mb-1">Age</span><span class="font-bold text-gray-200">${esc(age)}</span></div><div class="rounded-xl bg-darkbg/60 border border-gray-800 p-3"><span class="text-gray-500 block mb-1">Venue</span><span class="font-bold text-gray-200 truncate" title="${esc(t.venue)}">${esc(t.venue)}</span></div><div class="rounded-xl bg-darkbg/60 border border-gray-800 p-3"><span class="text-gray-500 block mb-1">Trial Date</span><span class="font-bold text-gray-200">${esc(t.trial_date)}</span></div></div><div class="flex items-center justify-between pt-1"><div><span class="text-[10px] text-gray-500 uppercase tracking-wider block">Available Slots</span><span class="text-sm font-black ${remaining>0?'text-accentNeon':'text-red-300'}">${remaining} places</span></div><button ${remaining<1?'disabled':''} onclick="openTrialApplication(${t.id})" class="px-4 py-2.5 rounded-xl ${remaining<1?'bg-gray-800 text-gray-500 cursor-not-allowed':'bg-gradient-to-r from-cyan-400 to-emerald-400 text-darkbg hover:shadow-lg hover:shadow-cyan-400/10'} text-[11px] font-black uppercase tracking-wider transition">${remaining<1?'Full':'Apply Now'}</button></div></div></div>`;}).join('');}
 async function loadDashboardTrials(){const box=document.getElementById("dashboard-trials-grid");if(!box)return;try{const rows=await apiRequest("/trials/featured");box.innerHTML=renderTrialCards(rows,true);}catch(e){box.innerHTML=`<div class="md:col-span-2 text-red-300 text-xs">${esc(e.message)}</div>`;}}
 async function openTrialApplication(trialId){if(!AuthState.isLoggedIn()){openAuth("login");return;}try{const [trial,profile,apps]=await Promise.all([apiRequest(`/trials/${trialId}`),apiRequest("/user/profile",{auth:true}),apiRequest("/applications",{auth:true})]);const existing=apps.find(a=>Number(a.trial_id)===Number(trialId));if(existing){showApplicationResult(existing);return;}document.getElementById("trial-modal-title").textContent=`Apply — ${trial.name}`;document.getElementById("trial-modal-meta").textContent=`${trial.organization||"Verified trial organizer"} • Complete your athlete details below. Profile information has been pre-filled where available.`;document.getElementById("trial-id").value=trialId;document.getElementById("trial-form-summary").innerHTML=`<div class="rounded-xl bg-darkbg/60 border border-gray-800 p-3"><span class="text-[9px] text-gray-500 uppercase block">Category</span><b class="text-xs">${esc(trial.category||"Open")}</b></div><div class="rounded-xl bg-darkbg/60 border border-gray-800 p-3"><span class="text-[9px] text-gray-500 uppercase block">Age</span><b class="text-xs">${esc(trial.age_category||"Youth")}</b></div><div class="rounded-xl bg-darkbg/60 border border-gray-800 p-3"><span class="text-[9px] text-gray-500 uppercase block">Venue</span><b class="text-xs truncate block" title="${esc(trial.venue)}">${esc(trial.venue)}</b></div><div class="rounded-xl bg-darkbg/60 border border-gray-800 p-3"><span class="text-[9px] text-gray-500 uppercase block">Date</span><b class="text-xs">${esc(trial.trial_date)}</b></div>`;const fields={athleteName:profile.fullName,email:profile.email,sport:profile.sport||trial.sport||"",location:profile.location||""};Object.entries(fields).forEach(([k,v])=>{const el=document.querySelector(`#trial-form [name="${k}"]`);if(el)el.value=v||"";});const submit=document.getElementById("trial-submit-btn");if(submit){submit.disabled=false;submit.textContent="Submit Application";}openModal("trial-modal");}catch(e){showFeatureToast(e.message,"error");}}
@@ -706,6 +735,7 @@ function openCoachConnection(id,name){document.getElementById('coach-connection-
 async function submitCoachConnection(event){event.preventDefault();const id=document.getElementById('coach-connection-id').value;const message=document.getElementById('coach-connection-message').value.trim();try{await apiRequest(`/coaches/${id}/connect`,{method:'POST',auth:true,body:{message}});closeModal('coach-connection-modal');showFeatureToast('Coach connection request sent — status is now Pending.','success');await loadScouts();await loadConnections();}catch(e){showFeatureToast(e.message,'error');}}
 function openScoutConnection(id,name){document.getElementById('scout-connection-id').value=id;document.getElementById('scout-connection-name').textContent=name;document.getElementById('scout-connection-message').value='';openModal('scout-connection-modal');}
 async function submitScoutConnection(event){event.preventDefault();const id=document.getElementById('scout-connection-id').value;try{const message=document.getElementById('scout-connection-message').value.trim();await apiRequest(`/scouts/${id}/connect`,{method:'POST',auth:true,body:{message}});closeModal('scout-connection-modal');showFeatureToast('Scout connection request sent — status is now Pending.','success');await loadScoutNetwork();await loadConnections();}catch(e){showFeatureToast(e.message,'error');}}
+<<<<<<< HEAD
 async function loadScoutNetwork(){const box=document.getElementById('scouts-network-grid');if(!box)return;try{const [scouts,connections]=await Promise.all([apiRequest('/scouts'),apiRequest('/connections',{auth:true})]);box.innerHTML=scouts.map(s=>{const conn=connections.find(x=>x.scout_id===s.id);return `<div class="glass-card p-6 rounded-3xl border border-gray-800 space-y-3"><div class="flex items-center gap-3"><div class="w-12 h-12 rounded-xl bg-yellow-400/10 border border-yellow-400/20 flex items-center justify-center text-yellow-300"><i class="fa-solid fa-binoculars"></i></div><div><h4 class="font-bold">${esc(s.name)}</h4><p class="text-xs text-accentBlue">${esc(s.organization)}</p></div></div><p class="text-xs text-gray-400">${esc(s.sports)} • ${esc(s.specialization)}</p><p class="text-xs text-gray-500">${esc(s.location)} • ${esc(s.experience)}</p><div class="flex gap-2"><button onclick="viewScoutProfile(${s.id})" class="flex-1 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs font-bold">View Profile</button><button ${conn?'disabled':''} onclick="openScoutConnection(${s.id},'${esc(s.name)}')" class="flex-1 py-2 rounded-xl ${conn?'bg-gray-800 text-accentGreen cursor-default':'bg-accentBlue text-darkbg hover:bg-accentNeon'} text-xs font-bold">${conn?(conn.status==='CONNECTED'?'Connected':'Pending'):'Connect'}</button></div></div>`;}).join('')}catch(e){box.innerHTML=`<div class="text-red-300">${esc(e.message)}</div>`;}}
 async function loadConnections(){const box=document.getElementById("connections-list");if(!box)return;const rows=await apiRequest("/connections",{auth:true});box.innerHTML=rows.length?rows.map(c=>`<div class="flex items-center justify-between p-3 rounded-xl bg-darkbg/60 border border-gray-800"><div><div class="font-bold text-sm">${esc(c.name)}</div><div class="text-xs text-gray-500">${esc(c.organization)}</div></div><span class="text-[10px] font-bold px-2 py-1 rounded-full ${c.status==="CONNECTED"?"bg-accentGreen/10 text-accentGreen":"bg-yellow-400/10 text-yellow-300"}">${esc(c.status)}</span></div>`).join(""):"<p class='text-xs text-gray-500'>No scout connections yet.</p>";}
 async function viewScoutProfile(scoutId) {
@@ -1005,6 +1035,23 @@ async function loadPublicAthleteProfile(athleteId) {
         openModal('result-modal');
     } catch(e) { showFeatureToast(e.message, 'error'); }
 }
+=======
+async function loadScoutNetwork(){const box=document.getElementById('scouts-network-grid');if(!box)return;try{const [scouts,connections]=await Promise.all([apiRequest('/scouts'),apiRequest('/connections',{auth:true})]);box.innerHTML=scouts.map(s=>{const conn=connections.find(x=>x.scout_id===s.id);return `<div class="glass-card p-6 rounded-3xl border border-gray-800 space-y-3"><div class="flex items-center gap-3"><div class="w-12 h-12 rounded-xl bg-yellow-400/10 border border-yellow-400/20 flex items-center justify-center text-yellow-300"><i class="fa-solid fa-binoculars"></i></div><div><h4 class="font-bold">${esc(s.name)}</h4><p class="text-xs text-accentBlue">${esc(s.organization)}</p></div></div><p class="text-xs text-gray-400">${esc(s.sports)} • ${esc(s.specialization)}</p><p class="text-xs text-gray-500">${esc(s.location)} • ${esc(s.experience)}</p><button ${conn?'disabled':''} onclick="openScoutConnection(${s.id},'${esc(s.name)}')" class="w-full py-2.5 rounded-xl ${conn?'bg-gray-800 text-accentGreen':'bg-accentBlue text-darkbg hover:bg-accentNeon'} text-xs font-bold">${conn?(conn.status==='CONNECTED'?'Connected':'Pending'):'Connect'}</button></div>`;}).join('')}catch(e){box.innerHTML=`<div class="text-red-300">${esc(e.message)}</div>`;}}
+async function loadConnections(){const box=document.getElementById("connections-list");if(!box)return;const rows=await apiRequest("/connections",{auth:true});box.innerHTML=rows.length?rows.map(c=>`<div class="flex items-center justify-between p-3 rounded-xl bg-darkbg/60 border border-gray-800"><div><div class="font-bold text-sm">${esc(c.name)}</div><div class="text-xs text-gray-500">${esc(c.organization)}</div></div><span class="text-[10px] font-bold px-2 py-1 rounded-full ${c.status==="CONNECTED"?"bg-accentGreen/10 text-accentGreen":"bg-yellow-400/10 text-yellow-300"}">${esc(c.status)}</span></div>`).join(""):"<p class='text-xs text-gray-500'>No scout connections yet.</p>";}
+
+async function loadApplications(){const box=document.getElementById("applications-list");if(!box)return;const rows=await apiRequest("/applications",{auth:true});box.innerHTML=rows.length?rows.map(a=>`<div class="p-3 rounded-xl bg-darkbg/60 border border-gray-800"><div class="flex justify-between gap-2"><b class="text-sm">${esc(a.trial_name)}</b><span class="text-[10px] font-bold text-accentNeon">${esc(a.status)}</span></div><div class="text-[11px] text-gray-500 mt-1">Application #${esc(a.application_id)} • ${esc(a.trial_date)}</div></div>`).join(""):"<p class='text-xs text-gray-500'>No trial applications yet.</p>";}
+async function loadBookings(){const box=document.getElementById("bookings-list");if(!box)return;const rows=await apiRequest("/bookings",{auth:true});box.innerHTML=rows.length?rows.map(b=>`<div class="p-4 rounded-xl bg-darkbg/60 border border-gray-800"><div class="flex justify-between gap-2"><b class="text-sm">${esc(b.trial_name)}</b><span class="text-[10px] font-bold text-accentGreen">${esc(b.status)}</span></div><div class="text-xs text-gray-400 mt-1">${esc(b.venue)}</div><div class="text-xs text-gray-500 mt-1">${esc(b.slot_date)} • ${esc(b.slot_time)} • Booking #${esc(b.booking_id)}</div><button onclick="showBooking(${b.booking_id})" class="mt-3 text-xs text-accentBlue hover:text-white font-bold">View confirmation →</button></div>`).join(""):"<p class='text-xs text-gray-500'>No booked trials yet.</p>";}
+async function showBooking(id){try{const b=await apiRequest(`/bookings/${id}`,{auth:true});showBookingCard(b);}catch(e){showFeatureToast(e.message,"error");}}
+function showBookingCard(b){document.getElementById("result-modal-content").innerHTML=`<div class="space-y-5"><div class="flex items-center gap-3"><div class="w-12 h-12 rounded-xl bg-accentGreen/10 text-accentGreen flex items-center justify-center"><i class="fa-solid fa-ticket"></i></div><div><h3 class="text-xl font-black">Booking Confirmed</h3><p class="text-xs text-gray-500">Booking #${esc(b.booking_id)}</p></div></div><div class="grid grid-cols-2 gap-3 text-sm"><div class="p-3 rounded-xl bg-darkbg/60"><span class="text-gray-500 block text-xs">Trial</span>${esc(b.trial_name)}</div><div class="p-3 rounded-xl bg-darkbg/60"><span class="text-gray-500 block text-xs">Sport</span>${esc(b.sport)}</div><div class="p-3 rounded-xl bg-darkbg/60"><span class="text-gray-500 block text-xs">Venue</span>${esc(b.venue)}</div><div class="p-3 rounded-xl bg-darkbg/60"><span class="text-gray-500 block text-xs">Date & Time</span>${esc(b.slot_date)} • ${esc(b.slot_time)}</div></div><div class="p-4 rounded-xl border border-accentBlue/30 bg-accentBlue/5 text-xs text-gray-300">${b.email_sent?"Confirmation email sent from sreevaib@gmail.com.":"Booking saved securely in database."}</div>${b.confirmation_token?`<a target="_blank" href="/api/confirm-booking?token=${encodeURIComponent(b.confirmation_token)}" class="block text-center py-3 rounded-xl bg-accentBlue text-darkbg font-bold text-sm hover:bg-accentNeon transition">Open Confirmation</a>`:""}</div>`;openModal("result-modal");}
+
+async function loadOpportunityCards(){/* static cards retain current design; their buttons use the real API */}
+async function loadNotifications(){if(!AuthState.isLoggedIn())return;const rows=await apiRequest("/notifications",{auth:true});let bell=document.getElementById("notification-bell");if(!bell){bell=document.createElement("button");bell.id="notification-bell";bell.className="fixed top-24 right-5 z-40 w-11 h-11 rounded-full bg-gray-950/90 border border-gray-700 text-white shadow-xl hover:border-accentBlue transition";document.body.appendChild(bell);}const unread=rows.filter(n=>!n.is_read).length;bell.innerHTML='<i class="fa-solid fa-bell"></i>'+(unread?`<span class="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] w-5 h-5 rounded-full flex items-center justify-center">${unread}</span>`:"");bell.onclick=()=>showNotifications(rows);}
+function showNotifications(rows){document.getElementById("result-modal-content").innerHTML=`<div><h3 class="text-xl font-black mb-4">Notifications</h3><div class="space-y-2">${rows.length?rows.slice(0,12).map(n=>`<div class="p-3 rounded-xl border border-gray-800 bg-darkbg/60"><div class="font-bold text-sm">${esc(n.title)}</div><div class="text-xs text-gray-400 mt-1">${esc(n.message)}</div></div>`).join(""):"<p class='text-sm text-gray-500'>No notifications yet.</p>"}</div></div>`;openModal("result-modal");rows.filter(n=>!n.is_read).forEach(n=>apiRequest(`/notifications/${n.id}/read`,{method:"POST",auth:true}).catch(()=>{}));setTimeout(loadNotifications,400);}
+async function loadProfileIntoDashboard(){try{const p=await apiRequest("/user/profile",{auth:true});document.getElementById("dash-user-name")?.replaceChildren(document.createTextNode(p.fullName||"Athlete"));const sport=document.getElementById("dash-user-sport");if(sport)sport.textContent=p.sport||"Athlete";const email=document.getElementById("dash-user-email");if(email)email.textContent=p.email||"";const loc=document.querySelector("#dash-user-location span");if(loc)loc.textContent=p.location||"Location not set";const avatar=document.getElementById("profile-avatar");if(avatar){const initials=(p.fullName||"A").split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0]).join("").toUpperCase();avatar.textContent=initials;}}catch(e){if(e.status===401||e.status===403){AuthState.clearSession();refreshAuthUI();}}}
+async function loadDashboard(){if(!AuthState.isLoggedIn())return;await loadAthleteFeatures();}
+function openModal(id){document.getElementById(id)?.classList.remove("hidden");}
+function closeModal(id){document.getElementById(id)?.classList.add("hidden");}
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
 function openAchievementModal(){openModal("achievement-modal");}
 
 // =========================================================================
@@ -1564,12 +1611,17 @@ function showExistingScholarshipModal(app) {
 }
 
 window.addEventListener("DOMContentLoaded",()=>{
+<<<<<<< HEAD
     ["achievement-modal","trial-modal","result-modal","scout-connection-modal","metric-modal","challenge-modal"].forEach(id=>document.getElementById(id)?.addEventListener("click",e=>{if(e.target.id===id)closeModal(id);}));
+=======
+    ["achievement-modal","trial-modal","result-modal","scout-connection-modal"].forEach(id=>document.getElementById(id)?.addEventListener("click",e=>{if(e.target.id===id)closeModal(id);}));
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
     document.getElementById("scholarshipModal")?.addEventListener("click", e => {
         if (e.target.id === "scholarshipModal") closeScholarshipForm();
     });
 });
 
+<<<<<<< HEAD
 // =========================================================================
 // FEATURE 3: BENCHMARK DRILLS & SKILLS ARENA
 // =========================================================================
@@ -2089,6 +2141,8 @@ function resetBreathingTimer() {
     if (cue) cue.textContent = "Inhale through nose for 4 seconds...";
 }
 
+=======
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
 window.loadAthleteFeatures = loadAthleteFeatures;
 window.loadDashboardTrials = loadDashboardTrials;
 window.loadDashboard = loadDashboard;
@@ -2118,6 +2172,7 @@ window.toggleDefenceResourcesList = toggleDefenceResourcesList;
 window.submitScholarshipApplication = submitScholarshipApplication;
 window.cancelScholarshipApplication = cancelScholarshipApplication;
 window.loadMyScholarship = loadMyScholarship;
+<<<<<<< HEAD
 window.viewScoutProfile = viewScoutProfile;
 window.openScoutingCardModal = openScoutingCardModal;
 window.setScoutingQrMode = setScoutingQrMode;
@@ -2143,3 +2198,5 @@ window.changePrehabSport = changePrehabSport;
 window.toggleBreathingTimer = toggleBreathingTimer;
 window.resetBreathingTimer = resetBreathingTimer;
 
+=======
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40

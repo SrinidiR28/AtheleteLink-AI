@@ -2,11 +2,16 @@ package com.athletelink.controller;
 
 import com.athletelink.dto.AchievementRequest;
 import com.athletelink.dto.ApiMessage;
+<<<<<<< HEAD
 import com.athletelink.dto.AthleteMetricRequest;
 import com.athletelink.dto.BookingRequest;
 import com.athletelink.dto.ChallengeSubmissionRequest;
 import com.athletelink.dto.CoachConnectionRequest;
 import com.athletelink.dto.ReadinessLogRequest;
+=======
+import com.athletelink.dto.BookingRequest;
+import com.athletelink.dto.CoachConnectionRequest;
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
 import com.athletelink.dto.ScholarshipApplicationRequest;
 import com.athletelink.dto.TrialApplicationRequest;
 import com.athletelink.service.PlatformService;
@@ -21,12 +26,16 @@ import java.util.Objects;
 @RequestMapping("/api")
 public class PlatformController {
     private final PlatformService service;
+<<<<<<< HEAD
     private final String publicBaseUrl;
 
     public PlatformController(PlatformService service, @org.springframework.beans.factory.annotation.Value("${athletelink.public-base-url:http://localhost:8080}") String publicBaseUrl){
         this.service = service;
         this.publicBaseUrl = publicBaseUrl.replaceAll("/$", "");
     }
+=======
+    public PlatformController(PlatformService service){this.service=service;}
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
     private long id(Authentication a){return (Long)a.getPrincipal();}
 
     @GetMapping("/stats") public Map<String,Object> publicStats(){return service.publicStats();}
@@ -36,6 +45,7 @@ public class PlatformController {
     @PostMapping("/achievements") public Object addAchievement(Authentication a,@Valid @RequestBody AchievementRequest r){return service.addAchievement(id(a),r);}
     @DeleteMapping("/achievements/{x}") public ApiMessage delAchievement(Authentication a,@PathVariable long x){service.deleteAchievement(id(a),x);return new ApiMessage("Achievement deleted");}
 
+<<<<<<< HEAD
     // Athlete Performance Metrics & PRs
     @GetMapping("/metrics") public Object metrics(Authentication a){return Map.of("metrics", service.metrics(id(a)), "summary", service.metricsSummary(id(a)));}
     @PostMapping("/metrics") public Object addMetric(Authentication a,@Valid @RequestBody AthleteMetricRequest r){return service.addMetric(id(a),r);}
@@ -53,6 +63,9 @@ public class PlatformController {
     @GetMapping("/recovery/injury-guidelines") public Object injuryGuidelines(@RequestParam(required=false) String sport){return service.injuryGuidelines(sport);}
 
     @GetMapping("/trials") public Object trials(@RequestParam(required=false) String sport, @RequestParam(required=false) String category, @RequestParam(required=false) String ageCategory, @RequestParam(required=false) String status, @RequestParam(required=false) String search){return (sport==null&&category==null&&ageCategory==null&&status==null&&search==null)?service.trials():service.trialsFiltered(sport,category,ageCategory,status,search);}
+=======
+    @GetMapping("/trials") public Object trials(){return service.trials();}
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
     @GetMapping("/trials/featured") public Object featuredTrials(){return service.featuredTrials();}
     @GetMapping("/trials/{x}") public Object trial(@PathVariable long x){return service.trial(x);}
     @GetMapping("/trials/{x}/slots") public Object slots(@PathVariable long x){return service.slots(x);}
@@ -78,8 +91,11 @@ public class PlatformController {
     @PostMapping("/bookings") public Object book(Authentication a,@Valid @RequestBody BookingRequest r){return service.book(id(a),r);}
     @GetMapping("/bookings") public Object bookings(Authentication a){return service.bookings(id(a));}
     @GetMapping("/bookings/{x}") public Object booking(Authentication a,@PathVariable long x){return service.booking(id(a),x);}
+<<<<<<< HEAD
     @PostMapping("/bookings/{x}/cancel") public Object cancelBooking(Authentication a, @PathVariable long x){return service.cancelBooking(id(a),x);}
     @PostMapping("/applications/{x}/withdraw") public Object withdrawApplication(Authentication a, @PathVariable long x){return service.withdrawApplication(id(a),x);}
+=======
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
 
     @GetMapping("/scouts") public Object scouts(){return service.scouts();}
     @PostMapping("/scouts/{x}/connect") public Object connect(Authentication a,@PathVariable long x,@Valid @RequestBody(required=false) CoachConnectionRequest r){return service.connect(id(a),x,r==null?new CoachConnectionRequest():r);}
@@ -87,6 +103,7 @@ public class PlatformController {
 
     @GetMapping("/notifications") public Object notifications(Authentication a){return service.notifications(id(a));}
     @PostMapping("/notifications/{x}/read") public ApiMessage read(Authentication a,@PathVariable long x){service.markNotificationRead(id(a),x);return new ApiMessage("Notification marked read");}
+<<<<<<< HEAD
     @PostMapping("/notifications/read-all") public ApiMessage readAll(Authentication a){service.markAllNotificationsRead(id(a));return new ApiMessage("All notifications marked as read");}
 
     @GetMapping("/dashboard") public Object dashboard(Authentication a){return service.dashboard(id(a));}
@@ -95,6 +112,11 @@ public class PlatformController {
     @GetMapping("/athletes") public Object athletes(@RequestParam(defaultValue="0") int page, @RequestParam(defaultValue="20") int size){return service.athleteDirectory(page,size);}
     @GetMapping("/athletes/{athleteId}/profile") public Object publicProfile(@PathVariable long athleteId){return service.publicAthleteProfile(athleteId);}
     @PostMapping("/videos/upload") public Object uploadVideo(Authentication a, @RequestParam("file") org.springframework.web.multipart.MultipartFile file){return service.uploadVideo(id(a),file);}
+=======
+
+    @GetMapping("/dashboard") public Object dashboard(Authentication a){return service.dashboard(id(a));}
+    @GetMapping("/matching") public Object matching(Authentication a){return service.matching(id(a));}
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
     @GetMapping("/coaches") public Object coaches(){return service.coaches();}
     @GetMapping("/coaches/nearby") public Object nearbyCoaches(Authentication a, @RequestParam(required=false) Double lat, @RequestParam(required=false) Double lon, @RequestParam(defaultValue="75") double radiusKm){return service.nearbyCoaches(id(a),lat,lon,radiusKm);}
     @PostMapping("/coaches/{x}/connect") public Object connectCoach(Authentication a,@PathVariable long x,@Valid @RequestBody(required=false) CoachConnectionRequest r){return service.connectCoach(id(a),x,r==null?new CoachConnectionRequest():r);}
@@ -134,6 +156,7 @@ public class PlatformController {
                 .body(renderTrialApplicationConfirmationHtml(data, token));
     }
 
+<<<<<<< HEAD
     @GetMapping("/trials/checkin")
     public Object checkinTrial(@RequestParam String token,
                                @RequestHeader(value = "Accept", required = false) String acceptHeader,
@@ -150,6 +173,8 @@ public class PlatformController {
                 .body(renderTrialCheckinHtml(data, token));
     }
 
+=======
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
     private String renderBookingConfirmationHtml(Map<String, Object> data, String token) {
         if (data == null) {
             return renderErrorHtml("Invalid or Expired Booking Token", "The requested booking confirmation token could not be found or has expired.");
@@ -164,9 +189,12 @@ public class PlatformController {
         String slotDate = Objects.toString(data.get("slot_date"), "Date TBA");
         String slotTime = Objects.toString(data.get("slot_time"), "Time TBA");
         String orgName = Objects.toString(data.get("organization"), "AthleteLink Official");
+<<<<<<< HEAD
         String wifiCheckinUrl = "http://10.65.24.238:8080/api/trials/checkin?token=" + java.net.URLEncoder.encode(token, java.nio.charset.StandardCharsets.UTF_8);
         String checkinUrl = publicBaseUrl.contains("localhost") ? wifiCheckinUrl : (publicBaseUrl + "/api/trials/checkin?token=" + java.net.URLEncoder.encode(token, java.nio.charset.StandardCharsets.UTF_8));
         String qrImgUrl = "https://api.qrserver.com/v1/create-qr-code/?size=180x180&margin=6&data=" + java.net.URLEncoder.encode(checkinUrl, java.nio.charset.StandardCharsets.UTF_8);
+=======
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
 
         return "<!DOCTYPE html>\n" +
                 "<html lang=\"en\" class=\"dark\">\n" +
@@ -181,6 +209,7 @@ public class PlatformController {
                 "        body { font-family: 'Outfit', sans-serif; background-color: #060911; color: #f3f4f6; min-height: 100vh; }\n" +
                 "        .glow-card { background: rgba(17, 24, 39, 0.92); border: 1px solid rgba(31, 41, 55, 0.8); backdrop-filter: blur(16px); box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.8), 0 0 30px rgba(16, 185, 129, 0.15); }\n" +
                 "        .badge-glow { box-shadow: 0 0 20px rgba(16, 185, 129, 0.4); }\n" +
+<<<<<<< HEAD
                 "        @media print {\n" +
                 "            @page { size: A4 portrait; margin: 8mm 10mm; }\n" +
                 "            .no-print { display: none !important; }\n" +
@@ -190,11 +219,18 @@ public class PlatformController {
                 "            .text-gray-300, .text-gray-400 { color: #334155 !important; }\n" +
                 "            .bg-gray-900, .bg-gray-800 { background: #f8fafc !important; border-color: #cbd5e1 !important; }\n" +
                 "        }\n" +
+=======
+                "        @media print { .no-print { display: none !important; } body { background: white; color: black; } .glow-card { border: 1px solid #ccc; box-shadow: none; background: white; } }\n" +
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
                 "    </style>\n" +
                 "</head>\n" +
                 "<body class=\"flex items-center justify-center p-4 sm:p-6 lg:p-10 relative overflow-x-hidden\">\n" +
                 "    <!-- Background Radial Gradients -->\n" +
+<<<<<<< HEAD
                 "    <div class=\"fixed inset-0 pointer-events-none opacity-20 no-print\">\n" +
+=======
+                "    <div class=\"fixed inset-0 pointer-events-none opacity-20\">\n" +
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
                 "        <div class=\"absolute -top-40 -left-40 w-96 h-96 bg-cyan-500 rounded-full blur-3xl\"></div>\n" +
                 "        <div class=\"absolute -bottom-40 -right-40 w-96 h-96 bg-emerald-500 rounded-full blur-3xl\"></div>\n" +
                 "    </div>\n" +
@@ -261,6 +297,7 @@ public class PlatformController {
                 "            </div>\n" +
                 "        </div>\n" +
                 "\n" +
+<<<<<<< HEAD
                 "        <!-- Official Gate Pass QR Code -->\n" +
                 "        <div class=\"bg-gray-900/90 rounded-2xl p-5 border border-cyan-500/30 text-center space-y-3 mb-6 shadow-xl\">\n" +
                 "            <div class=\"flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-wider text-cyan-300\">\n" +
@@ -279,6 +316,8 @@ public class PlatformController {
                 "            </div>\n" +
                 "        </div>\n" +
                 "\n" +
+=======
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
                 "        <!-- Attendance Guidelines -->\n" +
                 "        <div class=\"bg-cyan-950/20 border border-cyan-800/40 rounded-xl p-4 mb-8 text-xs text-cyan-200/90 space-y-2\">\n" +
                 "            <div class=\"font-bold text-cyan-300 uppercase tracking-wider flex items-center gap-2 text-xs\">\n" +
@@ -439,6 +478,7 @@ public class PlatformController {
                 "</html>";
     }
 
+<<<<<<< HEAD
     private String renderTrialCheckinHtml(Map<String, Object> data, String token) {
         if (data == null) {
             return renderErrorHtml("Invalid or Expired Check-in Token", "This trial check-in pass could not be verified or the token is invalid.");
@@ -537,6 +577,8 @@ public class PlatformController {
                 "</html>";
     }
 
+=======
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
     private String renderErrorHtml(String title, String message) {
         return "<!DOCTYPE html>\n" +
                 "<html lang=\"en\" class=\"dark\">\n" +

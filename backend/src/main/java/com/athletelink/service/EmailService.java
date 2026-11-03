@@ -108,6 +108,7 @@ public class EmailService {
         return true;
     }
 
+<<<<<<< HEAD
     public boolean sendCancellationEmail(String email, String name, String trialName, String type) {
         if (!smtpConfigured()) {
             System.out.println("[SMTP NOT CONFIGURED] Cancellation notification for " + name + " (" + email + ") - " + type + ": " + trialName);
@@ -134,6 +135,8 @@ public class EmailService {
         return true;
     }
 
+=======
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
     public boolean sendTrialAdminBookingEmail(String email, String name, String trialName, String venue, String confirmedDate, String confirmedTime) {
         if (!smtpConfigured()) {
             System.out.println("[SMTP NOT CONFIGURED] Trial booked by Admin for " + name + " (" + email + ") - Trial: " + trialName + " on " + confirmedDate + " at " + confirmedTime);

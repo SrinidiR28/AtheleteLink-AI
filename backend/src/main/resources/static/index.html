@@ -223,6 +223,7 @@
         to { transform: rotate(360deg); }
     }
 
+<<<<<<< HEAD
     /* =========================================================
        CLEAN A4 PRINT STYLESHEET (FIXES 6-PAGE REPEATING ISSUE)
     ========================================================= */
@@ -317,6 +318,8 @@
         }
     }
 
+=======
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
 </style>
 </head>
 <body class="text-gray-100 selection:bg-accentBlue selection:text-white">
@@ -365,6 +368,7 @@
 
         <nav class="hidden lg:flex items-center gap-8 text-sm font-semibold">
 
+<<<<<<< HEAD
             <button onclick="switchTab('home')" data-nav-tab="home"
                 class="text-cyan-300 font-black hover:text-white transition">
                 Home
@@ -394,6 +398,45 @@
             <button onclick="switchTab('dashboard')" data-nav-tab="dashboard"
                 class="text-gray-300 hover:text-emerald-300 transition">
                 Dashboard
+=======
+            <button onclick="switchTab('home')"
+                class="text-cyan-300 hover:text-white transition">
+
+                Home
+
+            </button>
+
+            <button onclick="switchTab('challenge')"
+                class="text-gray-300 hover:text-cyan-300 transition">
+
+                The Challenge
+
+            </button>
+
+            <button onclick="switchTab('solution')"
+                class="text-gray-300 hover:text-emerald-300 transition">
+
+                Our AI Solution
+
+            </button>
+
+            <button onclick="switchTab('directory')"
+                class="text-gray-300 hover:text-cyan-300 transition">
+
+                Explore Talent
+
+            </button>
+
+            <button onclick="switchTab('scouts')" class="text-gray-300 hover:text-cyan-300 transition">Scouts</button>
+            <button onclick="switchTab('trials')" class="text-gray-300 hover:text-emerald-300 transition">Trials</button>
+            <button onclick="switchTab('opportunities')" class="text-gray-300 hover:text-emerald-300 transition">Opportunities</button>
+
+            <button onclick="switchTab('dashboard')"
+                class="text-gray-300 hover:text-emerald-300 transition">
+
+                Dashboard
+
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
             </button>
 
         </nav>
@@ -443,10 +486,13 @@
                 <i class="fa-solid fa-shield-halved"></i>
                 Admin Dashboard
             </a>
+<<<<<<< HEAD
             <button onclick="loadNotifications().then(res => res && showNotifications(res.rows))" class="relative p-2.5 rounded-xl bg-white/5 border border-white/10 hover:border-cyan-400/40 text-gray-300 hover:text-white transition" title="Notifications">
                 <i class="fa-solid fa-bell text-sm"></i>
                 <span id="notif-count-badge" class="hidden absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">0</span>
             </button>
+=======
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
             <div class="hidden sm:flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10">
                 <i class="fa-solid fa-circle-user text-cyan-300"></i>
                 <span id="nav-user-name" class="text-sm font-bold text-white">Athlete</span>
@@ -478,12 +524,18 @@
 
         <button onclick="switchTab('challenge'); toggleMobileMenu()"
             class="block w-full text-left px-4 py-3 rounded-xl hover:bg-cyan-400/10 text-white">
+<<<<<<< HEAD
             Challenges &amp; Arena
         </button>
 
         <button onclick="switchTab('recovery'); toggleMobileMenu()"
             class="block w-full text-left px-4 py-3 rounded-xl hover:bg-cyan-400/10 text-emerald-300 font-semibold">
             <i class="fa-solid fa-heart-pulse text-xs mr-2 text-emerald-400"></i>Recovery Lab
+=======
+
+            The Challenge
+
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
         </button>
 
         <button onclick="switchTab('solution'); toggleMobileMenu()"
@@ -502,12 +554,20 @@
 
         <button onclick="switchTab('opportunities'); toggleMobileMenu()"
             class="block w-full text-left px-4 py-3 rounded-xl hover:bg-cyan-400/10 text-white">
+<<<<<<< HEAD
             Opportunities
         </button>
         <button onclick="switchTab('matching'); toggleMobileMenu()"
             class="block w-full text-left px-4 py-3 rounded-xl hover:bg-accentNeon/10 text-accentNeon font-bold">
             <i class="fa-solid fa-wand-magic-sparkles mr-2"></i>AI Matching
         </button>
+=======
+
+            Opportunities
+
+        </button>
+
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
         <button onclick="switchTab('dashboard'); toggleMobileMenu()"
             class="block w-full text-left px-4 py-3 rounded-xl hover:bg-cyan-400/10 text-white">
 
@@ -1119,6 +1179,7 @@
                     <p class="text-gray-400 text-sm leading-relaxed">Fixing this bottleneck creates an unprecedented medal pipeline, drastically improving India’s global standing at the Olympics and international championships.</p>
                 </div>
             </div>
+<<<<<<< HEAD
 
             <!-- ================= PRACTICAL FEATURE: ATHLETE SKILLS & FITNESS DRILLS ARENA ================= -->
             <div class="mt-12 pt-10 border-t border-gray-800 space-y-8">
@@ -1491,6 +1552,8 @@
                     </div>
                 </div>
             </div>
+=======
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
         </section>
 
         <!-- ================= PAGE 3: OUR SOLUTION ================= -->
@@ -1546,9 +1609,13 @@
             <div class="glass-card p-6 sm:p-8 rounded-3xl border border-gray-800 flex flex-col md:flex-row items-center justify-between gap-6 glow-blue">
                 <div class="flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left">
                     <div class="relative">
+<<<<<<< HEAD
                         <div id="profile-avatar" class="w-28 h-28 rounded-2xl border-2 border-accentBlue bg-gradient-to-br from-cyan-400/20 to-emerald-400/20 flex items-center justify-center text-cyan-300">
                             <svg viewBox="0 0 24 24" class="w-14 h-14" fill="currentColor"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
                         </div>
+=======
+                        <div id="profile-avatar" class="w-28 h-28 rounded-2xl border-2 border-accentBlue bg-gradient-to-br from-cyan-400/20 to-emerald-400/20 flex items-center justify-center text-3xl font-black text-cyan-300">A</div>
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
                         <span class="absolute -bottom-2 -right-2 bg-accentBlue text-white text-xs font-black px-2.5 py-1 rounded-full uppercase">Athlete</span>
                     </div>
                     <div class="space-y-1">
@@ -1564,6 +1631,7 @@
                     </div>
                 </div>
 
+<<<<<<< HEAD
                 <div class="flex flex-wrap items-center justify-center gap-4 bg-darkbg/60 p-4 rounded-2xl border border-gray-800">
                     <div class="text-center px-3">
                         <div id="dash-ai-talent-score" class="text-3xl font-black text-accentNeon">—</div>
@@ -1596,6 +1664,18 @@
                 </div>
                 <div class="w-full bg-gray-800 rounded-full h-2.5">
                     <div id="dash-profile-completion-bar" class="h-2.5 rounded-full bg-gradient-to-r from-cyan-400 to-emerald-400 transition-all duration-700" style="width: 25%"></div>
+=======
+                <div class="flex items-center gap-4 bg-darkbg/60 p-4 rounded-2xl border border-gray-800">
+                    <div class="text-center px-4">
+                        <div class="text-3xl font-black text-accentNeon">94.8</div>
+                        <div class="text-[10px] text-gray-400 uppercase tracking-wider font-bold">AI Talent Score</div>
+                    </div>
+                    <div class="h-10 w-px bg-gray-800"></div>
+                    <div class="text-center px-4">
+                        <div class="text-3xl font-black text-accentGreen">#3</div>
+                        <div class="text-[10px] text-gray-400 uppercase tracking-wider font-bold">National State Rank</div>
+                    </div>
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
                 </div>
             </div>
 
@@ -1622,6 +1702,7 @@
                         </div>
                     </div>
 
+<<<<<<< HEAD
                     <!-- Athlete Performance Metrics & PR Tracker (Feature 2) -->
                     <div class="glass-card p-6 sm:p-8 rounded-3xl border border-gray-800 space-y-6 glow-blue">
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -1670,12 +1751,15 @@
                         </div>
                     </div>
 
+=======
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
                     <!-- Upload Training Video Feature -->
                     <div class="glass-card p-6 rounded-3xl border border-gray-800 space-y-4">
                         <h3 class="text-lg font-bold flex items-center gap-2">
                             <i class="fa-solid fa-video text-accentNeon"></i> AI Video Analysis & Form Upload
                         </h3>
                         <p class="text-gray-400 text-sm">Upload raw training or race footage. Our computer vision model automatically extracts joint angles, stride frequency, and explosive power vectors.</p>
+<<<<<<< HEAD
                         <label for="video-file-input" class="block border-2 border-dashed border-gray-700 hover:border-accentBlue rounded-2xl p-8 text-center cursor-pointer transition bg-darkbg/40">
                             <i class="fa-solid fa-cloud-arrow-up text-4xl text-accentBlue mb-3"></i>
                             <p class="font-bold text-sm">Click to browse or drag &amp; drop your training video</p>
@@ -1690,6 +1774,16 @@
                             <p class="text-xs text-gray-400 mt-2">Uploading video and running AI analysis...</p>
                         </div>
                         <div id="video-upload-result"></div>
+=======
+                        <div class="border-2 border-dashed border-gray-700 hover:border-accentBlue rounded-2xl p-8 text-center cursor-pointer transition bg-darkbg/40">
+                            <i class="fa-solid fa-cloud-arrow-up text-4xl text-accentBlue mb-3"></i>
+                            <p class="font-bold text-sm">Drag & drop your training video here, or <span class="text-accentBlue underline">browse files</span></p>
+                            <p class="text-xs text-gray-500 mt-1">Supports MP4, MOV, AVI up to 500MB (Auto AI Skeleton Mapping)</p>
+                            <button onclick="alert('Video uploaded successfully! AI Talent Analysis engine is processing biomechanical metrics.')" class="mt-4 px-6 py-2.5 rounded-xl bg-accentBlue text-darkbg font-bold text-xs uppercase tracking-wider hover:bg-accentNeon transition">
+                                Upload & Analyze Now
+                            </button>
+                        </div>
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
                     </div>
                 </div>
 
@@ -1712,6 +1806,7 @@
                         <div id="my-scholarship-card" class="space-y-3"><p class="text-xs text-gray-500">Loading scholarship status…</p></div>
                     </div>
                     <div class="glass-card p-6 rounded-3xl border border-gray-800 space-y-4">
+<<<<<<< HEAD
                         <div class="flex items-center justify-between">
                             <h3 class="text-lg font-bold flex items-center gap-2"><i class="fa-solid fa-bell text-accentBlue"></i> Notifications</h3>
                             <button onclick="markAllNotificationsRead()" class="text-xs text-accentBlue hover:text-white font-bold transition">Mark all read</button>
@@ -1719,6 +1814,8 @@
                         <div id="notifications-list" class="space-y-3"><p class="text-xs text-gray-500">Loading notifications…</p></div>
                     </div>
                     <div class="glass-card p-6 rounded-3xl border border-gray-800 space-y-4">
+=======
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
                         <h3 class="text-lg font-bold flex items-center gap-2"><i class="fa-solid fa-user-group text-accentNeon"></i> Scout Connections</h3>
                         <div id="connections-list" class="space-y-3"><p class="text-xs text-gray-500">Loading connections…</p></div>
                     </div>
@@ -1820,9 +1917,94 @@
                 </div>
             </div>
 
+<<<<<<< HEAD
             <!-- Athlete Cards Grid - Dynamic from DB -->
             <div id="athletes-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div class="col-span-3 text-center py-10 text-gray-500">Loading athletes...</div>
+=======
+            <!-- Athlete Cards Grid -->
+            <div id="athletes-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div class="athlete-card glass-card p-6 rounded-3xl border border-gray-800 space-y-4 hover:border-accentBlue/50 transition" data-sport="Athletics" data-name="Ramesh Kumar">
+                    <div class="flex items-center gap-4">
+                        <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=200&auto=format&fit=crop" class="w-16 h-16 rounded-2xl object-cover border border-accentBlue">
+                        <div>
+                            <h3 class="font-bold text-lg">Ramesh Kumar</h3>
+                            <p class="text-xs text-accentBlue font-bold">Track & Field (100m)</p>
+                            <p class="text-[11px] text-gray-400"><i class="fa-solid fa-location-dot text-red-400"></i> Bilaspur, Chhattisgarh</p>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center bg-darkbg/60 p-3 rounded-xl border border-gray-800 text-xs">
+                        <div>
+                            <span class="text-gray-400 block">AI Score</span>
+                            <span class="font-black text-accentNeon text-base">94.8</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-400 block">Age Group</span>
+                            <span class="font-bold text-white">U-19 Youth</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-400 block">Best Mark</span>
+                            <span class="font-bold text-accentGreen">10.42s</span>
+                        </div>
+                    </div>
+                    <button onclick="alert('Viewing full scouting dossier for Ramesh Kumar.')" class="w-full py-2.5 rounded-xl bg-gray-800 hover:bg-accentBlue hover:text-white text-xs font-bold transition">View Scouting Profile</button>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="athlete-card glass-card p-6 rounded-3xl border border-gray-800 space-y-4 hover:border-accentBlue/50 transition" data-sport="Badminton" data-name="Ananya Sharma">
+                    <div class="flex items-center gap-4">
+                        <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=200&auto=format&fit=crop" class="w-16 h-16 rounded-2xl object-cover border border-accentGreen">
+                        <div>
+                            <h3 class="font-bold text-lg">Ananya Sharma</h3>
+                            <p class="text-xs text-accentGreen font-bold">Badminton (Singles)</p>
+                            <p class="text-[11px] text-gray-400"><i class="fa-solid fa-location-dot text-red-400"></i> Guwahati, Assam</p>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center bg-darkbg/60 p-3 rounded-xl border border-gray-800 text-xs">
+                        <div>
+                            <span class="text-gray-400 block">AI Score</span>
+                            <span class="font-black text-accentNeon text-base">96.2</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-400 block">Age Group</span>
+                            <span class="font-bold text-white">U-17 Junior</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-400 block">Rank</span>
+                            <span class="font-bold text-accentGreen">#1 North-East</span>
+                        </div>
+                    </div>
+                    <button onclick="alert('Viewing full scouting dossier for Ananya Sharma.')" class="w-full py-2.5 rounded-xl bg-gray-800 hover:bg-accentGreen hover:text-darkbg text-xs font-bold transition">View Scouting Profile</button>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="athlete-card glass-card p-6 rounded-3xl border border-gray-800 space-y-4 hover:border-accentBlue/50 transition" data-sport="Wrestling" data-name="Vikram Singh">
+                    <div class="flex items-center gap-4">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop" class="w-16 h-16 rounded-2xl object-cover border border-yellow-400">
+                        <div>
+                            <h3 class="font-bold text-lg">Vikram Singh</h3>
+                            <p class="text-xs text-yellow-400 font-bold">Freestyle Wrestling (74kg)</p>
+                            <p class="text-[11px] text-gray-400"><i class="fa-solid fa-location-dot text-red-400"></i> Rohtak, Haryana</p>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center bg-darkbg/60 p-3 rounded-xl border border-gray-800 text-xs">
+                        <div>
+                            <span class="text-gray-400 block">AI Score</span>
+                            <span class="font-black text-accentNeon text-base">92.5</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-400 block">Age Group</span>
+                            <span class="font-bold text-white">U-23 Senior</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-400 block">Medals</span>
+                            <span class="font-bold text-yellow-400">2x National Gold</span>
+                        </div>
+                    </div>
+                    <button onclick="alert('Viewing full scouting dossier for Vikram Singh.')" class="w-full py-2.5 rounded-xl bg-gray-800 hover:bg-yellow-500 hover:text-darkbg text-xs font-bold transition">View Scouting Profile</button>
+                </div>
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
             </div>
         </section>
 
@@ -1847,6 +2029,7 @@
                 <h2 class="text-3xl sm:text-5xl font-black uppercase tracking-tight">Upcoming Trials</h2>
                 <p class="text-gray-400">Apply with your athlete profile, choose an available slot and receive a persistent booking confirmation.</p>
             </div>
+<<<<<<< HEAD
 
             <!-- Trials Filter & Search Bar -->
             <div class="glass-card p-5 rounded-2xl border border-gray-800 space-y-3">
@@ -1895,6 +2078,8 @@
                 </div>
             </div>
 
+=======
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
             <div id="trials-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"><div class="md:col-span-3 text-gray-500">Loading trials…</div></div>
         </section>
 
@@ -2515,6 +2700,7 @@
     </div>
     <div id="scout-connection-modal" class="hidden fixed inset-0 z-[155] bg-black/80 backdrop-blur-sm p-4 overflow-y-auto"><div class="max-w-xl mx-auto mt-20 glass-card rounded-3xl border border-gray-700 p-6 sm:p-8"><div class="flex justify-between items-center mb-6"><div><h2 class="text-2xl font-black">Connect With Scout</h2><p class="text-xs text-gray-500 mt-1">Send a request to <span id="scout-connection-name" class="text-cyan-300 font-bold"></span>.</p></div><button onclick="closeModal('scout-connection-modal')" class="text-gray-400 hover:text-white text-xl">&times;</button></div><form onsubmit="submitScoutConnection(event)" class="space-y-4"><input type="hidden" id="scout-connection-id"><textarea id="scout-connection-message" maxlength="500" rows="5" class="form-input" placeholder="Introduce yourself and your sporting goals."></textarea><div class="flex justify-end gap-3"><button type="button" onclick="closeModal('scout-connection-modal')" class="px-5 py-2.5 rounded-xl bg-gray-800 font-bold text-sm">Cancel</button><button class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-cyan-400 to-emerald-400 text-darkbg font-black text-sm">Send Scout Request</button></div></form></div></div>
     <div id="result-modal" class="hidden fixed inset-0 z-[160] bg-black/80 backdrop-blur-sm p-4 overflow-y-auto"><div class="max-w-xl mx-auto mt-20 glass-card rounded-3xl border border-gray-700 p-6 sm:p-8"><div id="result-modal-content"></div><div class="text-right mt-6"><button onclick="closeModal('result-modal')" class="px-5 py-2.5 rounded-xl bg-gray-800 font-bold text-sm">Close</button></div></div></div>
+<<<<<<< HEAD
 
     <!-- Add Performance Metric / PR Modal (Feature 2) -->
     <div id="metric-modal" class="hidden fixed inset-0 z-[150] bg-black/80 backdrop-blur-sm p-4 overflow-y-auto">
@@ -2649,6 +2835,8 @@
         </form>
       </div>
     </div>
+=======
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
     <style> .form-label{display:block;font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#9ca3af;margin-bottom:.45rem}.form-input{width:100%;background:#0b1220;border:1px solid #374151;border-radius:.8rem;padding:.7rem .85rem;color:#fff;font-size:.875rem;outline:none}.form-input:focus{border-color:#38bdf8;box-shadow:0 0 0 2px rgba(56,189,248,.12)} textarea.form-input{resize:vertical} </style>
 <!-- ================= ATHLETELINK AI HELP CHATBOT ================= -->
 

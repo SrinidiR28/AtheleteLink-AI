@@ -39,8 +39,13 @@ window.apiRequest = apiRequest;
 async function apiRequest(path, { method = "GET", body = null, auth = false } = {}) {
     const headers = { "Content-Type": "application/json" };
 
+<<<<<<< HEAD
     const token = AuthState.getToken();
     if (auth || token) {
+=======
+    if (auth) {
+        const token = AuthState.getToken();
+>>>>>>> 1bdcedfdb8d69998a11cf16735225a5f5770ab40
         if (token) headers["Authorization"] = "Bearer " + token;
     }
 
